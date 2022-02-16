@@ -6,7 +6,7 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/07 04:17:11 by jbettini          #+#    #+#             */
-/*   Updated: 2022/02/14 01:34:26 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/02/16 02:51:00 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	redir_heredoc(char *stop)
 	int		i;
 
 	i = -1;
-	fd = open(".heredoc_tmp", O_CREAT | O_RDWR | O_TRUNC, 644);
+	fd = open(".heredoc_tmp", O_CREAT | O_RDWR | O_TRUNC, 0744);
 	if (fd == -1)
 		return (OP_ERROR);
 	hd = here_doc(stop);
@@ -67,9 +67,9 @@ int	redir_to_stdout(void *file, int mod)
 	if (file == NULL || ft_strequ_hd(file, "|"))
 		return (OUT_ERROR);
 	if (mod == O_TRUNC)
-		fd = open(file, O_CREAT | O_RDWR | O_TRUNC, 644);
+		fd = open(file, O_CREAT | O_RDWR | O_TRUNC, 0744);
 	else if (mod == O_APPEND)
-		fd = open(file, O_CREAT | O_RDWR | O_APPEND, 644);
+		fd = open(file, O_CREAT | O_RDWR | O_APPEND, 0744);
 	if (fd == -1)
 		return (OP_ERROR);
 	if (dup2(fd, 1) == -1)

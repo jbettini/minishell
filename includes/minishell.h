@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rahmed <rahmed@student.42.fr>              +#+  +:+       +#+        */
+/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/04 17:03:54 by rahmed            #+#    #+#             */
-/*   Updated: 2022/02/13 21:28:03 by rahmed           ###   ########.fr       */
+/*   Updated: 2022/02/16 07:58:09 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include <termios.h>
 # include "../libft/libft.h"
 # include "cmds.h"
+# include <sys/types.h>
 
 # define	PROMPT		"minishell$> "
 # define	QUOTE		39
@@ -72,6 +73,8 @@ typedef struct s_env
 	t_list	*envp;
 	char	**path;
 	char	*cmd_path;
+	int		oldstdin;
+	int		oldstdout;
 }		t_env;
 
 /* Ra */
@@ -99,6 +102,7 @@ void	ft_check_unset(char **args, t_list **env);
 void	ft_unset(char *args, t_list **env);
 void	ft_check_export(char **args, t_list **env);
 void	ft_export(char *args, t_list **env);
+int		ft_env_alnum_underscore(char *str);
 
 /* signal.c */
 void	init_signal(int fd);
@@ -108,16 +112,18 @@ int		handle_eof_ctrl_d(char *str);
 /* Jb */
 /* connect.c */
 int		redir_manag(t_redir *to_redir);
-int		redir_all(t_list *in, t_list *out);
+int		redir_lst(t_list *redir_lst);
+// int		redir_all(t_list *in, t_list *out, t_env *env);
 void	error_manag(int ret);
-int		launch_exec(t_env *env, char **arg, int mod);
+int		launch_exec(t_env *env, t_cmd *cmd, int mod);
 int		exec_block(t_cmd *to_exec, t_env *env, int mod);
 int		connecting_fct(t_list *line, t_env *env);
 
 /* exec.c */
 int		ft_isbuild(char *args);
-int		exec_in_main(char **arg, t_env *env, int mod);
-int		exec_in_child(char **arg, t_env *env);
+int		exec_in_main(t_cmd *cmd, t_env *env, int mod);
+// int		exec_in_main(char **arg, t_env *env, int mod);
+int		exec_in_child(t_cmd	*cmd, t_env *env);
 char	*parse_cmd(char **path, char **cmd);
 
 /* redir.c */
@@ -130,7 +136,7 @@ int		redir_to_stdin(void *file);
 void	ft_echo(char **arg);
 
 /* pipe.c */
-void	ft_pipex(char **arg, t_env *env);
+void	ft_pipex(t_cmd *cmd, t_env *env);
 
 /* miniparser.c */
 int		ft_strequ_h(char const *s1, char const *s2);
@@ -156,6 +162,7 @@ void	print_cmd(void *ptr);
 void	print_error(char *msg);
 void	exit_error(char *msg, int code);
 int		error(char *msg, int code);
+void	*error_null(char *msg);
 
 /* expand_ev.c */
 // static char	*get_ev_name(char *ev);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rahmed <rahmed@student.42.fr>              +#+  +:+       +#+        */
+/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 14:26:39 by ydanset           #+#    #+#             */
-/*   Updated: 2022/02/13 23:05:55 by rahmed           ###   ########.fr       */
+/*   Updated: 2022/02/16 03:23:20 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,9 @@
 		- consider the fact that readline doesn't read tabulation (am i right?)
 
 	must ensure that :
-		- ev name must not start by a digit
-		- ev name consist of alpha, numeric and/or '_' characters
-		- ev name must not be empty
+		- ev name must not start by a digit >> OK PATCH
+		- ev name consist of alpha, numeric and/or '_' characters >> OK PATCH
+		- ev name must not be empty > deja OK JE PRENDS PAS LES ARGS NULL
 */
 
 // int	main(int ac, char **av, char **env)
@@ -52,7 +52,6 @@
 // 	return (0);
 // }
 
-// long long	g_exit_status = 0; // ! A garder ?
 
 int	main(int ac, char **av, char **env)
 {
@@ -71,7 +70,7 @@ int	main(int ac, char **av, char **env)
 			break ;
 	free_strs(local_env);
 	env_manag(NULL, env_set, 1);
-	ft_printf("\033[1;31m****EXIT STATUS = %d****\033[0m\n", g_exit_status); //! test
+	// ft_printf("\033[1;31m****EXIT STATUS = %d****\033[0m\n", g_exit_status); //! test
 	return (g_exit_status);
 }
 

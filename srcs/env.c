@@ -6,7 +6,7 @@
 /*   By: rahmed <rahmed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/05 13:23:34 by rahmed            #+#    #+#             */
-/*   Updated: 2022/02/13 15:09:27 by rahmed           ###   ########.fr       */
+/*   Updated: 2022/02/14 22:26:36 by rahmed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,11 @@ void	ft_check_export(char **args, t_list **env)
 	export_key = 1;
 	while (args[export_key] != NULL)
 	{
-		ft_export(args[export_key], env);
+		if (!ft_isdigit(args[export_key][0]) &&
+		ft_env_alnum_underscore(args[export_key]))
+			ft_export(args[export_key], env);
+		else
+			print_error("export: not a valid identifier");
 		export_key++;
 	}
 }
@@ -88,4 +92,18 @@ void	ft_export(char *args, t_list **env)
 	exist = replace_existing_env(args, env_cpy);
 	if (!exist)
 		ft_lstadd_back(&env_cpy, ft_lstnew(ft_strjoin(args, "\n")));
+}
+
+int	ft_env_alnum_underscore(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i] && str[i] != '=')
+	{
+		if (!ft_isalnum(str[i]) && (str[i] != '_'))
+			return (0);
+		i++;
+	}
+	return (1);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_cmds.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rahmed <rahmed@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 14:26:28 by ydanset           #+#    #+#             */
-/*   Updated: 2022/02/13 15:09:56 by rahmed           ###   ########.fr       */
+/*   Updated: 2022/02/15 15:59:46 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,13 +80,10 @@ static t_cmd	*get_next_cmd(t_list **tokens)
 	if (*tokens)
 	{
 		*tokens = (*tokens)->next;
-		if (!*tokens)
-			; // handle pipe at end of line?
-		else if (get_token_type((*tokens)->content) == PIPE)
+		if (!*tokens || get_token_type((*tokens)->content) == PIPE)
 		{
 			free_cmd(cmd);
-			print_error("unexpected token '|'");
-			return (NULL);
+			return (error_null("unexpected token '|'"));
 		}
 	}
 	return (cmd);

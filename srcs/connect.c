@@ -6,14 +6,16 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/11 04:03:54 by jbettini          #+#    #+#             */
-/*   Updated: 2022/02/14 00:54:31 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/02/16 07:57:37 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	destroy_ftmp(void)
+void	reset_routine(t_env *env)
 {
+	dup2(env->oldstdin, 0);
+	dup2(env->oldstdout, 1);
 	if (!access(".heredoc_tmp", F_OK))
 		unlink(".heredoc_tmp");
 }
@@ -31,40 +33,22 @@ int	redir_manag(t_redir *to_redir)
 		ret = redir_to_stdout(to_redir->word, O_APPEND);
 	else if (to_redir->type == REDIR_R)
 		ret = redir_to_stdout(to_redir->word, O_TRUNC);
-	// if (ft_strequ_hd(to_redir->type, "<"))
-	// 	ret = redir_to_stdin(to_redir->word);
-	// else if (ft_strequ_hd(to_redir->type, "<<"))
-	// 	ret = redir_heredoc(to_redir->word);
-	// else if (ft_strequ_hd(to_redir->type, ">>"))
-	// 	ret = redir_to_stdout(to_redir->word, O_APPEND);
-	// else if (ft_strequ_hd(to_redir->type, ">"))
-	// 	ret = redir_to_stdout(to_redir->word, O_TRUNC);
 	return (ret);
 }
 
-int	redir_all(t_list *in, t_list *out)
+int	redir_lst(t_list *redir_lst)
 {
 	t_redir	*to_redir;
 	int		ret;
 
 	ret = 0;
-	while (in)
+	while (redir_lst)
 	{
-		// ft_printf("in = %s \n", (t_redir *)in->content); // ! Test
-		to_redir = (t_redir *)in->content;
+		to_redir = (t_redir *)redir_lst->content;
 		ret = redir_manag(to_redir);
 		if (ret)
 			return (ret);
-		in = in->next;
-	}
-	while (out)
-	{
-		// ft_printf("out = %s\n", (t_redir *)out->content); // ! Test
-		to_redir = (t_redir *)out->content;
-		ret = redir_manag(to_redir);
-		if (ret)
-			return (ret);
-		out = out->next;
+		redir_lst = redir_lst->next;
 	}
 	return (SUCCESS);
 }
@@ -83,24 +67,22 @@ void	error_manag(int ret)
 		perror("command not found ");
 }
 
-int	launch_exec(t_env *env, char **arg, int mod)
+int	launch_exec(t_env *env, t_cmd *cmd, int mod)
 {
 	int	ret;
 
 	ret = 0;
 	if (mod == 1)
 	{
-		env->cmd_path = parse_cmd(env->path, arg);
-		// ft_printf("3 launch_exec - env->cmd_path  : %s - ret = %d\n", env->cmd_path, ret); //! test
-		if (!env->cmd_path && !ft_isbuild(arg[0]))
-			return (CMD_ERROR);
-		ft_pipex(arg, env);
-		free(env->cmd_path);
+		env->cmd_path = parse_cmd(env->path, cmd->args);
+		ft_pipex(cmd, env);
+		if (env->cmd_path)
+			free(env->cmd_path);
 	}
 	else if (mod == 2)
-		ret = exec_in_child(arg, env);
+		ret = exec_in_child(cmd, env);
 	else if (!mod)
-		ret = exec_in_main(arg, env, 1);
+		ret = exec_in_main(cmd, env, 1);
 	// ft_printf("3 launch_exec ret = %d\n", ret); //! test
 	env->cmd_path = NULL;
 	return (ret);
@@ -110,44 +92,38 @@ int	exec_block(t_cmd *to_exec, t_env *env, int mod)
 {
 	int	ret;
 
-	ret = redir_all(to_exec->redir_in, to_exec->redir_out);
+	ret = redir_lst(to_exec->redir_in);
 	if (ret)
 		return (ret);
-	ret = launch_exec(env, to_exec->args, mod);
+	ret = launch_exec(env, to_exec, mod);
 	return (ret);
 }
 
-int	connecting_fct(t_list *line, t_env *env)
+int	connecting_fct(t_list *cmd, t_env *env)
 {
 	int		ret;
-	int		oldstdin;
-	int		oldstdout;
 
-	oldstdout = dup(1);
-	oldstdin = dup(0);
-	if (line->next != NULL)
+	if (cmd->next != NULL)
 	{
-		while (line)
+		while (cmd)
 		{
 			// ft_printf("1.0 connecting_fct line->content = %s\n", line->content); //! test
-			if (line->next)
-				ret = exec_block((t_cmd *)(line->content), env, 1);
+			if (cmd->next)
+				ret = exec_block((t_cmd *)(cmd->content), env, 1);
 			else
-				ret = exec_block((t_cmd *)(line->content), env, 2);
+				ret = exec_block((t_cmd *)(cmd->content), env, 2);
 			// ft_printf("1.1 connecting_fct ret = %d\n", ret); //! test
 			if (ret) // ! a changer par une pipe NULL ? pour avoir result = 0
 				error_manag(ret);
-			line = line->next;
+			cmd = cmd->next;
 		}
 	}
 	else
-		ret = exec_block((t_cmd *)(line->content), env, 0);
+		ret = exec_block((t_cmd *)(cmd->content), env, 0);
 	error_manag(ret);
-	dup2(oldstdin, 0);
-	dup2(oldstdout, 1);
-	destroy_ftmp();
+	reset_routine(env);
 	// ft_printf("1 connecting_fct ret (if !-1 => ret = 0) = %d\n", ret); //! test
-	// if (ret == -1 || ret == CMD_ERROR)
-	// 	return (ret);
+	if (ret == -1)
+		return (ret);
 	return (SUCCESS);
 }

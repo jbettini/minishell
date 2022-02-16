@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: rahmed <rahmed@student.42.fr>              +#+  +:+       +#+         #
+#    By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/12/24 13:51:13 by rahmed            #+#    #+#              #
-#    Updated: 2022/02/13 18:20:34 by rahmed           ###   ########.fr        #
+#    Updated: 2022/02/16 02:48:33 by jbettini         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -52,8 +52,16 @@ AR			=	ar rcs
 CFLAGS		=	-Wall -Wextra -Werror -g
 FSFLAGS		=	-fsanitize=address
 
+# IF NEEDED at 42 on MacOS10 Install :
+#rm -rf $HOME/.brew && git clone --depth=1 https://github.com/Homebrew/brew $HOME/.brew && echo 'export PATH=$HOME/.brew/bin:$PATH' >> $HOME/.zshrc && source $HOME/.zshrc && brew update
+# brew install readline
+#HEADER	=	-I${INC_DIR} -I/Users/$(USER)/.brew/opt/readline/include
+#LDFLAGS	=	-L${SRC_DIR} -L/Users/$(USER)/.brew/opt/readline/lib
+
+# @HOME on MacOS12 Monterey
 HEADER		=	-I${INC_DIR} -I/usr/local/opt/readline/include
 LDFLAGS		=	-L${SRC_DIR} -L/usr/local/opt/readline/lib
+
 MSHELLFLAG	=	-lreadline
 
 TARGET_SRV	=	minishell
