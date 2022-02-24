@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rahmed <rahmed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/04 17:03:54 by rahmed            #+#    #+#             */
-/*   Updated: 2022/02/16 07:58:09 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/02/18 20:12:38 by rahmed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,18 +75,21 @@ typedef struct s_env
 	char	*cmd_path;
 	int		oldstdin;
 	int		oldstdout;
+	int		out_check;
 }		t_env;
 
 /* Ra */
 /* minishell.c */
 t_env	*env_manag(char **env, t_env *to_free, int mod);
-int		routine(char **local_env, t_env *env_set);
+int		routine(t_env *env_set);
 int		ft_exit_code(char **args, int print_exit);
 
 /* builtins.c */
 int		ft_cmd(char **args, t_list	**env);
 void	ft_pwd(void);
 void	ft_cd(char **args, t_list **env);
+void	ft_write_oldpwd(t_list **env, char *pwd);
+char	*ft_my_getenv(t_list **env, char *key);
 void	ft_env(t_list **env);
 
 /* utils_builtins.c */
@@ -94,7 +97,7 @@ int		get_env_name_len(char *str, int getequal);
 int		replace_existing_env(char *args, t_list *env);
 char	*ft_get_path(char *args);
 char	*ft_get_special_path(char *args);
-void	freed_chdir(char *path);
+void	my_chdir(t_list **env, char *path);
 
 /* env.c */
 char	*ft_get_env_path(char *args);
@@ -111,8 +114,8 @@ int		handle_eof_ctrl_d(char *str);
 
 /* Jb */
 /* connect.c */
-int		redir_manag(t_redir *to_redir);
-int		redir_lst(t_list *redir_lst);
+int		redir_manag(t_redir *to_redir, t_env *env);
+int		redir_lst(t_list *redir_lst, t_env *env);
 // int		redir_all(t_list *in, t_list *out, t_env *env);
 void	error_manag(int ret);
 int		launch_exec(t_env *env, t_cmd *cmd, int mod);
@@ -168,7 +171,7 @@ void	*error_null(char *msg);
 // static char	*get_ev_name(char *ev);
 // static char	*get_ev_value(char **local_env, char *ev_name);
 // static void	rearrange_line(char **line, int *i, char **local_env);
-void	expand_ev(char **line, char **local_env);
+int	expand_ev(t_list *cmds, t_env *env_set);
 
 /* free.c */
 void	free_token(void *ptr);
@@ -198,6 +201,7 @@ void	free_strs(char **strs);
 char	**copy_strs(char **strs);
 int		strs_len(char **strs);
 char	**strs_append(char **strs, const char *str);
+char	**strs_join(char **strs1, char **strs2);
 
 /* utils.c */
 int		is_symbol(char c);
@@ -210,5 +214,8 @@ char	*get_str_truncated(const char *str, int start, int len);
 char	*trunc_str(char *str, int start, int len);
 int		get_token_type(t_token *tok);
 char	*get_token_value(t_token *tok);
+
+/* ft_strtok.c */
+char	**ft_strtok(char *str, char *delim);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/11 04:03:54 by jbettini          #+#    #+#             */
-/*   Updated: 2022/02/16 07:57:37 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/02/16 09:29:45 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	reset_routine(t_env *env)
 		unlink(".heredoc_tmp");
 }
 
-int	redir_manag(t_redir *to_redir)
+int	redir_manag(t_redir *to_redir, t_env *env)
 {
 	int	ret;
 
@@ -28,7 +28,10 @@ int	redir_manag(t_redir *to_redir)
 	if (to_redir->type == REDIR_L)
 		ret = redir_to_stdin(to_redir->word);
 	else if (to_redir->type == REDIR_LL)
+	{
+		dup2(env->oldstdin, 0);
 		ret = redir_heredoc(to_redir->word);
+	}
 	else if (to_redir->type == REDIR_RR)
 		ret = redir_to_stdout(to_redir->word, O_APPEND);
 	else if (to_redir->type == REDIR_R)
@@ -36,7 +39,7 @@ int	redir_manag(t_redir *to_redir)
 	return (ret);
 }
 
-int	redir_lst(t_list *redir_lst)
+int	redir_lst(t_list *redir_lst, t_env *env)
 {
 	t_redir	*to_redir;
 	int		ret;
@@ -45,7 +48,7 @@ int	redir_lst(t_list *redir_lst)
 	while (redir_lst)
 	{
 		to_redir = (t_redir *)redir_lst->content;
-		ret = redir_manag(to_redir);
+		ret = redir_manag(to_redir, env);
 		if (ret)
 			return (ret);
 		redir_lst = redir_lst->next;
@@ -74,13 +77,21 @@ int	launch_exec(t_env *env, t_cmd *cmd, int mod)
 	ret = 0;
 	if (mod == 1)
 	{
-		env->cmd_path = parse_cmd(env->path, cmd->args);
+		if (ft_strchr(cmd->args[0], '/'))
+			env->cmd_path = ft_strdup(cmd->args[0]);
+		else
+			env->cmd_path = parse_cmd(env->path, cmd->args);
 		ft_pipex(cmd, env);
 		if (env->cmd_path)
 			free(env->cmd_path);
 	}
 	else if (mod == 2)
+	{
+		ret = redir_lst(cmd->redir_out, env);
+		if (ret)
+			return (ret);
 		ret = exec_in_child(cmd, env);
+	}
 	else if (!mod)
 		ret = exec_in_main(cmd, env, 1);
 	// ft_printf("3 launch_exec ret = %d\n", ret); //! test
@@ -92,9 +103,15 @@ int	exec_block(t_cmd *to_exec, t_env *env, int mod)
 {
 	int	ret;
 
-	ret = redir_lst(to_exec->redir_in);
+	ret = redir_lst(to_exec->redir_in, env);
 	if (ret)
 		return (ret);
+	if (!mod)
+	{
+		ret = redir_lst(to_exec->redir_out, env);
+		if (ret)
+			return (ret);
+	}
 	ret = launch_exec(env, to_exec, mod);
 	return (ret);
 }

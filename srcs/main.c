@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/02/13 14:26:39 by ydanset           #+#    #+#             */
-/*   Updated: 2022/02/16 03:23:20 by jbettini         ###   ########.fr       */
+/*   Created: 2022/02/24 17:33:48 by jbettini          #+#    #+#             */
+/*   Updated: 2022/02/24 17:33:50 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,20 +55,15 @@
 
 int	main(int ac, char **av, char **env)
 {
-	char	**local_env;
 	t_env	*env_set;
 
 	(void)ac;
 	(void)av;
 	env_set = env_manag(env, NULL, 0);
-	local_env = copy_strs(env);
 	init_signal(0);
-	if (!local_env)
-		exit_error("cannot allocate memory", EXIT_FAILURE);
 	while (1)
-		if (routine(local_env, env_set) == -1)
+		if (routine(env_set) == -1)
 			break ;
-	free_strs(local_env);
 	env_manag(NULL, env_set, 1);
 	// ft_printf("\033[1;31m****EXIT STATUS = %d****\033[0m\n", g_exit_status); //! test
 	return (g_exit_status);

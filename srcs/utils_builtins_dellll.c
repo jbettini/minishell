@@ -6,7 +6,7 @@
 /*   By: rahmed <rahmed@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/05 13:36:03 by rahmed            #+#    #+#             */
-/*   Updated: 2022/02/13 15:10:52 by rahmed           ###   ########.fr       */
+/*   Updated: 2022/02/18 20:09:45 by rahmed           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,10 +105,19 @@ char	*ft_get_special_path(char *args)
 	return (path);
 }
 
-void	freed_chdir(char *path)
+void	my_chdir(t_list **env, char *path)
 {
-	if (chdir(path) == -1)
+	char	*pwd;
+	char	*tmp;
+
+	tmp = getcwd(NULL, 0);
+	pwd = ft_strjoin(tmp, "\n");
+	free(tmp);
+	if (chdir(ft_del_nl(path)) == -1)
 		perror("cd");
+	else
+		ft_write_oldpwd(env, pwd);
+	free(pwd);
 	if (path)
 		free(path);
 }

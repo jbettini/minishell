@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/01/04 17:03:54 by rahmed            #+#    #+#             */
-/*   Updated: 2022/02/16 07:58:21 by jbettini         ###   ########.fr       */
+/*   Created: 2022/01/04 17:03:54 by jbettini          #+#    #+#             */
+/*   Updated: 2022/02/24 18:50:21 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ t_env	*env_manag(char **env, t_env *to_free, int mod)
 	return (env_set);
 }
 
-int	routine(char **local_env, t_env *env_set)
+int	routine(t_env *env_set)
 {
 	// TODO : get choice between char** and t_env
 	int		ret;
@@ -49,11 +49,14 @@ int	routine(char **local_env, t_env *env_set)
 	else if (!ft_is_str_blank(line) && line)
 	{
 		add_history(line);
-		expand_ev(&line, local_env);
 		cmds = parse(line);
 		// ft_lstiter(cmds, &print_cmd);
 		if (cmds)
+		{
+			if (!expand_ev(cmds, env_set))
+				; // smth bad occurred
 			ret = connecting_fct(cmds, env_set); // ! t_env *env to send or char **
+		}
 		ft_lstclear(&cmds, &free_cmd);
 	}
 	free(line);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rahmed <rahmed@student.42.fr>              +#+  +:+       +#+        */
+/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/02/05 13:21:35 by rahmed            #+#    #+#             */
-/*   Updated: 2022/02/13 20:36:04 by rahmed           ###   ########.fr       */
+/*   Created: 2022/02/24 15:32:07 by jbettini          #+#    #+#             */
+/*   Updated: 2022/02/24 18:50:41 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,32 +46,52 @@ void	ft_pwd(void)
 
 void	ft_cd(char **args, t_list **env)
 {
-	char	*path;
-	char	*tmp;
+	char	*oldpwd;
+
+	if (args[1] == NULL || ft_is_str_blank(args[1]))
+		my_chdir(env, ft_strdup(getenv("HOME")));
+	else if (ft_strequ_hd(args[1], "-"))
+	{
+		oldpwd = ft_my_getenv(env, "OLDPWD=");
+		if (oldpwd)
+			my_chdir(env, ft_strdup(oldpwd));
+		else
+			ft_putendl_fd("cd: OLDPWD not set", 2);
+	}
+	else
+		my_chdir(env, ft_get_path(args[1]));
+}
+
+void	ft_write_oldpwd(t_list **env, char *pwd)
+{
 	t_list	*tmp_env;
 
-	path = NULL;
 	tmp_env = *env;
-	if (args[1] == NULL || ft_is_str_blank(args[1]))
-		chdir(getenv("HOME"));
-	else
+	while (tmp_env)
 	{
-		while (tmp_env)
+		if (ft_strncmp(tmp_env->content, "OLDPWD=", 7) == 0)
 		{
-			if (ft_strncmp(tmp_env->content, "OLDPWD=", 7) == 0)
-			{
-				free(tmp_env->content);
-				tmp = getcwd(NULL, 0);
-				path = ft_strjoin(tmp, "\n");
-				free(tmp);
-				tmp_env->content = ft_strjoin("OLDPWD=", path);
-				free(path);
-			}
-			tmp_env = tmp_env->next;
+			free(tmp_env->content);
+			tmp_env->content = ft_strjoin("OLDPWD=", pwd);
 		}
-		freed_chdir(ft_get_path(args[1]));
+		tmp_env = tmp_env->next;
 	}
 }
+
+char	*ft_my_getenv(t_list **env, char *key)
+{
+	t_list	*tmp_env;
+
+	tmp_env = *env;
+	while (tmp_env)
+	{
+		if (ft_strncmp(tmp_env->content, key, ft_strlen(key)) == 0)
+			return (ft_strchr(tmp_env->content, '=') + 1);
+		tmp_env = tmp_env->next;
+	}
+	return (NULL);
+}
+
 
 void	ft_env(t_list **env)
 {

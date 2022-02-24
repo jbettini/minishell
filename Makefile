@@ -6,7 +6,7 @@
 #    By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/12/24 13:51:13 by rahmed            #+#    #+#              #
-#    Updated: 2022/02/16 02:48:33 by jbettini         ###   ########.fr        #
+#    Updated: 2022/02/24 20:25:30 by jbettini         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,7 +37,8 @@ SRCS		=	${SRC_DIR}/main.c \
 				${SRC_DIR}/get_tokens.c \
 				${SRC_DIR}/parse.c \
 				${SRC_DIR}/strs.c \
-				${SRC_DIR}/utils.c
+				${SRC_DIR}/utils.c	\
+				${SRC_DIR}/ft_strtok.c
 
 #SRCSB		=
 
@@ -53,14 +54,14 @@ CFLAGS		=	-Wall -Wextra -Werror -g
 FSFLAGS		=	-fsanitize=address
 
 # IF NEEDED at 42 on MacOS10 Install :
-#rm -rf $HOME/.brew && git clone --depth=1 https://github.com/Homebrew/brew $HOME/.brew && echo 'export PATH=$HOME/.brew/bin:$PATH' >> $HOME/.zshrc && source $HOME/.zshrc && brew update
-# brew install readline
-#HEADER	=	-I${INC_DIR} -I/Users/$(USER)/.brew/opt/readline/include
-#LDFLAGS	=	-L${SRC_DIR} -L/Users/$(USER)/.brew/opt/readline/lib
+#  rm -rf $HOME/.brew && git clone --depth=1 https://github.com/Homebrew/brew $HOME/.brew && echo 'export PATH=$HOME/.brew/bin:$PATH' >> $HOME/.zshrc && source $HOME/.zshrc && brew update
+#  brew install readline
+HEADER	=	-I${INC_DIR} -I/Users/$(USER)/.brew/opt/readline/include
+LDFLAGS	=	-L${SRC_DIR} -L/Users/$(USER)/.brew/opt/readline/lib
 
 # @HOME on MacOS12 Monterey
-HEADER		=	-I${INC_DIR} -I/usr/local/opt/readline/include
-LDFLAGS		=	-L${SRC_DIR} -L/usr/local/opt/readline/lib
+#HEADER		=	-I${INC_DIR} -I/usr/local/opt/readline/include
+#LDFLAGS	=	-L${SRC_DIR} -L/usr/local/opt/readline/lib
 
 MSHELLFLAG	=	-lreadline
 
@@ -103,6 +104,7 @@ ${NAME}		:	${OBJS}
 				@echo "${FANCY_RESET}"
 
 all			:	${NAME}
+				mv srcs/*.o srcs/Obj
 #bonus 		:	${NAMEB}
 
 clean		:

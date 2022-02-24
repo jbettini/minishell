@@ -6,7 +6,7 @@
 /*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 14:26:28 by ydanset           #+#    #+#             */
-/*   Updated: 2022/02/15 15:59:46 by ydanset          ###   ########.fr       */
+/*   Updated: 2022/02/16 21:39:26 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,6 @@
 static void	init_redir(t_redir **redir, int type)
 {
 	*redir = malloc(sizeof(t_redir) * 1);
-	if (!*redir)
-		exit_error("cannot allocate memory", EXIT_FAILURE);
 	(*redir)->type = type;
 	(*redir)->word = NULL;
 }
@@ -35,11 +33,7 @@ static int	add_redir(t_cmd *cmd, t_list **tokens)
 		return (error("missing word after redirection", 0));
 	}
 	redir->word = ft_strdup(get_token_value((*tokens)->content));
-	if (!redir->word)
-		exit_error("cannot allocate memory", EXIT_FAILURE);
 	new = ft_lstnew(redir);
-	if (!new)
-		exit_error("cannot allocate memory", EXIT_FAILURE);
 	if (redir->type == REDIR_LL || redir->type == REDIR_L)
 		ft_lstadd_back(&cmd->redir_in, new);
 	else
@@ -50,8 +44,6 @@ static int	add_redir(t_cmd *cmd, t_list **tokens)
 static void	init_cmd(t_cmd **cmd)
 {
 	*cmd = malloc(sizeof(t_cmd) * 1);
-	if (!*cmd)
-		exit_error("cannot allocate memory", EXIT_FAILURE);
 	(*cmd)->args = NULL;
 	(*cmd)->redir_in = NULL;
 	(*cmd)->redir_out = NULL;
@@ -65,11 +57,7 @@ static t_cmd	*get_next_cmd(t_list **tokens)
 	while (*tokens && get_token_type((*tokens)->content) != PIPE)
 	{
 		if (get_token_type((*tokens)->content) == WORD)
-		{
 			cmd->args = strs_append(cmd->args, get_token_value((*tokens)->content));
-			if (!cmd->args)
-				exit_error("cannot allocate memory", EXIT_FAILURE);
-		}
 		else if (!add_redir(cmd, tokens))
 		{
 			free_cmd(cmd);
@@ -105,8 +93,6 @@ t_list	*get_cmds(t_list *tokens)
 			return (NULL);
 		}
 		new = ft_lstnew(cmd);
-		if (!new)
-			exit_error("cannot allocate memory", EXIT_FAILURE);
 		ft_lstadd_back(&cmds, new);
 	}
 	return (cmds);

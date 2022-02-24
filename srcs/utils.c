@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: rahmed <rahmed@student.42.fr>              +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/02/13 14:26:55 by ydanset           #+#    #+#             */
-/*   Updated: 2022/02/13 17:36:06 by rahmed           ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../includes/minishell.h"
 
 int	is_symbol(char c)
@@ -44,7 +32,7 @@ void	my_strncpy(char *dst, const char *src, int n)
 		dst[i] = src[i];
 		i++;
 	}
-	dst[i] = '\0';
+	dst[i] = '\0';	
 }
 
 int	my_strcmp(char *s1, char *s2)
@@ -69,7 +57,6 @@ char	*str_insert(char *dst, const char *src, size_t n)
 	int		i;
 	char	*new;
 
-// int		j; //! unused
 	new = malloc(ft_strlen(dst) + ft_strlen(src));
 	if (!new)
 		return (NULL);

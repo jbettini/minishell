@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_tokens.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rahmed <rahmed@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 14:26:35 by ydanset           #+#    #+#             */
-/*   Updated: 2022/02/13 15:10:06 by rahmed           ###   ########.fr       */
+/*   Updated: 2022/02/16 21:17:43 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,39 +14,29 @@
 // #include "cmds.h"
 // #include "libft.h"
 
-static int	get_len_word(char *line)
+int	get_len_word(char *line)
 {
-	int		len_word;
+	int		i;
 	char	quote;
 
-	len_word = 0;
-	while (*line && !is_whitespace(*line) && !is_symbol(*line))
+	i = 0;
+	while (line[i] && !is_whitespace(line[i]) && !is_symbol(line[i]))
 	{
-		if (*line == '"' || *line == '\'')
+		if (line[i] == '\'' || line[i] == '"')
 		{
-			quote = *line;
-			line++;
-			while (*line && *line != quote)
-			{
-				len_word++;
-				line++;
-			}
-			if (!*line)
+			quote = line[i++];
+			while (line[i] && line[i] != quote)
+				i++;
+			if (!line[i])
 				return (-1);
-			line++;
 		}
-		else
-		{
-			len_word++;
-			line++;
-		}
+		i++;
 	}
-	return (len_word);
+	return (i);
 }
 
 static int	extract_word(char **line, t_token *tok)
 {
-	char	quote;
 	int		i;
 
 	i = get_len_word(*line);
@@ -54,23 +44,8 @@ static int	extract_word(char **line, t_token *tok)
 		return (error("quotes unclosed", 0));
 	tok->type = WORD;
 	tok->val = malloc(i + 1);
-	if (!tok->val)
-		exit_error("cannot allocate memory", EXIT_FAILURE);
-	i = 0;
-	while (**line && !is_whitespace(**line) && !is_symbol(**line))
-	{
-		if (**line == '"' || **line == '\'')
-		{
-			quote = **line;
-			*line += 1;
-			while (**line && **line != quote)
-				tok->val[i++] = *((*line)++);
-			*line += 1;
-		}
-		else
-			tok->val[i++] = *((*line)++);
-	}
-	tok->val[i] = '\0';
+	my_strncpy(tok->val, *line, i);
+	*line += i;
 	return (1);
 }
 
@@ -108,8 +83,6 @@ static t_token	*get_next_token(char **line)
 	t_token	*tok;
 
 	tok = malloc(sizeof(t_token) * 1);
-	if (!tok)
-		exit_error("cannot allocate memory", EXIT_FAILURE);
 	if (is_symbol(**line))
 	{
 		if (!extract_symbol(line, tok))
@@ -143,8 +116,6 @@ t_list	*get_tokens(char *line)
 			return (NULL);
 		}
 		new = ft_lstnew(tok);
-		if (!new)
-			exit_error("cannot allocate memory", EXIT_FAILURE);
 		ft_lstadd_back(&tokens, new);
 		skip_whitespace(&line);
 	}

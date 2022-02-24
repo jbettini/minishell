@@ -6,7 +6,7 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/25 14:38:36 by jbettini          #+#    #+#             */
-/*   Updated: 2022/02/16 07:45:52 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/02/16 09:41:05 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	exec_in_main(t_cmd *cmd, t_env *env, int mod)
 	}
 	else
 	{
-		ret = redir_lst(cmd->redir_out);
+		ret = redir_lst(cmd->redir_out, env);
 		if (ret)
 			exit(1);
 		if (ft_cmd(cmd->args, &(env->envp)) > 0)
@@ -68,13 +68,13 @@ int	exec_in_child(t_cmd	*cmd, t_env *env)
 	int	pid;
 	int	ret;
 
-	env->cmd_path = parse_cmd(env->path, cmd->args);
+	if (ft_strchr(cmd->args[0], '/'))
+		env->cmd_path = ft_strdup(cmd->args[0]);
+	else
+		env->cmd_path = parse_cmd(env->path, cmd->args);
 	pid = fork();
 	if (!pid)
 	{
-		ret = redir_lst(cmd->redir_out);
-		if (ret)
-			exit(1);
 		if (ft_cmd(cmd->args, &(env->envp)) > 0)
 			execve((env->cmd_path), cmd->args, NULL); // ft_printf("\033[1;33m4.E exec_in_child exit 0\n\033[0m"); //! test
 		exit(0);

@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   strs.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: rahmed <rahmed@student.42.fr>              +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/02/13 14:26:50 by ydanset           #+#    #+#             */
-/*   Updated: 2022/02/13 18:37:50 by rahmed           ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../includes/minishell.h"
 
 void	print_strs(char **strs)
@@ -20,7 +8,7 @@ void	print_strs(char **strs)
 		return ;
 	i = 0;
 	while (strs[i])
-		ft_printf("\033[1;32m%s\n\033[0m", strs[i++]); // ? ADD couleurs pour debug
+		ft_printf("%s\n", strs[i++]);
 }
 
 void	free_strs(char **strs)
@@ -91,7 +79,32 @@ char	**strs_append(char **strs, const char *str)
 	new[i] = ft_strdup(str);
 	if (!new[i])
 		return (NULL);
-	new[i + 1] = NULL;
+	new[i + 1] = NULL; 
 	free_strs(strs);
+	return (new);
+}
+
+char	**strs_join(char **strs1, char **strs2)
+{
+	int	i;
+	int	j;
+	char **new;
+
+	new = malloc(sizeof(char *) * (strs_len(strs1) + strs_len(strs2) + 1));
+	i = 0;
+	while (strs1 && strs1[i])
+	{
+		new[i] = ft_strdup(strs1[i]);
+		i++;
+	}
+	j = 0;
+	while (strs2 && strs2[j])
+	{
+		new[i + j] = ft_strdup(strs2[j]);
+		j++;
+	}
+	new[i + j] = NULL;
+	free_strs(strs1);
+	free_strs(strs2);
 	return (new);
 }
