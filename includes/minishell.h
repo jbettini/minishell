@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rahmed <rahmed@student.42.fr>              +#+  +:+       +#+        */
+/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/04 17:03:54 by rahmed            #+#    #+#             */
-/*   Updated: 2022/02/18 20:12:38 by rahmed           ###   ########.fr       */
+/*   Updated: 2022/02/26 20:01:53 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,12 +39,6 @@ enum	e_err
 	OUT_ERROR,
 	CMD_ERROR
 };
-// # define	SUCCESS		0
-// # define	BF_ERROR	1
-// # define	OP_ERROR	2
-// # define	DUP_ERROR	3
-// # define	OUT_ERROR	4
-// # define	CMD_ERROR	5
 
 enum	e_redir_type
 {
@@ -55,19 +49,11 @@ enum	e_redir_type
 	REDIR_R,
 	REDIR_RR
 };
-// # define 	WORD 		0
-// # define 	PIPE 		1
-// # define 	REDIR_L 	2
-// # define 	REDIR_LL 	3
-// # define 	REDIR_R 	4
-// # define 	REDIR_RR 	5
-
 typedef struct s_token
 {
 	int		type;
 	char	*val;
 }	t_token;
-
 typedef struct s_env
 {
 	t_list	*envp;
@@ -78,7 +64,6 @@ typedef struct s_env
 	int		out_check;
 }		t_env;
 
-/* Ra */
 /* minishell.c */
 t_env	*env_manag(char **env, t_env *to_free, int mod);
 int		routine(t_env *env_set);
@@ -90,29 +75,25 @@ void	ft_pwd(void);
 void	ft_cd(char **args, t_list **env);
 void	ft_write_oldpwd(t_list **env, char *pwd);
 char	*ft_my_getenv(t_list **env, char *key);
-void	ft_env(t_list **env);
+void	ft_env(char **args, t_list **env);
 
 /* utils_builtins.c */
 int		get_env_name_len(char *str, int getequal);
 int		replace_existing_env(char *args, t_list *env);
 char	*ft_get_path(char *args);
 char	*ft_get_special_path(char *args);
-void	my_chdir(t_list **env, char *path);
+void	my_chdir(char *path, t_list **env);
 
 /* env.c */
-char	*ft_get_env_path(char *args);
-void	ft_check_unset(char **args, t_list **env);
-void	ft_unset(char *args, t_list **env);
-void	ft_check_export(char **args, t_list **env);
-void	ft_export(char *args, t_list **env);
-int		ft_env_alnum_underscore(char *str);
+void    add_ref(t_list **lst, void *data_ref, int idx);
+void	ft_unset(char **arg, t_list **env);
+void	ft_export(char **arg, t_list **env);
 
 /* signal.c */
 void	init_signal(int fd);
 void	signal_handler(int signo);
 int		handle_eof_ctrl_d(char *str);
 
-/* Jb */
 /* connect.c */
 int		redir_manag(t_redir *to_redir, t_env *env);
 int		redir_lst(t_list *redir_lst, t_env *env);
@@ -125,6 +106,7 @@ int		connecting_fct(t_list *line, t_env *env);
 /* exec.c */
 int		ft_isbuild(char *args);
 int		exec_in_main(t_cmd *cmd, t_env *env, int mod);
+
 // int		exec_in_main(char **arg, t_env *env, int mod);
 int		exec_in_child(t_cmd	*cmd, t_env *env);
 char	*parse_cmd(char **path, char **cmd);
@@ -155,7 +137,6 @@ void	ft_print_dpt(char **split);
 void	print_redir_lst(t_list *lst);
 void	ft_putbiglst(t_list *lst);
 
-/* Yo */
 /* dev.c */
 void	print_tokens(t_list *tokens);
 void	print_redir(void *ptr);

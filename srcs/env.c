@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pendant_ce_temps.c                                 :+:      :+:    :+:   */
+/*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/23 05:33:04 by jbettini          #+#    #+#             */
-/*   Updated: 2022/02/23 07:07:41 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/02/26 09:02:33 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../includes/minishell.h"
 
 # define EXPORT 1
 # define UNSET 0
@@ -87,7 +87,7 @@ void    delref(t_list **lst, void *data_ref)
     free(data_ref);
 }
 
-void    ft_unset(t_list *env, char **arg)
+void	ft_unset(char **arg, t_list **env)
 {
     int i;
 
@@ -95,7 +95,7 @@ void    ft_unset(t_list *env, char **arg)
     while (arg[++i])
     {
         if (is_valide_var(arg[i], UNSET))
-                delref(&env, ft_strjoin(arg[i], "="));
+                delref(env, ft_strjoin(arg[i], "="));
          else
         {
                 ft_putstr_fd("unset:", 2);
@@ -122,7 +122,7 @@ void    add_ref(t_list **lst, void *data_ref, int idx)
     }
 }
 
-void    ft_export(t_list *env, char **arg)
+void	ft_export(char **arg, t_list **env)
 {
     int i;
     int equ;
@@ -130,7 +130,7 @@ void    ft_export(t_list *env, char **arg)
     i = 0;
     equ = 0;
     if (!arg[1])
-        ft_putlst(env);
+        ft_putlst(*env);
     else
         while (arg[++i])
         {
@@ -138,12 +138,12 @@ void    ft_export(t_list *env, char **arg)
             {
                 equ = ft_strc_index(arg[i], '=');
                 if (equ != -1)
-                    add_ref(&env, arg[i], equ + 1);
+                    add_ref(env, arg[i], equ + 1);
             }
             else
             {
-                    printf("export: not valid in this context: ");
-                    ft_putendl_fd(arg[i], 2);
+                ft_putstr_fd("export: not valid in this context: ", 2);
+                ft_putendl_fd(arg[i], 2);
             }
         }
 }

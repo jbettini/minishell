@@ -6,7 +6,7 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/24 17:33:48 by jbettini          #+#    #+#             */
-/*   Updated: 2022/02/24 17:33:50 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/02/26 18:38:18 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ int	main(int ac, char **av, char **env)
 			break ;
 	env_manag(NULL, env_set, 1);
 	// ft_printf("\033[1;31m****EXIT STATUS = %d****\033[0m\n", g_exit_status); //! test
+	// system("leaks minishell");
 	return (g_exit_status);
 }
 
