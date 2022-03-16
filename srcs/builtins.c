@@ -6,7 +6,7 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/24 15:32:07 by jbettini          #+#    #+#             */
-/*   Updated: 2022/02/26 20:08:17 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/03/16 03:42:43 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ void	ft_cd(char **args, t_list **env)
 {
 	if (ft_double_strlen(args) <= 2) // need change to 3 arg
 	{
-		if (ft_strequ_hd(args[1], "~") || !args[1])
+		if (!args[1])
 			cd_to_envvar(env, "HOME=");
 		else if (ft_strequ_hd(args[1], "-"))
 			cd_to_envvar(env, "OLDPWD=");
@@ -98,11 +98,24 @@ void	ft_cd(char **args, t_list **env)
 		ft_putendl_fd("cd: too many arguments", 2);
 }
 
+int	exec_build_in_env(char **args, t_list **env)
+{
+	if (ft_strequ_hd(args[0], "unset"))
+		ft_putstr("env: export: No such file or directory\n");
+	else if (ft_strequ_hd(args[0], "export"))
+		ft_putstr("env: export: No such file or directory\n");
+	else
+		return (ft_cmd(args, env));
+	return (0);
+}
+
 void	exec_in_env(char **args, t_list **env, char **path)
 {
 	int		pid;
 	char	*tmp;
+	char	**envp;
 
+	envp = ft_lst_to_dpt(*env);
 	if (ft_isbuild(args[0]))
 		tmp = NULL;
 	else
@@ -110,9 +123,9 @@ void	exec_in_env(char **args, t_list **env, char **path)
 	pid = fork();
 	if (!pid)
 	{
-		if (ft_cmd(args, env))
-			execve(tmp, args, NULL);
-		exit(1);
+		if (exec_build_in_env(args, env))
+			execve(tmp, args, envp);
+		exit(0);
 	}
 	else
 	{
@@ -120,6 +133,7 @@ void	exec_in_env(char **args, t_list **env, char **path)
 		if (tmp)
 			free(tmp);
 	}
+	ft_free_split(envp);
 }
 
 void	ft_env(char **args, t_list **env)

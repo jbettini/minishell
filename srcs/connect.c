@@ -6,7 +6,7 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/11 04:03:54 by jbettini          #+#    #+#             */
-/*   Updated: 2022/02/16 09:29:45 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/03/16 04:26:47 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 void	reset_routine(t_env *env)
 {
+	ft_free_split(env->nbtfke);
+	env->nbtfke = ft_lst_to_dpt(env->envp);
 	dup2(env->oldstdin, 0);
 	dup2(env->oldstdout, 1);
 	if (!access(".heredoc_tmp", F_OK))
@@ -75,6 +77,8 @@ int	launch_exec(t_env *env, t_cmd *cmd, int mod)
 	int	ret;
 
 	ret = 0;
+	if (!cmd->args)
+		return (-42);
 	if (mod == 1)
 	{
 		if (ft_strchr(cmd->args[0], '/'))
@@ -94,7 +98,6 @@ int	launch_exec(t_env *env, t_cmd *cmd, int mod)
 	}
 	else if (!mod)
 		ret = exec_in_main(cmd, env, 1);
-	// ft_printf("3 launch_exec ret = %d\n", ret); //! test
 	env->cmd_path = NULL;
 	return (ret);
 }
@@ -124,13 +127,11 @@ int	connecting_fct(t_list *cmd, t_env *env)
 	{
 		while (cmd)
 		{
-			// ft_printf("1.0 connecting_fct line->content = %s\n", line->content); //! test
 			if (cmd->next)
 				ret = exec_block((t_cmd *)(cmd->content), env, 1);
 			else
 				ret = exec_block((t_cmd *)(cmd->content), env, 2);
-			// ft_printf("1.1 connecting_fct ret = %d\n", ret); //! test
-			if (ret) // ! a changer par une pipe NULL ? pour avoir result = 0
+			if (ret)
 				error_manag(ret);
 			cmd = cmd->next;
 		}
@@ -139,7 +140,6 @@ int	connecting_fct(t_list *cmd, t_env *env)
 		ret = exec_block((t_cmd *)(cmd->content), env, 0);
 	error_manag(ret);
 	reset_routine(env);
-	// ft_printf("1 connecting_fct ret (if !-1 => ret = 0) = %d\n", ret); //! test
 	if (ret == -1)
 		return (ret);
 	return (SUCCESS);

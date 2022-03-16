@@ -6,7 +6,7 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/04 17:03:54 by rahmed            #+#    #+#             */
-/*   Updated: 2022/02/26 20:01:53 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/03/16 04:23:56 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ typedef struct s_token
 typedef struct s_env
 {
 	t_list	*envp;
+	char	**nbtfke; // tilteeeeeee
 	char	**path;
 	char	*cmd_path;
 	int		oldstdin;

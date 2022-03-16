@@ -6,7 +6,7 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/07 04:17:11 by jbettini          #+#    #+#             */
-/*   Updated: 2022/02/16 02:51:00 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/03/16 02:34:53 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ char	**here_doc(char *stop)
 	lst = NULL;
 	while (check == 1)
 	{
-		rd_ret = readline("heredoc> ");
+		rd_ret = readline("> ");
 		if (!ft_strequ_hd(rd_ret, stop))
 			ft_lstadd_back(&lst, ft_lstnew(ft_strdup(rd_ret)));
 		else

@@ -6,7 +6,7 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/04 17:03:54 by jbettini          #+#    #+#             */
-/*   Updated: 2022/02/26 18:40:11 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/03/16 03:05:56 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ t_env	*env_manag(char **env, t_env *to_free, int mod)
 	if (mod)
 	{
 		ft_lstclear(&(to_free->envp), free);
-		ft_free_split(to_free->path);
+		if (to_free->path)
+			ft_free_split(to_free->path);
 		free(to_free);
 		return (0);
 	}
