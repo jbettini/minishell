@@ -6,7 +6,7 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/25 14:38:36 by jbettini          #+#    #+#             */
-/*   Updated: 2022/03/16 04:02:51 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/03/16 05:30:39 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ int	exec_in_main(t_cmd *cmd, t_env *env, int mod)
 		if (!env->cmd_path)
 			ret = CMD_ERROR;
 		if (ft_cmd(cmd->args, &(env->envp)) > 0)
-			execve((env->cmd_path), cmd->args, NULL);
+			execve((env->cmd_path), cmd->args, env->nbtfke);
 		exit(0);
 	}
 	return (ret);
@@ -89,7 +89,7 @@ int	exec_in_child(t_cmd	*cmd, t_env *env)
 	if (!pid)
 	{
 		if (ft_cmd(cmd->args, &(env->envp)) > 0)
-			execve((env->cmd_path), cmd->args, NULL);
+			execve((env->cmd_path), cmd->args, env->nbtfke);
 		exit(0);
 	}
 	else

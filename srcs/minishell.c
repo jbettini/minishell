@@ -6,7 +6,7 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/04 17:03:54 by jbettini          #+#    #+#             */
-/*   Updated: 2022/03/16 03:05:56 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/03/16 05:19:39 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ t_env	*env_manag(char **env, t_env *to_free, int mod)
 	env_set->oldstdout = dup(1);
 	env_set->oldstdin = dup(0);
 	env_set->envp = ft_dpt_to_lst(env);
+	env_set->nbtfke = ft_lst_to_dpt(env_set->envp);
 	env_set->path = ft_split(getenv("PATH"), ':');
 	if (!(env_set->envp) || !(env_set->path))
 		return (NULL);

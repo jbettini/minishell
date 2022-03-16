@@ -6,7 +6,7 @@
 #    By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/12/24 13:51:13 by rahmed            #+#    #+#              #
-#    Updated: 2022/02/26 09:22:44 by jbettini         ###   ########.fr        #
+#    Updated: 2022/03/16 05:22:48 by jbettini         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -101,9 +101,9 @@ ${NAME}		:	${OBJS}
 #				${CC} ${CFLAGS} ${LDFLAGS} ${MSHELLFLAG} ${NAME} ${MSRC} -o ${TARGET_SRV}
 				${CC} ${CFLAGS} ${LDFLAGS} ${MSHELLFLAG} ${FSFLAGS} ${NAME} ${MSRC} -o ${TARGET_SRV}
 				@echo "${FANCY_RESET}"
+				mv srcs/*.o srcs/Obj
 
 all			:	${NAME}
-				mv srcs/*.o srcs/Obj
 #bonus 		:	${NAMEB}
 
 clean		:
@@ -123,6 +123,7 @@ fclean		:	clean
 				${RM} ${NAME}
 				@echo "${TXT_GREEN}"
 				make fclean -C ${LIBFT_DIR}
+				rm srcs/Obj/*.o
 				@echo "$(FANCY_RESET)"
 
 re			:	fclean all
