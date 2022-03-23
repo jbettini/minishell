@@ -6,7 +6,7 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/04 17:03:54 by jbettini          #+#    #+#             */
-/*   Updated: 2022/03/16 05:19:39 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/03/23 07:53:16 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ t_env	*env_manag(char **env, t_env *to_free, int mod)
 	if (mod)
 	{
 		ft_lstclear(&(to_free->envp), free);
+		ft_free_split(to_free->nbtfke);
 		if (to_free->path)
 			ft_free_split(to_free->path);
 		free(to_free);
@@ -27,6 +28,7 @@ t_env	*env_manag(char **env, t_env *to_free, int mod)
 	env_set = malloc(sizeof(t_env));
 	if (!env_set)
 		return (NULL);
+	env_set->child = 0;
 	env_set->oldstdout = dup(1);
 	env_set->oldstdin = dup(0);
 	env_set->envp = ft_dpt_to_lst(env);
@@ -37,7 +39,23 @@ t_env	*env_manag(char **env, t_env *to_free, int mod)
 	return (env_set);
 }
 
-int	routine(t_env *env_set)
+void wait_this_fk_process(t_env *env)
+{
+	int	i;
+	int status;
+
+	i = -1;
+	status = 0;
+	// printf("child %d\n", env->child);
+	if (env->child)
+	{
+		while (++i < env->child)
+			waitpid(-1, &status, 0);
+		g_exit_status = status % 255;
+	}
+}
+
+int	minishell(t_env *env_set)
 {
 	// TODO : get choice between char** and t_env
 	int		ret;
@@ -52,41 +70,36 @@ int	routine(t_env *env_set)
 	{
 		add_history(line);
 		cmds = parse(line);
-		// ft_lstiter(cmds, &print_cmd);
 		if (cmds)
 		{
 			if (!expand_ev(cmds, env_set))
 				; // smth bad occurred
-			ret = connecting_fct(cmds, env_set); // ! t_env *env to send or char **
+			ret = connecting_fct(cmds, env_set);
 		}
 		ft_lstclear(&cmds, &free_cmd);
 	}
 	free(line);
-	// system("leaks minishell");
 	return (ret);
 }
 
-int	ft_exit_code(char **args, int print_exit)
+int	ft_exit(char **args, int print_exit)
 {
-	//! tester les valeurs exit merdiques et negatives par rapport au vrai bash
-	int	valid_code;
-
 	if (print_exit)
 		ft_putstr_fd("exit\n", 1);
-	if (args[1] == NULL)
-		return (-1);
-	valid_code = ft_str_isdigit(args[1]);
-	if (!valid_code) // ! verif si > INT MAX aussi ?
-		print_error("exit: numeric argument required");
-	else if (args[2])
-		print_error("exit: too many arguments");
-	else if (valid_code && !args[2])
+	if (args[1] && !ft_str_isdigit(args[1]))
 	{
-		g_exit_status = ft_atoll(args[1]) % 256;
-		// ft_printf("---------------SORTIE = %d\n", g_exit_status); // ! test
-		return (-1);
+		print_error("exit: numeric argument required");
+		exit(255);
 	}
-	return (0);
+	else if (ft_double_strlen(args) > 2)
+		print_error("exit: too many arguments");
+	else
+	{
+		if (args[1])
+			exit(ft_atoll(args[1]));
+		exit(0);
+	}
+	return (BUILD_ERROR);
 }
 
 // int	routine(t_env *env_set)

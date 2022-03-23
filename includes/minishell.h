@@ -6,7 +6,7 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/04 17:03:54 by rahmed            #+#    #+#             */
-/*   Updated: 2022/03/16 04:23:56 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/03/23 07:31:10 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 # include "../libft/libft.h"
 # include "cmds.h"
 # include <sys/types.h>
+# include <sys/wait.h>
 
 # define	PROMPT		"minishell$> "
 # define	QUOTE		39
@@ -33,11 +34,24 @@ long long	g_exit_status; // ! A garder ?
 enum	e_err
 {
 	SUCCESS,
+	BUILD_ERROR,
 	BF_ERROR,
 	OP_ERROR,
 	DUP_ERROR,
 	OUT_ERROR,
-	CMD_ERROR
+	CMD_ERROR = 127
+};
+
+enum	e_mod
+{
+	IN_ENV,
+	OUT_OF_ENV,
+	IN_PIPE,
+	LAST_PIPE_BLOCK,
+	IN_MAIN,
+	IN_CHILD,
+	SET,
+	DESTROY_SET
 };
 
 enum	e_redir_type
@@ -63,20 +77,26 @@ typedef struct s_env
 	int		oldstdin;
 	int		oldstdout;
 	int		out_check;
+	int		child;
 }		t_env;
 
 /* minishell.c */
 t_env	*env_manag(char **env, t_env *to_free, int mod);
-int		routine(t_env *env_set);
-int		ft_exit_code(char **args, int print_exit);
+int		minishell(t_env *env_set);
+int		ft_exit(char **args, int print_exit);
+void	ft_export_exit_status(char *arg, t_list **env);
+void	wait_this_fk_process(t_env *env);
+void	set_path(t_env *env, char **args, int mod);
+char	**remake_path(t_env *env, char **args);
 
 /* builtins.c */
-int		ft_cmd(char **args, t_list	**env);
-void	ft_pwd(void);
+int		ft_cmd(char **args, t_env *env, int mod);
+int		exec_build_in_env(char **args, t_env *env);
+int		ft_pwd(char **args);
 void	ft_cd(char **args, t_list **env);
 void	ft_write_oldpwd(t_list **env, char *pwd);
 char	*ft_my_getenv(t_list **env, char *key);
-void	ft_env(char **args, t_list **env);
+void	ft_env(char **args, t_env *env, int mod);
 
 /* utils_builtins.c */
 int		get_env_name_len(char *str, int getequal);
@@ -87,8 +107,8 @@ void	my_chdir(char *path, t_list **env);
 
 /* env.c */
 void    add_ref(t_list **lst, void *data_ref, int idx);
-void	ft_unset(char **arg, t_list **env);
-void	ft_export(char **arg, t_list **env);
+int		ft_unset(char **arg, t_list **env);
+int		ft_export(char **arg, t_list **env);
 
 /* signal.c */
 void	init_signal(int fd);
@@ -107,9 +127,8 @@ int		connecting_fct(t_list *line, t_env *env);
 /* exec.c */
 int		ft_isbuild(char *args);
 int		exec_in_main(t_cmd *cmd, t_env *env, int mod);
-
-// int		exec_in_main(char **arg, t_env *env, int mod);
-int		exec_in_child(t_cmd	*cmd, t_env *env);
+int		execute_cmd(char **args, t_env *env, int mod);
+int		exec_in_child(char **args, t_env *env, int mod);
 char	*parse_cmd(char **path, char **cmd);
 
 /* redir.c */

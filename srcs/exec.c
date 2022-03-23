@@ -6,7 +6,7 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/25 14:38:36 by jbettini          #+#    #+#             */
-/*   Updated: 2022/03/16 05:30:39 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/03/23 07:19:31 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,27 @@ int	ft_isbuild(char *args)
 	else if (ft_strequ_hd(args, "echo"))
 		return (1);
 	return (0);
+}
+
+int	execute_cmd(char **args, t_env *env, int mod)
+{
+	int	ret;
+	
+	ret = 0;
+	if (mod == IN_ENV)
+		ret = exec_build_in_env(args, env);
+	else if (mod != IN_MAIN)
+		ret = ft_cmd(args, env, mod);
+	else if (mod == IN_MAIN)
+		ret = 2;
+	if (ret == 2 && !env->cmd_path)
+	{
+		ret = CMD_ERROR;
+		error_manag(ret);
+	}
+	else if (ret == 2)
+		execve(env->cmd_path, args, env->nbtfke);
+	exit(ret);
 }
 
 int	check_unset_path(char **path, t_env *env)
@@ -55,50 +76,61 @@ int	exec_in_main(t_cmd *cmd, t_env *env, int mod)
 	int	ret;
 
 	ret = 0;
-	if (mod)
+	if (mod == IN_MAIN)
 	{
-		ret = ft_cmd(cmd->args, &(env->envp));
-		if (!ret && ft_strequ_hd(cmd->args[0], "unset"))
+		ret = ft_cmd(cmd->args, env, mod);
+		if (ret != 2)
+			g_exit_status = ret;
+		else if (ret == 0 && ft_strequ_hd(cmd->args[0], "unset"))
 			check_unset_path(&cmd->args[1], env);
-		if (ret > 0)
-			ret = exec_in_child(cmd, env);
+		else if (ret == 2 && !env->cmd_path)
+		{
+			error_manag(CMD_ERROR);
+			g_exit_status = CMD_ERROR;
+		}
+		else if (ret == 2)
+			exec_in_child(cmd->args, env, mod);		
 	}
-	else
+	else if (mod == IN_PIPE)
 	{
 		ret = redir_lst(cmd->redir_out, env);
 		if (ret)
 			exit(-42);
-		if (!env->cmd_path)
-			ret = CMD_ERROR;
-		if (ft_cmd(cmd->args, &(env->envp)) > 0)
-			execve((env->cmd_path), cmd->args, env->nbtfke);
-		exit(0);
+		execute_cmd(cmd->args, env, mod);
 	}
 	return (ret);
 }
 
-int	exec_in_child(t_cmd	*cmd, t_env *env)
+char	**remake_path(t_env *env, char **args)
 {
-	int	pid;
+	int	i;
 
-	if (ft_strchr(cmd->args[0], '/'))
-		env->cmd_path = ft_strdup(cmd->args[0]);
-	else
-		env->cmd_path = parse_cmd(env->path, cmd->args);
+	i = 0;
+	if (ft_strequ_hd(args[0], "env"))
+	{
+		while (ft_strequ_hd(args[i], "env") && args[i + 1])
+			i++;
+		if (env->cmd_path)
+			free(env->cmd_path);
+		set_path(env, &args[i], SET);
+		return (&args[i]);
+	}
+	return (NULL);
+}
+
+int	exec_in_child(char **args, t_env *env, int mod)
+{
+	int		pid;
+	char	**exec_args;
+
+	exec_args = remake_path(env, args);
+	if (!exec_args)
+		exec_args = args;
 	pid = fork();
 	if (!pid)
-	{
-		if (ft_cmd(cmd->args, &(env->envp)) > 0)
-			execve((env->cmd_path), cmd->args, env->nbtfke);
-		exit(0);
-	}
+		execute_cmd(exec_args, env, mod);
 	else
-	{
-		waitpid(-1, NULL, 0);
-		free(env->cmd_path);
-	}
-	if (!env->cmd_path)
-		return (CMD_ERROR);
+		env->child++;
 	return (0);
 }
 

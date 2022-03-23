@@ -6,7 +6,7 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/24 17:33:48 by jbettini          #+#    #+#             */
-/*   Updated: 2022/02/26 18:38:18 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/03/23 07:39:19 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,11 +62,13 @@ int	main(int ac, char **av, char **env)
 	env_set = env_manag(env, NULL, 0);
 	init_signal(0);
 	while (1)
-		if (routine(env_set) == -1)
+		if (minishell(env_set) == -1)
 			break ;
 	env_manag(NULL, env_set, 1);
 	// ft_printf("\033[1;31m****EXIT STATUS = %d****\033[0m\n", g_exit_status); //! test
 	// system("leaks minishell");
+
+	system("leaks minishell");
 	return (g_exit_status);
 }
 

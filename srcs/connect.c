@@ -6,20 +6,38 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/11 04:03:54 by jbettini          #+#    #+#             */
-/*   Updated: 2022/03/16 04:26:47 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/03/23 07:33:06 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	reset_routine(t_env *env)
+void	set_path(t_env *env, char **args, int mod)
 {
+	if (mod != DESTROY_SET)
+	{
+		if (ft_strchr(args[0], '/'))
+			env->cmd_path = ft_strdup(args[0]);
+		else
+			env->cmd_path = parse_cmd(env->path, args);
+		return ;
+	}
+	if (env->cmd_path)
+		free(env->cmd_path);
+}
+
+void	reset_routine(t_env *env, int ret)
+{
+	ret = 0;
 	ft_free_split(env->nbtfke);
 	env->nbtfke = ft_lst_to_dpt(env->envp);
 	dup2(env->oldstdin, 0);
 	dup2(env->oldstdout, 1);
 	if (!access(".heredoc_tmp", F_OK))
 		unlink(".heredoc_tmp");
+	wait_this_fk_process(env);
+	// printf("global %lld\n", g_exit_status);
+	env->child = 0;
 }
 
 int	redir_manag(t_redir *to_redir, t_env *env)
@@ -79,26 +97,17 @@ int	launch_exec(t_env *env, t_cmd *cmd, int mod)
 	ret = 0;
 	if (!cmd->args)
 		return (-42);
-	if (mod == 1)
-	{
-		if (ft_strchr(cmd->args[0], '/'))
-			env->cmd_path = ft_strdup(cmd->args[0]);
-		else
-			env->cmd_path = parse_cmd(env->path, cmd->args);
+	if (mod == IN_PIPE)
 		ft_pipex(cmd, env);
-		if (env->cmd_path)
-			free(env->cmd_path);
-	}
-	else if (mod == 2)
+	else if (mod == LAST_PIPE_BLOCK)
 	{
 		ret = redir_lst(cmd->redir_out, env);
 		if (ret)
 			return (ret);
-		ret = exec_in_child(cmd, env);
+		ret = exec_in_child(cmd->args, env, mod);
 	}
-	else if (!mod)
-		ret = exec_in_main(cmd, env, 1);
-	env->cmd_path = NULL;
+	else if (mod == IN_MAIN)
+		ret = exec_in_main(cmd, env, mod);
 	return (ret);
 }
 
@@ -109,13 +118,15 @@ int	exec_block(t_cmd *to_exec, t_env *env, int mod)
 	ret = redir_lst(to_exec->redir_in, env);
 	if (ret)
 		return (ret);
-	if (!mod)
+	if (mod == IN_MAIN)
 	{
 		ret = redir_lst(to_exec->redir_out, env);
 		if (ret)
 			return (ret);
 	}
+	set_path(env, to_exec->args, SET);
 	ret = launch_exec(env, to_exec, mod);
+	set_path(env, to_exec->args, DESTROY_SET);
 	return (ret);
 }
 
@@ -123,24 +134,23 @@ int	connecting_fct(t_list *cmd, t_env *env)
 {
 	int		ret;
 
+	ret = 0;
 	if (cmd->next != NULL)
 	{
 		while (cmd)
 		{
 			if (cmd->next)
-				ret = exec_block((t_cmd *)(cmd->content), env, 1);
+				ret = exec_block((t_cmd *)(cmd->content), env, IN_PIPE);
 			else
-				ret = exec_block((t_cmd *)(cmd->content), env, 2);
-			if (ret)
-				error_manag(ret);
+				ret = exec_block((t_cmd *)(cmd->content), env, LAST_PIPE_BLOCK);
 			cmd = cmd->next;
 		}
+		reset_routine(env, IN_CHILD);
 	}
 	else
-		ret = exec_block((t_cmd *)(cmd->content), env, 0);
-	error_manag(ret);
-	reset_routine(env);
-	if (ret == -1)
-		return (ret);
+	{
+		ret = exec_block((t_cmd *)(cmd->content), env, IN_MAIN);
+		reset_routine(env, IN_MAIN);
+	}
 	return (SUCCESS);
 }

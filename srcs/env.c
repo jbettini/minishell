@@ -6,7 +6,7 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/23 05:33:04 by jbettini          #+#    #+#             */
-/*   Updated: 2022/02/26 09:02:33 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/03/19 13:14:36 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,13 +50,19 @@ int ft_strc_index(char *str, int c)
     return (-1);
 }
 
-void	ft_pwd(void)
+int	ft_pwd(char **args)
 {
 	char	*pwd;
 
+    if (args[1])
+    {
+        print_error("pwd: too many arguments");
+        return (BUILD_ERROR);
+    }
 	pwd = getcwd(NULL, 0);
 	ft_putendl_fd(pwd, 1);
 	free(pwd);
+    return (0);
 }
 
 void    delref(t_list **lst, void *data_ref)
@@ -87,11 +93,13 @@ void    delref(t_list **lst, void *data_ref)
     free(data_ref);
 }
 
-void	ft_unset(char **arg, t_list **env)
+int	ft_unset(char **arg, t_list **env)
 {
     int i;
+    int ret;
 
     i = 0;
+    ret = 0;
     while (arg[++i])
     {
         if (is_valide_var(arg[i], UNSET))
@@ -101,8 +109,10 @@ void	ft_unset(char **arg, t_list **env)
                 ft_putstr_fd("unset:", 2);
                 ft_putstr_fd(arg[i], 2);
                 ft_putstr_fd(" : invalid parameter name\n", 2);
+                ret = BUILD_ERROR;
         }
     }
+    return (ret);
 }
 
 void    add_ref(t_list **lst, void *data_ref, int idx)
@@ -122,13 +132,15 @@ void    add_ref(t_list **lst, void *data_ref, int idx)
     }
 }
 
-void	ft_export(char **arg, t_list **env)
+int	ft_export(char **arg, t_list **env)
 {
     int i;
     int equ;
+    int ret;
 
     i = 0;
     equ = 0;
+    ret = 0;
     if (!arg[1])
         ft_putlst(*env);
     else
@@ -144,6 +156,8 @@ void	ft_export(char **arg, t_list **env)
             {
                 ft_putstr_fd("export: not valid in this context: ", 2);
                 ft_putendl_fd(arg[i], 2);
+                ret = BUILD_ERROR;
             }
         }
+    return (ret);
 }

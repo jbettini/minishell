@@ -6,7 +6,7 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/24 15:32:07 by jbettini          #+#    #+#             */
-/*   Updated: 2022/03/16 03:42:43 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/03/23 07:53:18 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,26 +15,26 @@
 #define	HOME 1
 #define	OLD 2
 
-int	ft_cmd(char **args, t_list	**env)
+int	ft_cmd(char **args, t_env *env, int mod)
 {
 	if (args[0] == NULL)
 		return (0);
-	else if (ft_strequ_hd(args[0], "exit"))
-		return (ft_exit_code(args, 1));
-	else if (ft_strequ_hd(args[0], "unset"))
-		ft_unset(args, env);
-	else if (ft_strequ_hd(args[0], "export"))
-		ft_export(args, env);
+	else if (ft_strequ_hd(args[0], "exit") && mod != IN_ENV)
+		return (ft_exit(args, 1));
+	else if (ft_strequ_hd(args[0], "unset") && mod != IN_ENV)
+		return (ft_unset(args, &(env->envp)));
+	else if (ft_strequ_hd(args[0], "export") && mod != IN_ENV)
+		return (ft_export(args, &(env->envp)));
 	else if (ft_strequ_hd(args[0], "pwd"))
-		ft_pwd();
+		return (ft_pwd(args));
 	else if (ft_strequ_hd(args[0], "echo"))
 		ft_echo(args);
 	else if (ft_strequ_hd(args[0], "cd"))
-		ft_cd(args, env);
+		ft_cd(args, &(env->envp));
 	else if (ft_strequ_hd(args[0], "env"))
-		ft_env(args, env);
+		ft_env(args, env, mod);
 	else
-		return (1);
+		return (2);
 	return (0);
 }
 
@@ -98,55 +98,41 @@ void	ft_cd(char **args, t_list **env)
 		ft_putendl_fd("cd: too many arguments", 2);
 }
 
-int	exec_build_in_env(char **args, t_list **env)
+int	exec_build_in_env(char **args, t_env *env)
 {
+	int ret;
+
+	ret = CMD_ERROR;
 	if (ft_strequ_hd(args[0], "unset"))
 		ft_putstr("env: export: No such file or directory\n");
 	else if (ft_strequ_hd(args[0], "export"))
 		ft_putstr("env: export: No such file or directory\n");
+	else if (ft_strequ_hd(args[0], "exit"))
+		ft_putstr("env: exit: No such file or directory\n");
 	else
-		return (ft_cmd(args, env));
-	return (0);
+		ret = 0;
+	if (ret == 0)
+		ret = ft_cmd(args, env, IN_ENV);
+	return (ret);
 }
 
-void	exec_in_env(char **args, t_list **env, char **path)
+void	ft_env(char **args, t_env *env, int mod)
 {
-	int		pid;
-	char	*tmp;
-	char	**envp;
+	int		i;
 
-	envp = ft_lst_to_dpt(*env);
-	if (ft_isbuild(args[0]))
-		tmp = NULL;
-	else
-		tmp = parse_cmd(path, args);
-	pid = fork();
-	if (!pid)
-	{
-		if (exec_build_in_env(args, env))
-			execve(tmp, args, envp);
-		exit(0);
-	}
+	i = 0;
+	while (ft_strequ_hd(args[i], "env") && args[i + 1])
+		i++;
+	if (ft_strequ_hd(args[i], "env"))
+		ft_putlst(env->envp);
 	else
 	{
-		waitpid(-1, NULL, 0);
-		if (tmp)
-			free(tmp);
+		if (mod == IN_MAIN)
+		{
+			if (env->cmd_path)
+				free(env->cmd_path);
+			set_path(env, &args[i], SET);
+			exec_in_child(&args[i], env, IN_ENV);
+		}
 	}
-	ft_free_split(envp);
-}
-
-void	ft_env(char **args, t_list **env)
-{
-	char	**path;
-	char	*tmp;
-
-	tmp = getenv("PATH");
-	path = ft_split(tmp, ':');
-	if (!args[1])
-		ft_putlst(*env);
-	else
-		exec_in_env(&args[1], env, path);
-	// free(tmp);
-	ft_free_split(path);
 }
