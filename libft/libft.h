@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rahmed <rahmed@student.42.fr>              +#+  +:+       +#+        */
+/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/06 15:51:31 by rahmed            #+#    #+#             */
-/*   Updated: 2022/02/14 22:12:56 by rahmed           ###   ########.fr       */
+/*   Updated: 2022/03/19 07:58:31 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@ typedef struct s_list
 	struct s_list	*next;
 }	t_list;
 
+char		*ft_join_free_s1(char *s1, char *s2);
+char		*ft_join_free_s2(char *s1, char *s2);
 int			ft_atoi(const char *str);
 long long	ft_atoll(const char *str);
 char		**ft_add_line_tab(char **tab, char *line);
@@ -55,7 +57,7 @@ int			ft_str_isdigit(char *str);
 int			ft_isprint(int c);
 int			ft_is_str_blank(char *str);
 int			ft_iswhitespace(int c);
-char		*ft_itoa(int n);
+char		*ft_itoa(t_ull n);
 void		*ft_memchr(const void *s, int c, size_t n);
 int			ft_memcmp(const void *s1, const void *s2, size_t n);
 void		*ft_memcpy(void *dst, const void *src, size_t n);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_isdigit.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rahmed <rahmed@student.42.fr>              +#+  +:+       +#+        */
+/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/08/04 18:27:13 by rahmed            #+#    #+#             */
-/*   Updated: 2022/02/14 22:02:23 by rahmed           ###   ########.fr       */
+/*   Created: 2022/03/19 07:38:55 by jbettini          #+#    #+#             */
+/*   Updated: 2022/03/19 07:40:02 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,12 @@ int	ft_str_isdigit(char *str)
 	int	i;
 
 	i = 0;
+	if (str[i] == '+' || str[i] == '-')
+		i++;
 	while (str[i])
 	{
 		if (!ft_isdigit(str[i]))
-			if ((str[0] != '-') && (str[0] != '+'))
-				return (0);
+			return (0);
 		i++;
 	}
 	return (1);
