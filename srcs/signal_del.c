@@ -3,15 +3,37 @@
 /*                                                        :::      ::::::::   */
 /*   signal_del.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 18:55:54 by rahmed            #+#    #+#             */
-/*   Updated: 2022/03/23 07:38:48 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/03/29 13:38:21 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
+static void	sigint_handler(int signum)
+{
+	(void)signum;
+	write(1, "\n", 1);
+	rl_replace_line("", 0);
+	rl_on_new_line();
+	rl_redisplay();
+}
+
+void	set_mainprocess_sig(void)
+{
+	signal(SIGQUIT, SIG_IGN);
+	signal(SIGINT, &sigint_handler);
+}
+
+void	set_subprocess_sig(void)
+{
+	signal(SIGQUIT, SIG_DFL);
+	signal(SIGINT, SIG_DFL);
+}
+
+/*
 void	init_signal(int fd)
 {
 	struct termios		term;
@@ -29,18 +51,7 @@ void	init_signal(int fd)
 	action.sa_flags = 0;
 	sigaction(SIGINT, &action, NULL); // * Interruption (Ctrl-c)
 }
-
-void	signal_handler(int signo)
-{
-	if (signo == SIGINT)
-	{
-		//! add code for exit status on global var
-		write(1, "\n", 1);
-		rl_replace_line("", 0);
-		rl_on_new_line();
-		rl_redisplay();
-	}
-}
+*/
 
 int	handle_eof_ctrl_d(char *str) // * Get Ctrl-D
 {

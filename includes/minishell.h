@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/04 17:03:54 by rahmed            #+#    #+#             */
-/*   Updated: 2022/03/23 07:31:10 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/03/29 12:59:59 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,9 +111,10 @@ int		ft_unset(char **arg, t_list **env);
 int		ft_export(char **arg, t_list **env);
 
 /* signal.c */
-void	init_signal(int fd);
 void	signal_handler(int signo);
 int		handle_eof_ctrl_d(char *str);
+void	set_mainprocess_sig(void);
+void	set_subprocess_sig(void);
 
 /* connect.c */
 int		redir_manag(t_redir *to_redir, t_env *env);
