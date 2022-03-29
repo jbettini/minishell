@@ -55,6 +55,7 @@
 
 int	main(int ac, char **av, char **env)
 {
+	int		status;
 	t_env	*env_set;
 	char	*args[] = {"cat", NULL};
 
@@ -62,16 +63,22 @@ int	main(int ac, char **av, char **env)
 	(void)av;
 	env_set = env_manag(env, NULL, 0);
 	set_path(env_set, args, !DESTROY_SET);
-	set_mainprocess_sig();
+	set_sig();
+	ignore_sigint();
 	pid_t	pid = fork();
 	if (!pid)
 	{
-		set_subprocess_sig();
+		reset_sig();
 		execve(env_set->cmd_path, args, env_set->nbtfke);
 		printf("smth nad happened\n");
 		exit(1);
 	}
-	waitpid(pid, NULL, 0);
+	waitpid(pid, &status, 0);
+	if (WIFSIGNALED(status))
+	{
+		write(1, "\n", 1);
+		printf("exited from sig\n");
+	}
 	//printf("process finished\n");
 	while (1)
 		if (minishell(env_set) == -1)

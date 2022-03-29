@@ -113,8 +113,9 @@ int		ft_export(char **arg, t_list **env);
 /* signal.c */
 void	signal_handler(int signo);
 int		handle_eof_ctrl_d(char *str);
-void	set_mainprocess_sig(void);
-void	set_subprocess_sig(void);
+void	set_sig(void);
+void	ignore_sigint(void);
+void	reset_sig(void);
 
 /* connect.c */
 int		redir_manag(t_redir *to_redir, t_env *env);
