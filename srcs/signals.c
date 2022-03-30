@@ -32,6 +32,26 @@ void	ignore_sigint(void)
 	signal(SIGINT, SIG_IGN);
 }
 
+void	set_sigint_to_dfl(void)
+{
+	struct sigaction	sa;
+
+	sigemptyset(&sa.sa_mask);
+	sa.sa_handler = SIG_DFL;
+	sa.sa_flags = 0;
+	sigaction(SIGINT, &sa, NULL);
+}
+
+void	set_sigquit_to_dfl(void)
+{
+	struct sigaction	sa;
+
+	sigemptyset(&sa.sa_mask);
+	sa.sa_handler = SIG_DFL;
+	sa.sa_flags = 0;
+	sigaction(SIGQUIT, &sa, NULL);
+}
+
 void	set_subprocess_sig(void)
 {
 	signal(SIGQUIT, SIG_DFL);
