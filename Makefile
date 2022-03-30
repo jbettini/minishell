@@ -36,7 +36,7 @@ SRCS		=	${SRC_DIR}/main.c \
 				${SRC_DIR}/parse.c \
 				${SRC_DIR}/strs.c \
 				${SRC_DIR}/utils.c	\
-				${SRC_DIR}/signal_del.c \
+				${SRC_DIR}/signals.c \
 				${SRC_DIR}/ft_strtok.c
 
 #SRCSB		=

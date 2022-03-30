@@ -111,11 +111,10 @@ int		ft_unset(char **arg, t_list **env);
 int		ft_export(char **arg, t_list **env);
 
 /* signal.c */
-void	signal_handler(int signo);
-int		handle_eof_ctrl_d(char *str);
-void	set_mainprocess_sig(void);
-void	ignore_sigint(void);
-void	set_subprocess_sig(void);
+int		handle_eof(char *str);
+void	set_sig(int signum, void (*handler)(int));
+void	sigint_handler(int signum);
+void	sigquit_handler(int signum);
 
 /* connect.c */
 int		redir_manag(t_redir *to_redir, t_env *env);

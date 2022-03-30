@@ -128,7 +128,11 @@ int	exec_in_child(char **args, t_env *env, int mod)
 		exec_args = args;
 	pid = fork();
 	if (!pid)
+	{
+		set_sig(SIGINT, SIG_DFL);
+		set_sig(SIGQUIT, SIG_DFL);
 		execute_cmd(exec_args, env, mod);
+	}
 	else
 		env->child++;
 	return (0);
