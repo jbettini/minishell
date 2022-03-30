@@ -11,7 +11,7 @@
 # **************************************************************************** #
 
 CC		=	gcc
-CFLAGS	=	-Wall -Wextra -Werror
+CFLAGS	=	-Wall -Wextra -Werror -g
 NAME	=	minishell
 I_DIR	=	includes
 SRC_DIR =	srcs
@@ -27,6 +27,8 @@ HEADERS	=	-I$(I_DIR) -I/Users/$(USER)/.brew/opt/readline/include
 # @HOME on MacOS12 Monterey
 #LIBS	=	-L/usr/local/opt/readline/lib -lreadline -Llibft -lft
 #HEADERS	=	-I$(I_DIR) -I/usr/local/opt/readline/include
+
+OBJ_PFX = 	srcs/objs/main.o
 
 SRC	= 	main.c \
 		builtins.c \
@@ -59,17 +61,14 @@ OBJ_PFX = $(addprefix $(OBJ_DIR)/, $(OBJ))
 all: $(NAME)
 
 $(NAME): libft $(OBJ_PFX)
-	$(CC) ${CFLAGS} -o $(NAME) $(OBJ_PFX) $(LIBS)
-
-debug: libft $(OBJ_PFX)
-	$(CC) ${CFLAGS} -g -o $(NAME) $(OBJ_PFX) $(LIBS)
+	$(CC) -o $(NAME) $(OBJ_PFX) $(LIBS)
 
 libft:
 	make -C libft
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(OBJ_DIR)
-	$(CC) -o $@ -c $< $(HEADERS)
+	$(CC) $(CFLAGS) -o $@ -c $< $(HEADERS)
 
 clean:
 	make clean -C libft
