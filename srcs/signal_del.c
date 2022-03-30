@@ -21,7 +21,7 @@ static void	sigint_handler(int signum)
 	rl_redisplay();
 }
 
-void	set_sig(void)
+void	set_mainprocess_sig(void)
 {
 	signal(SIGQUIT, SIG_IGN);
 	signal(SIGINT, &sigint_handler);
@@ -32,7 +32,7 @@ void	ignore_sigint(void)
 	signal(SIGINT, SIG_IGN);
 }
 
-void	reset_sig(void)
+void	set_subprocess_sig(void)
 {
 	signal(SIGQUIT, SIG_DFL);
 	signal(SIGINT, SIG_DFL);

@@ -98,7 +98,7 @@ void	delete_quotes(char **word)
 		if ((*word)[i] == '\'' || (*word)[i] == '"')
 		{
 			quote = (*word)[i];
-			*word = trunc_str(*word, 0, 1);
+			*word = trunc_str(*word, i, 1);
 			while ((*word)[i] && (*word)[i] != quote)
 				i++;
 			if ((*word)[i])

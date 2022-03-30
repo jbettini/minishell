@@ -63,12 +63,12 @@ int	main(int ac, char **av, char **env)
 	(void)av;
 	env_set = env_manag(env, NULL, 0);
 	set_path(env_set, args, !DESTROY_SET);
-	set_sig();
+	set_mainprocess_sig();
 	ignore_sigint();
 	pid_t	pid = fork();
 	if (!pid)
 	{
-		reset_sig();
+		set_subprocess_sig();
 		execve(env_set->cmd_path, args, env_set->nbtfke);
 		printf("smth nad happened\n");
 		exit(1);
