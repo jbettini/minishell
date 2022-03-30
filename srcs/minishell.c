@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/04 17:03:54 by jbettini          #+#    #+#             */
-/*   Updated: 2022/03/23 07:53:16 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/03/30 17:00:33 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,8 @@ int	minishell(t_env *env_set)
 	t_list	*cmds;
 
 	ret = 0;
+	set_sig(SIGQUIT, &sigquit_handler);
+	set_sig(SIGINT, &sigint_handler);
 	line = readline(PROMPT);
 	if (handle_eof_ctrl_d(line))
 		ret = -1;
@@ -74,6 +76,7 @@ int	minishell(t_env *env_set)
 		{
 			if (!expand_ev(cmds, env_set))
 				; // smth bad occurred
+			set_sig(SIGINT, SIG_IGN);
 			ret = connecting_fct(cmds, env_set);
 		}
 		ft_lstclear(&cmds, &free_cmd);

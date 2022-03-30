@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signal_del.c                                       :+:      :+:    :+:   */
+/*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 18:55:54 by rahmed            #+#    #+#             */
-/*   Updated: 2022/03/29 13:38:21 by ydanset          ###   ########.fr       */
+/*   Updated: 2022/03/30 16:39:10 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-static void	sigint_handler(int signum)
+void	sigint_handler(int signum)
 {
 	(void)signum;
 	write(1, "\n", 1);
@@ -21,44 +21,17 @@ static void	sigint_handler(int signum)
 	rl_redisplay();
 }
 
-void	set_mainprocess_sig(void)
+void	set_sig(int signum, void (*handler)(int))
 {
-	signal(SIGQUIT, SIG_IGN);
-	signal(SIGINT, &sigint_handler);
+	struct sigaction	sa;
+
+	sigemptyset(&sa.sa_mask);
+	sa.sa_handler = handler;
+	sa.sa_flags = 0;
+	sigaction(signum, &sa, NULL);
 }
 
-void	ignore_sigint(void)
-{
-	signal(SIGINT, SIG_IGN);
-}
-
-void	set_subprocess_sig(void)
-{
-	signal(SIGQUIT, SIG_DFL);
-	signal(SIGINT, SIG_DFL);
-}
-
-/*
-void	init_signal(int fd)
-{
-	struct termios		term;
-	struct sigaction	action;
-	sigset_t			set;
-
-	tcgetattr(fd, &term);
-	term.c_lflag &= ~(ECHOCTL);
-	tcsetattr(fd, TCSANOW, &term);
-	signal(SIGQUIT, SIG_IGN); // * Interruption forte (Ctrl-\) to IGNORE
-	sigemptyset(&set);
-	sigaddset(&set, SIGINT);
-	action.sa_handler = signal_handler;
-	action.sa_mask = set;
-	action.sa_flags = 0;
-	sigaction(SIGINT, &action, NULL); // * Interruption (Ctrl-c)
-}
-*/
-
-int	handle_eof_ctrl_d(char *str) // * Get Ctrl-D
+int	handle_eof(char *str)
 {
 	if (str == NULL)
 	{

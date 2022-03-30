@@ -35,6 +35,8 @@ void	ft_pipex(t_cmd *cmd, t_env *env)
 	pid = fork();
 	if (!pid)
 	{
+		set_sig(SIGINT, SIG_DFL);
+		set_sig(SIGQUIT, SIG_DFL);
 		dup2(fd[1], 1);
 		close(fd[0]);
 		exec_in_main(cmd, env, IN_PIPE);

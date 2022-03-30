@@ -6,7 +6,7 @@
 /*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/24 17:33:48 by jbettini          #+#    #+#             */
-/*   Updated: 2022/03/29 13:39:41 by ydanset          ###   ########.fr       */
+/*   Updated: 2022/03/30 16:59:59 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,30 +55,11 @@
 
 int	main(int ac, char **av, char **env)
 {
-	int		status;
 	t_env	*env_set;
-	char	*args[] = {"cat", NULL};
 
 	(void)ac;
 	(void)av;
 	env_set = env_manag(env, NULL, 0);
-	set_path(env_set, args, !DESTROY_SET);
-	set_mainprocess_sig();
-	ignore_sigint();
-	pid_t	pid = fork();
-	if (!pid)
-	{
-		set_subprocess_sig();
-		execve(env_set->cmd_path, args, env_set->nbtfke);
-		printf("smth nad happened\n");
-		exit(1);
-	}
-	waitpid(pid, &status, 0);
-	if (WIFSIGNALED(status))
-	{
-		write(1, "\n", 1);
-		printf("exited from sig\n");
-	}
 	//printf("process finished\n");
 	while (1)
 		if (minishell(env_set) == -1)
