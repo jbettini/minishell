@@ -27,10 +27,10 @@ int	redir_heredoc(char *stop)
 	while (hd[++i])
 		ft_putendl_fd(hd[i], fd);
 	close(fd);
-	usleep(2000);
 	fd2 = open(".heredoc_tmp", O_RDONLY);
 	if (dup2(fd2, 0) == -1)
 		return (DUP_ERROR);
+	close(fd2);
 	ft_free_split(hd);
 	return (SUCCESS);
 }
