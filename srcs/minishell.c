@@ -6,7 +6,7 @@
 /*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/04 17:03:54 by jbettini          #+#    #+#             */
-/*   Updated: 2022/03/30 17:00:33 by ydanset          ###   ########.fr       */
+/*   Updated: 2022/03/30 17:46:55 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int	minishell(t_env *env_set)
 	set_sig(SIGQUIT, &sigquit_handler);
 	set_sig(SIGINT, &sigint_handler);
 	line = readline(PROMPT);
-	if (handle_eof_ctrl_d(line))
+	if (handle_eof(line))
 		ret = -1;
 	else if (!ft_is_str_blank(line) && line)
 	{
