@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/01/04 17:03:54 by rahmed            #+#    #+#             */
-/*   Updated: 2022/03/29 12:59:59 by ydanset          ###   ########.fr       */
+/*   Created: 2022/03/30 19:51:20 by jbettini          #+#    #+#             */
+/*   Updated: 2022/03/30 21:00:08 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ typedef struct s_token
 typedef struct s_env
 {
 	t_list	*envp;
+	t_list	*ex_env;
 	char	**nbtfke; // tilteeeeeee
 	char	**path;
 	char	*cmd_path;
@@ -107,14 +108,13 @@ void	my_chdir(char *path, t_list **env);
 
 /* env.c */
 void    add_ref(t_list **lst, void *data_ref, int idx);
-int		ft_unset(char **arg, t_list **env);
-int		ft_export(char **arg, t_list **env);
+int		ft_unset(char **arg, t_env *env_set);
+int		ft_export(char **arg, t_env *env_set);
 
 /* signal.c */
 int		handle_eof(char *str);
 void	set_sig(int signum, void (*handler)(int));
 void	sigint_handler(int signum);
-void	sigquit_handler(int signum);
 
 /* connect.c */
 int		redir_manag(t_redir *to_redir, t_env *env);

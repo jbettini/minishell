@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/04 17:03:54 by jbettini          #+#    #+#             */
-/*   Updated: 2022/03/30 17:46:55 by ydanset          ###   ########.fr       */
+/*   Updated: 2022/03/30 20:58:43 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ t_env	*env_manag(char **env, t_env *to_free, int mod)
 	env_set->oldstdout = dup(1);
 	env_set->oldstdin = dup(0);
 	env_set->envp = ft_dpt_to_lst(env);
+	env_set->ex_env = ft_dpt_to_lst(env);
 	env_set->nbtfke = ft_lst_to_dpt(env_set->envp);
 	env_set->path = ft_split(getenv("PATH"), ':');
 	if (!(env_set->envp) || !(env_set->path))
@@ -63,7 +64,7 @@ int	minishell(t_env *env_set)
 	t_list	*cmds;
 
 	ret = 0;
-	set_sig(SIGQUIT, &sigquit_handler);
+	set_sig(SIGQUIT, SIG_IGN);
 	set_sig(SIGINT, &sigint_handler);
 	line = readline(PROMPT);
 	if (handle_eof(line))
