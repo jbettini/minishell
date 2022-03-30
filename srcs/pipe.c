@@ -46,5 +46,6 @@ void	ft_pipex(t_cmd *cmd, t_env *env)
 		env->child++;
 		dup2(fd[0], 0);
 		close(fd[1]);
+		close(fd[0]);
 	}
 }
