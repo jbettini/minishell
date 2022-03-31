@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   connect.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/11 04:03:54 by jbettini          #+#    #+#             */
-/*   Updated: 2022/03/31 18:54:55 by ydanset          ###   ########.fr       */
+/*   Updated: 2022/03/31 19:50:50 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,8 @@ void	error_manag(int ret)
 		perror("parse error n");
 	else if (ret == CMD_ERROR)
 		perror("command not found ");
+	if (ret >= BF_ERROR)
+		g_exit_status = 1;
 }
 
 int	launch_exec(t_env *env, t_cmd *cmd, int mod)
@@ -148,6 +150,7 @@ int	connecting_fct(t_list *cmd, t_env *env)
 				ret = exec_block((t_cmd *)(cmd->content), env, IN_PIPE);
 			else
 				ret = exec_block((t_cmd *)(cmd->content), env, LAST_PIPE_BLOCK);
+			error_manag(ret);
 			cmd = cmd->next;
 		}
 		reset_routine(env, IN_CHILD);
@@ -155,6 +158,7 @@ int	connecting_fct(t_list *cmd, t_env *env)
 	else
 	{
 		ret = exec_block((t_cmd *)(cmd->content), env, IN_MAIN);
+		error_manag(ret);
 		reset_routine(env, IN_MAIN);
 	}
 	return (SUCCESS);

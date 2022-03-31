@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/25 14:38:36 by jbettini          #+#    #+#             */
-/*   Updated: 2022/03/30 16:59:55 by ydanset          ###   ########.fr       */
+/*   Updated: 2022/03/31 19:34:18 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ int	exec_in_main(t_cmd *cmd, t_env *env, int mod)
 	{
 		ret = redir_lst(cmd->redir_out, env);
 		if (ret)
-			exit(-42);
+			exit(1);
 		execute_cmd(cmd->args, env, mod);
 	}
 	return (ret);

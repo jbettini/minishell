@@ -6,7 +6,7 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/30 19:51:20 by jbettini          #+#    #+#             */
-/*   Updated: 2022/03/31 12:50:04 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/03/31 19:39:10 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ enum	e_err
 {
 	SUCCESS,
 	BUILD_ERROR,
+	TMP,
 	BF_ERROR,
 	OP_ERROR,
 	DUP_ERROR,
