@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_ev.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 14:26:15 by ydanset           #+#    #+#             */
-/*   Updated: 2022/02/22 22:55:55 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/03/31 18:22:05 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -179,11 +179,11 @@ int	expand_ev(t_list *cmds, t_env *env)
 		if (!expand_redir(cmd->redir_in, envp)
 			|| !expand_redir(cmd->redir_out, envp))
 		{
-			free(envp);
+			free_strs(envp);
 			return (0);
 		}
 		cmds = cmds->next;
 	}
-	free(envp);
+	free_strs(envp);
 	return (1);
 }
