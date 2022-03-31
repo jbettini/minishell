@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lst_to_dpt.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rahmed <rahmed@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/07 03:54:57 by jbettini          #+#    #+#             */
-/*   Updated: 2022/02/09 20:48:05 by rahmed           ###   ########.fr       */
+/*   Updated: 2022/03/31 19:25:39 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ char	**ft_lst_to_dpt(t_list *lst)
 	int		i;
 
 	i = 0;
-	tab = malloc(sizeof(char *) * ft_lstsize(lst) + 1);
+	tab = malloc(sizeof(char *) * (ft_lstsize(lst) + 1));
 	if (!tab)
 		return (NULL);
 	while (lst)
