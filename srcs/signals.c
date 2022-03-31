@@ -6,7 +6,7 @@
 /*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 18:55:54 by rahmed            #+#    #+#             */
-/*   Updated: 2022/03/30 16:39:10 by ydanset          ###   ########.fr       */
+/*   Updated: 2022/03/31 18:26:45 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,14 +29,4 @@ void	set_sig(int signum, void (*handler)(int))
 	sa.sa_handler = handler;
 	sa.sa_flags = 0;
 	sigaction(signum, &sa, NULL);
-}
-
-int	handle_eof(char *str)
-{
-	if (str == NULL)
-	{
-		ft_putstr_fd("exit\n", 1);
-		return (1);
-	}
-	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 14:26:15 by ydanset           #+#    #+#             */
-/*   Updated: 2022/03/31 18:22:05 by ydanset          ###   ########.fr       */
+/*   Updated: 2022/03/31 19:07:34 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,7 @@ char	**expand_args(char **args, char **env)
 
 	new_args = NULL;
 	i = -1;
-	while (args[++i])
+	while (args && args[++i])
 	{
 		expand_word(&args[i], env);
 		if (!args[i][0])

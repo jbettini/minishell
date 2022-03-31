@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/07 04:17:11 by jbettini          #+#    #+#             */
-/*   Updated: 2022/03/16 02:34:53 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/03/31 18:50:33 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ int	redir_to_stdout(void *file, int mod)
 		return (OP_ERROR);
 	if (dup2(fd, 1) == -1)
 		return (DUP_ERROR);
+	close(fd);
 	return (0);
 }
 
@@ -88,5 +89,6 @@ int	redir_to_stdin(void *file)
 		return (OP_ERROR);
 	if (dup2(fd, 0) == -1)
 		return (DUP_ERROR);
+	close(fd);
 	return (0);
 }

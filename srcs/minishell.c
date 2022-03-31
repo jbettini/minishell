@@ -6,7 +6,7 @@
 /*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/04 17:03:54 by jbettini          #+#    #+#             */
-/*   Updated: 2022/03/31 18:14:58 by ydanset          ###   ########.fr       */
+/*   Updated: 2022/03/31 18:59:05 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,6 @@ t_env	*env_manag(char **env, t_env *to_free, int mod)
 	if (!env_set)
 		return (NULL);
 	env_set->child = 0;
-	env_set->oldstdout = dup(1);
-	env_set->oldstdin = dup(0);
 	env_set->envp = ft_dpt_to_lst(env);
 	env_set->ex_env = ft_dpt_to_lst(env);
 	env_set->nbtfke = ft_lst_to_dpt(env_set->envp);
@@ -70,8 +68,14 @@ int	minishell(t_env *env_set)
 	set_sig(SIGQUIT, SIG_IGN);
 	set_sig(SIGINT, &sigint_handler);
 	line = readline(PROMPT);
-	if (handle_eof(line))
-		ret = -1;
+	env_set->oldstdout = dup(1);
+	env_set->oldstdin = dup(0);
+	if (!line)
+	{
+		env_manag(NULL, env_set, 1);
+		ft_putstr_fd("exit\n", 1);
+		exit(0);
+	}
 	else if (!ft_is_str_blank(line) && line)
 	{
 		add_history(line);

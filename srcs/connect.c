@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   connect.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/11 04:03:54 by jbettini          #+#    #+#             */
-/*   Updated: 2022/03/23 07:33:06 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/03/31 18:54:55 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ void	reset_routine(t_env *env, int ret)
 	env->nbtfke = ft_lst_to_dpt(env->envp);
 	dup2(env->oldstdin, 0);
 	dup2(env->oldstdout, 1);
+	close(env->oldstdin);
+	close(env->oldstdout);
 	if (!access(".heredoc_tmp", F_OK))
 		unlink(".heredoc_tmp");
 	wait_this_fk_process(env);
@@ -124,9 +126,12 @@ int	exec_block(t_cmd *to_exec, t_env *env, int mod)
 		if (ret)
 			return (ret);
 	}
-	set_path(env, to_exec->args, SET);
-	ret = launch_exec(env, to_exec, mod);
-	set_path(env, to_exec->args, DESTROY_SET);
+	if (to_exec->args)
+	{
+		set_path(env, to_exec->args, SET);
+		ret = launch_exec(env, to_exec, mod);
+		set_path(env, to_exec->args, DESTROY_SET);
+	}
 	return (ret);
 }
 
