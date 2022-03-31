@@ -6,7 +6,7 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/11 04:03:54 by jbettini          #+#    #+#             */
-/*   Updated: 2022/03/31 19:50:50 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/03/31 21:41:55 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,19 +147,22 @@ int	connecting_fct(t_list *cmd, t_env *env)
 		while (cmd)
 		{
 			if (cmd->next)
+			{
 				ret = exec_block((t_cmd *)(cmd->content), env, IN_PIPE);
+				error_manag(ret);
+			}
 			else
 				ret = exec_block((t_cmd *)(cmd->content), env, LAST_PIPE_BLOCK);
-			error_manag(ret);
 			cmd = cmd->next;
 		}
 		reset_routine(env, IN_CHILD);
+		error_manag(ret);
 	}
 	else
 	{
 		ret = exec_block((t_cmd *)(cmd->content), env, IN_MAIN);
-		error_manag(ret);
 		reset_routine(env, IN_MAIN);
+		error_manag(ret);
 	}
 	return (SUCCESS);
 }

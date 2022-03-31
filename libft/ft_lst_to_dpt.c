@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lst_to_dpt.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/07 03:54:57 by jbettini          #+#    #+#             */
-/*   Updated: 2022/03/31 19:25:39 by ydanset          ###   ########.fr       */
+/*   Updated: 2022/03/31 21:27:22 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,19 @@ char	**ft_lst_to_dpt(t_list *lst)
 	tab[i] = NULL;
 	return (tab);
 }
-
 t_list	*ft_dpt_to_lst(char **tab)
+{
+	int		i;
+	t_list	*lst;
+
+	i = -1;
+	lst = NULL;
+	while (tab[++i])
+		ft_lstadd_back(&lst, ft_lstnew(ft_strdup(tab[i])));
+	return (lst);
+}
+
+t_list	*ft_dpt_to_lst_nl(char **tab)
 {
 	int		i;
 	t_list	*lst;

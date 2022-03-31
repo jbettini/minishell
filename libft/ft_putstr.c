@@ -25,6 +25,15 @@ void	ft_putlst(t_list *lst)
 {
 	while (lst)
 	{
+		ft_putendl_fd(lst->content, 1);
+		lst = lst->next;
+	}
+}
+
+void	ft_putlst_no_nl(t_list *lst)
+{
+	while (lst)
+	{
 		ft_putstr(lst->content);
 		lst = lst->next;
 	}

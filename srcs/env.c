@@ -6,7 +6,7 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/23 05:33:04 by jbettini          #+#    #+#             */
-/*   Updated: 2022/03/30 16:34:09 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/03/31 21:28:50 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,7 +146,7 @@ void	ft_putexport(t_list *lst)
 	while (lst)
 	{
 		ft_putstr("declare -x ");
-		ft_putstr(lst->content);
+		ft_putendl_fd(lst->content, 1);
 		lst = lst->next;
 	}
 }
