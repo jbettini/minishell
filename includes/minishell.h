@@ -6,7 +6,7 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/30 19:51:20 by jbettini          #+#    #+#             */
-/*   Updated: 2022/03/30 21:00:08 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/03/31 12:50:04 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ typedef struct s_env
 /* minishell.c */
 t_env	*env_manag(char **env, t_env *to_free, int mod);
 int		minishell(t_env *env_set);
-int		ft_exit(char **args, int print_exit);
+int		ft_exit(char **args, int print_exit, t_env *env_set);
 void	ft_export_exit_status(char *arg, t_list **env);
 void	wait_this_fk_process(t_env *env);
 void	set_path(t_env *env, char **args, int mod);

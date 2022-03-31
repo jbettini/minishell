@@ -6,7 +6,7 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/24 15:32:07 by jbettini          #+#    #+#             */
-/*   Updated: 2022/03/30 20:59:43 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/03/31 12:49:35 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	ft_cmd(char **args, t_env *env, int mod)
 	if (args[0] == NULL)
 		return (0);
 	else if (ft_strequ_hd(args[0], "exit") && mod != IN_ENV)
-		return (ft_exit(args, 1));
+		return (ft_exit(args, 1, env));
 	else if (ft_strequ_hd(args[0], "unset") && mod != IN_ENV)
 		return (ft_unset(args, env));
 	else if (ft_strequ_hd(args[0], "export") && mod != IN_ENV)

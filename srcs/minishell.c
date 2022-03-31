@@ -6,7 +6,7 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/04 17:03:54 by jbettini          #+#    #+#             */
-/*   Updated: 2022/03/30 20:58:43 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/03/31 12:53:42 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,13 @@ t_env	*env_manag(char **env, t_env *to_free, int mod)
 	if (mod)
 	{
 		ft_lstclear(&(to_free->envp), free);
+		ft_lstclear(&(to_free->ex_env), free);
 		ft_free_split(to_free->nbtfke);
 		if (to_free->path)
 			ft_free_split(to_free->path);
 		free(to_free);
+		close(to_free->oldstdin);
+		close(to_free->oldstdout);
 		return (0);
 	}
 	env_set = malloc(sizeof(t_env));
@@ -86,13 +89,14 @@ int	minishell(t_env *env_set)
 	return (ret);
 }
 
-int	ft_exit(char **args, int print_exit)
+int	ft_exit(char **args, int print_exit, t_env *env_set)
 {
 	if (print_exit)
 		ft_putstr_fd("exit\n", 1);
 	if (args[1] && !ft_str_isdigit(args[1]))
 	{
 		print_error("exit: numeric argument required");
+		env_manag(NULL, env_set, 1);
 		exit(255);
 	}
 	else if (ft_double_strlen(args) > 2)
@@ -100,7 +104,13 @@ int	ft_exit(char **args, int print_exit)
 	else
 	{
 		if (args[1])
+		{
+			env_manag(NULL, env_set, 1);
+			system("leaks minishell");
 			exit(ft_atoll(args[1]));
+		}
+		env_manag(NULL, env_set, 1);
+		system("leaks minishell");
 		exit(0);
 	}
 	return (BUILD_ERROR);
