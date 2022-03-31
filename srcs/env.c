@@ -6,7 +6,7 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/23 05:33:04 by jbettini          #+#    #+#             */
-/*   Updated: 2022/03/19 13:14:36 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/03/30 16:34:09 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ void    delref(t_list **lst, void *data_ref)
     free(data_ref);
 }
 
-int	ft_unset(char **arg, t_list **env)
+int	ft_unset(char **arg, t_env *env_set)
 {
     int i;
     int ret;
@@ -103,13 +103,22 @@ int	ft_unset(char **arg, t_list **env)
     while (arg[++i])
     {
         if (is_valide_var(arg[i], UNSET))
-                delref(env, ft_strjoin(arg[i], "="));
-         else
         {
-                ft_putstr_fd("unset:", 2);
-                ft_putstr_fd(arg[i], 2);
-                ft_putstr_fd(" : invalid parameter name\n", 2);
-                ret = BUILD_ERROR;
+            if (ft_strchr(arg[i], '='))
+            {
+            	delref(&(env_set->envp), ft_strjoin(arg[i], "="));
+            	delref(&(env_set->ex_env), ft_strjoin(arg[i], "="));
+            }
+			else
+            	delref(&(env_set->ex_env), ft_strdup(arg[i]));
+
+        }
+        else
+        {
+            ft_putstr_fd("unset:", 2);
+            ft_putstr_fd(arg[i], 2);
+            ft_putstr_fd(" : invalid parameter name\n", 2);
+            ret = BUILD_ERROR;
         }
     }
     return (ret);
@@ -132,7 +141,17 @@ void    add_ref(t_list **lst, void *data_ref, int idx)
     }
 }
 
-int	ft_export(char **arg, t_list **env)
+void	ft_putexport(t_list *lst)
+{
+	while (lst)
+	{
+		ft_putstr("declare -x ");
+		ft_putstr(lst->content);
+		lst = lst->next;
+	}
+}
+
+int	ft_export(char **arg, t_env *env_set)
 {
     int i;
     int equ;
@@ -142,7 +161,7 @@ int	ft_export(char **arg, t_list **env)
     equ = 0;
     ret = 0;
     if (!arg[1])
-        ft_putlst(*env);
+        ft_putexport(env_set->ex_env);
     else
         while (arg[++i])
         {
@@ -150,7 +169,9 @@ int	ft_export(char **arg, t_list **env)
             {
                 equ = ft_strc_index(arg[i], '=');
                 if (equ != -1)
-                    add_ref(env, arg[i], equ + 1);
+                    add_ref(&(env_set->envp), arg[i], equ + 1);
+                else
+                    add_ref(&(env_set->ex_env), arg[i], ft_strlen(arg[i]));
             }
             else
             {
