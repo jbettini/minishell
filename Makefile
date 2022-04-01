@@ -3,14 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+         #
+#    By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/12/24 13:51:13 by rahmed            #+#    #+#              #
-<<<<<<< HEAD
-#    Updated: 2022/04/01 18:48:00 by jbettini         ###   ########.fr        #
-=======
-#    Updated: 2022/04/01 14:47:36 by ydanset          ###   ########.fr        #
->>>>>>> 3ec4dfd357f08ad34e931b3166f7abf81aeeb36b
+#    Updated: 2022/04/01 20:58:31 by jbettini         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,8 +16,8 @@ NAME	=	minishell
 I_DIR	=	includes
 SRC_DIR =	srcs
 OBJ_DIR =	srcs/objs
-USER	=	ydanset
-#USER	=	jbettini
+#USER	=	ydanset
+USER	=	jbettini
 
 # IF NEEDED at 42 on MacOS10 Install :
 #  rm -rf $HOME/.brew && git clone --depth=1 https://github.com/Homebrew/brew $HOME/.brew && echo 'export PATH=$HOME/.brew/bin:$PATH' >> $HOME/.zshrc && source $HOME/.zshrc && brew update

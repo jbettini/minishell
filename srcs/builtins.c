@@ -6,7 +6,7 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/24 15:32:07 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/01 19:11:21 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/04/01 21:12:26 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,15 @@
 #define HOME 1
 #define OLD 2
 
-int	ft_cmd(char **args, t_env *env, int mod)
+int	ft_cmd(char **args, t_env *env)
 {
 	if (args[0] == NULL)
 		return (0);
-	else if (ft_strequ_hd(args[0], "exit") && mod != IN_ENV)
+	else if (ft_strequ_hd(args[0], "exit"))
 		return (ft_exit(args, 1, env));
-	else if (ft_strequ_hd(args[0], "unset") && mod != IN_ENV)
+	else if (ft_strequ_hd(args[0], "unset"))
 		return (ft_unset(args, env));
-	else if (ft_strequ_hd(args[0], "export") && mod != IN_ENV)
+	else if (ft_strequ_hd(args[0], "export"))
 		return (ft_export(args, env));
 	else if (ft_strequ_hd(args[0], "pwd"))
 		return (ft_pwd(args));
@@ -32,7 +32,7 @@ int	ft_cmd(char **args, t_env *env, int mod)
 	else if (ft_strequ_hd(args[0], "cd"))
 		ft_cd(args, &(env->envp));
 	else if (ft_strequ_hd(args[0], "env"))
-		ft_env(args, env, mod);
+		ft_env(args, env);
 	else
 		return (2);
 	return (0);
@@ -108,27 +108,12 @@ int	exec_build_in_env(char **args, t_env *env)
 	else
 		ret = 0;
 	if (ret == 0)
-		ret = ft_cmd(args, env, IN_ENV);
+		ret = ft_cmd(args, env);
 	return (ret);
 }
 
-void	ft_env(char **args, t_env *env, int mod)
+void	ft_env(char **args, t_env *env)
 {
-	int		i;
-
-	i = 0;
-	while (ft_strequ_hd(args[i], "env") && args[i + 1])
-		i++;
-	if (ft_strequ_hd(args[i], "env"))
+	if (ft_strequ_hd(args[0], "env"))
 		ft_putlst(env->envp);
-	else
-	{
-		if (mod == IN_MAIN)
-		{
-			if (env->cmd_path)
-				free(env->cmd_path);
-			set_path(env, &args[i], SET);
-			exec_in_child(&args[i], env, IN_ENV);
-		}
-	}
 }

@@ -3,14 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/04 17:03:54 by jbettini          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2022/04/01 20:38:05 by jbettini         ###   ########.fr       */
-=======
-/*   Updated: 2022/04/01 15:41:55 by ydanset          ###   ########.fr       */
->>>>>>> 3ec4dfd357f08ad34e931b3166f7abf81aeeb36b
+/*   Updated: 2022/04/01 20:58:54 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,12 +80,8 @@ int	minishell(t_env *env_set)
 		cmds = parse(line);
 		if (cmds)
 		{
-<<<<<<< HEAD
-			ft_lstiter(cmds, &print_cmd);
-=======
 			if (!expand_ev(cmds, env_set))
 				; // expand just before exec
->>>>>>> 3ec4dfd357f08ad34e931b3166f7abf81aeeb36b
 			set_sig(SIGINT, SIG_IGN);
 			ret = connecting_fct(cmds, env_set);
 		}

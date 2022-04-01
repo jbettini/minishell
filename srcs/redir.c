@@ -6,7 +6,7 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/07 04:17:11 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/01 20:42:00 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/04/01 20:59:06 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ char	**here_doc(char *stop)
 	t_list	*lst;
 	int		check;
 
-	set_sig(SIGINT, );
+	set_sig(SIGINT, SIG_IGN);
 	check = 1;
 	rd_ret = NULL;
 	lst = NULL;

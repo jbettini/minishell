@@ -6,7 +6,7 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/25 14:38:36 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/01 14:57:43 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/04/01 21:13:45 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,8 @@ int	execute_cmd(char **args, t_env *env, int mod)
 	int	ret;
 
 	ret = 0;
-	if (mod == IN_ENV)
-		ret = exec_build_in_env(args, env);
-	else if (mod != IN_MAIN)
-		ret = ft_cmd(args, env, mod);
+	if (mod != IN_MAIN)
+		ret = ft_cmd(args, env);
 	else if (mod == IN_MAIN)
 		ret = 2;
 	if (ret == 2 && !env->cmd_path)
@@ -78,7 +76,7 @@ int	exec_in_main(t_cmd *cmd, t_env *env, int mod)
 	ret = 0;
 	if (mod == IN_MAIN)
 	{
-		ret = ft_cmd(cmd->args, env, mod);
+		ret = ft_cmd(cmd->args, env);
 		if (ret != 2)
 			g_exit_status = ret;
 		else if (ret == 0 && ft_strequ_hd(cmd->args[0], "unset"))
@@ -98,37 +96,16 @@ int	exec_in_main(t_cmd *cmd, t_env *env, int mod)
 	return (ret);
 }
 
-char	**remake_path(t_env *env, char **args)
-{
-	int	i;
-
-	i = 0;
-	if (ft_strequ_hd(args[0], "env"))
-	{
-		while (ft_strequ_hd(args[i], "env") && args[i + 1])
-			i++;
-		if (env->cmd_path)
-			free(env->cmd_path);
-		set_path(env, &args[i], SET);
-		return (&args[i]);
-	}
-	return (NULL);
-}
-
 int	exec_in_child(char **args, t_env *env, int mod)
 {
 	int		pid;
-	char	**exec_args;
 
-	exec_args = remake_path(env, args);
-	if (!exec_args)
-		exec_args = args;
 	pid = fork();
 	if (!pid)
 	{
 		set_sig(SIGINT, SIG_DFL);
 		set_sig(SIGQUIT, SIG_DFL);
-		execute_cmd(exec_args, env, mod);
+		execute_cmd(args, env, mod);
 	}
 	else
 		env->child++;

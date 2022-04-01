@@ -6,7 +6,7 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/30 19:51:20 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/01 15:29:14 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/04/01 21:11:49 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,13 +92,13 @@ void	set_path(t_env *env, char **args, int mod);
 char	**remake_path(t_env *env, char **args);
 
 /* builtins.c */
-int		ft_cmd(char **args, t_env *env, int mod);
+int		ft_cmd(char **args, t_env *env);
 int		exec_build_in_env(char **args, t_env *env);
 int		ft_pwd(char **args);
 void	ft_cd(char **args, t_list **env);
 void	ft_write_oldpwd(t_list **env, char *pwd);
 char	*ft_my_getenv(t_list **env, char *key);
-void	ft_env(char **args, t_env *env, int mod);
+void	ft_env(char **args, t_env *env);
 
 /* utils_builtins.c */
 int		get_env_name_len(char *str, int getequal);
