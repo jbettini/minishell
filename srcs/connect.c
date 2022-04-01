@@ -6,7 +6,7 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/11 04:03:54 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/01 21:27:19 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/04/01 21:40:42 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,6 +150,19 @@ void	cette_fct_sert_pour_la_norm(t_env *env, const int mod, int ret)
 	error_manag(ret);
 }
 
+int		check_the_build_for_env(char *args)
+{
+	if (ft_strequ_hd(args, "unset"))
+		ft_putstr("env: export: No such file or directory\n");
+	else if (ft_strequ_hd(args, "export"))
+		ft_putstr("env: export: No such file or directory\n");
+	else if (ft_strequ_hd(args, "exit"))
+		ft_putstr("env: exit: No such file or directory\n");
+	else
+		return (1);
+	return (0);
+}
+
 int	manag_exec_in_env(t_list *cmd)
 {
 	char	**args;
@@ -159,13 +172,10 @@ int	manag_exec_in_env(t_list *cmd)
 	args = ((t_cmd *)cmd->content)->args;
 	while (ft_strequ_hd(args[i], "env") && args[i - 1])
 		i++;
-
-	// if (ft_strequ_hd(args[0], "unset"))
-	// 	ft_putstr("env: export: No such file or directory\n");
-	// else if (ft_strequ_hd(args[0], "export"))
-	// 	ft_putstr("env: export: No such file or directory\n");
-	// else if (ft_strequ_hd(args[0], "exit"))
-	// 	ft_putstr("env: exit: No such file or directory\n");
+	if (check_the_build_for_env(args[i]))
+		return (1);
+	
+	return (0);	
 }
 
 int	connecting_fct(t_list *cmd, t_env *env)
@@ -179,6 +189,7 @@ int	connecting_fct(t_list *cmd, t_env *env)
 		{
 			if (manag_exec_in_env(cmd))
 			{
+				cmd = cmd->next;
 				continue ;
 			}
 			if (!expand_ev(cmd, env))
