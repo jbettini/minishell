@@ -6,7 +6,7 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/23 05:33:04 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/01 14:48:19 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/04/01 18:45:17 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ void	delref(t_list **lst, void *data_ref)
 	free(data_ref);
 }
 
-static int	print_msg_err(char	*msg, char *arg)
+static void	print_msg_err(char	*msg, char *arg)
 {
 	ft_putstr_fd(msg, 2);
 	ft_putendl_fd(arg, 2);

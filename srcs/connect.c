@@ -6,7 +6,7 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/11 04:03:54 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/01 14:56:27 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/04/01 20:40:34 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,9 +138,9 @@ int	exec_block(t_cmd *to_exec, t_env *env, int mod)
 	return (ret);
 }
 
-void	cette_fct_sert_pour_la_normt(t_env *env, const int mod, int ret)
+void	cette_fct_sert_pour_la_norm(t_env *env, const int mod, int ret)
 {
-	reset_routine(env, IN_CHILD);
+	reset_routine(env, mod);
 	error_manag(ret);
 }
 
@@ -153,7 +153,9 @@ int	connecting_fct(t_list *cmd, t_env *env)
 	{
 		while (cmd)
 		{
-			if (cmd->next)
+			if (!expand_ev(cmd, env))
+				;	
+			else if (cmd->next)
 			{
 				ret = exec_block((t_cmd *)(cmd->content), env, IN_PIPE);
 				error_manag(ret);
@@ -164,7 +166,7 @@ int	connecting_fct(t_list *cmd, t_env *env)
 		}
 		cette_fct_sert_pour_la_norm(env, IN_CHILD, ret);
 	}
-	else
+	else if (expand_ev(cmd, env))
 	{
 		ret = exec_block((t_cmd *)(cmd->content), env, IN_MAIN);
 		cette_fct_sert_pour_la_norm(env, IN_MAIN, ret);

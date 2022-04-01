@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmds.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rahmed <rahmed@student.42.fr>              +#+  +:+       +#+        */
+/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 23:30:50 by ydanset           #+#    #+#             */
-/*   Updated: 2022/04/01 15:31:49 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/04/01 18:44:52 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,3 +25,5 @@ typedef struct s_cmd
 	t_list	*redir_in;
 	t_list	*redir_out;
 }	t_cmd;
+
+#endif

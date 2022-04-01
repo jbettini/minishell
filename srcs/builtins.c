@@ -6,7 +6,7 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/24 15:32:07 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/01 13:26:15 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/04/01 19:11:21 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,17 +86,12 @@ void	my_chdir(char *path, t_list **env)
 
 void	ft_cd(char **args, t_list **env)
 {
-	if (ft_double_strlen(args) <= 2) // need change to 3 arg
-	{
-		if (!args[1])
-			cd_to_envvar(env, "HOME=");
-		else if (ft_strequ_hd(args[1], "-"))
-			cd_to_envvar(env, "OLDPWD=");
-		else // need 1 more else if for 3 arg
-			my_chdir(args[1], env);
-	}
+	if (!args[1])
+		cd_to_envvar(env, "HOME=");
+	else if (ft_strequ_hd(args[1], "-"))
+		cd_to_envvar(env, "OLDPWD=");
 	else
-		ft_putendl_fd("cd: too many arguments", 2);
+		my_chdir(args[1], env);
 }
 
 int	exec_build_in_env(char **args, t_env *env)

@@ -6,7 +6,7 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/04 17:03:54 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/01 15:18:52 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/04/01 20:38:05 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,8 +81,6 @@ int	minishell(t_env *env_set)
 		if (cmds)
 		{
 			ft_lstiter(cmds, &print_cmd);
-			if (!expand_ev(cmds, env_set))
-				; // expand just before exec
 			set_sig(SIGINT, SIG_IGN);
 			ft_lstiter(cmds, &print_cmd);
 			ret = connecting_fct(cmds, env_set);
