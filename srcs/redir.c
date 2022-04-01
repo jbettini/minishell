@@ -3,14 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   redir.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/07 04:17:11 by jbettini          #+#    #+#             */
-/*   Updated: 2022/03/31 19:25:31 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/04/01 15:34:44 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+/*
+void	sigint_handler_heredoc(int signum)
+{
+	
+}
+*/
 
 int	redir_heredoc(char *stop)
 {
@@ -42,20 +49,22 @@ char	**here_doc(char *stop)
 	t_list	*lst;
 	int		check;
 
+	set_sig(SIGINT, );
 	check = 1;
 	rd_ret = NULL;
 	lst = NULL;
 	while (check == 1)
 	{
 		rd_ret = readline("> ");
-		if (!ft_strequ_hd(rd_ret, stop))
-			ft_lstadd_back(&lst, ft_lstnew(ft_strdup(rd_ret)));
-		else
+		if (!rd_ret || ft_strequ_hd(rd_ret, stop))
 			check--;
+		else
+			ft_lstadd_back(&lst, ft_lstnew(ft_strdup(rd_ret)));
 		free(rd_ret);
 	}
 	tab = ft_lst_to_dpt(lst);
 	ft_lstclear(&lst, free);
+	set_sig(SIGINT, SIG_IGN);
 	return (tab);
 }
 
