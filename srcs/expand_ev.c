@@ -6,7 +6,7 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 14:26:15 by ydanset           #+#    #+#             */
-/*   Updated: 2022/04/01 18:52:12 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/04/01 20:41:37 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,7 +124,6 @@ char	**expand_args(char **args, char **env)
 		expand_word(&args[i], env);
 		if (!args[i][0])
 			continue ;
-		// printf("args: |%s|\n", args[i]);
 		arg_expanded = ft_strtok(args[i], " \t\n");
 		j = -1;
 		while (arg_expanded[++j])
