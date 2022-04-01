@@ -6,12 +6,12 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/30 19:51:20 by jbettini          #+#    #+#             */
-/*   Updated: 2022/03/31 19:39:10 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/04/01 15:29:14 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
-# define	MINISHELL_H
+# define MINISHELL_H
 
 # include <stdio.h>
 # include <fcntl.h>
@@ -24,10 +24,10 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 
-# define	PROMPT		"minishell$> "
-# define	QUOTE		39
-# define	DQUOTE		34
-# define	BACKSLASH	92
+# define PROMPT		"minishell$> "
+# define QUOTE		39
+# define DQUOTE		34
+# define BACKSLASH	92
 
 long long	g_exit_status; // ! A garder ?
 
@@ -73,7 +73,7 @@ typedef struct s_env
 {
 	t_list	*envp;
 	t_list	*ex_env;
-	char	**nbtfke; // tilteeeeeee
+	char	**nbtfke;
 	char	**path;
 	char	*cmd_path;
 	int		oldstdin;
@@ -108,7 +108,7 @@ char	*ft_get_special_path(char *args);
 void	my_chdir(char *path, t_list **env);
 
 /* env.c */
-void    add_ref(t_list **lst, void *data_ref, int idx);
+void	add_ref(t_list **lst, void *data_ref, int idx);
 int		ft_unset(char **arg, t_env *env_set);
 int		ft_export(char **arg, t_env *env_set);
 
@@ -174,7 +174,7 @@ void	*error_null(char *msg);
 // static char	*get_ev_name(char *ev);
 // static char	*get_ev_value(char **local_env, char *ev_name);
 // static void	rearrange_line(char **line, int *i, char **local_env);
-int	expand_ev(t_list *cmds, t_env *env_set);
+int		expand_ev(t_list *cmds, t_env *env_set);
 
 /* free.c */
 void	free_token(void *ptr);

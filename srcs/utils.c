@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jbettini <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/04/01 15:20:54 by jbettini          #+#    #+#             */
+/*   Updated: 2022/04/01 15:21:47 by jbettini         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/minishell.h"
 
 int	is_symbol(char c)
@@ -32,7 +44,7 @@ void	my_strncpy(char *dst, const char *src, int n)
 		dst[i] = src[i];
 		i++;
 	}
-	dst[i] = '\0';	
+	dst[i] = '\0';
 }
 
 int	my_strcmp(char *s1, char *s2)

@@ -6,7 +6,7 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/08 01:39:22 by jbettini          #+#    #+#             */
-/*   Updated: 2022/03/23 07:33:29 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/04/01 13:19:46 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	check_env_exec_in_pipe(t_cmd *cmd, t_env *env)
 {
-	char **tmp;
+	char	**tmp;
 
 	tmp = &(cmd->args[0]);
 	if (ft_strequ_hd(cmd->args[0], "env"))

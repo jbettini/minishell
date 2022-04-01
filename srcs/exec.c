@@ -6,7 +6,7 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/25 14:38:36 by jbettini          #+#    #+#             */
-/*   Updated: 2022/03/31 19:34:18 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/04/01 14:57:43 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	ft_isbuild(char *args)
 int	execute_cmd(char **args, t_env *env, int mod)
 {
 	int	ret;
-	
+
 	ret = 0;
 	if (mod == IN_ENV)
 		ret = exec_build_in_env(args, env);
@@ -66,7 +66,7 @@ int	check_unset_path(char **path, t_env *env)
 	if (path[i])
 	{
 		ft_free_split(env->path);
-		env->path = NULL;	
+		env->path = NULL;
 	}
 	return (0);
 }
@@ -84,12 +84,9 @@ int	exec_in_main(t_cmd *cmd, t_env *env, int mod)
 		else if (ret == 0 && ft_strequ_hd(cmd->args[0], "unset"))
 			check_unset_path(&cmd->args[1], env);
 		else if (ret == 2 && !env->cmd_path)
-		{
 			error_manag(CMD_ERROR);
-			g_exit_status = CMD_ERROR;
-		}
 		else if (ret == 2)
-			exec_in_child(cmd->args, env, mod);		
+			exec_in_child(cmd->args, env, mod);
 	}
 	else if (mod == IN_PIPE)
 	{

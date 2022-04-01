@@ -6,28 +6,28 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/06 15:51:31 by rahmed            #+#    #+#             */
-/*   Updated: 2022/03/19 07:58:31 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/04/01 15:25:19 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LIBFT_H
-# define	LIBFT_H
+# define LIBFT_H
 # include <string.h>
 # include <stdlib.h>
 # include <unistd.h>
 # include <stdarg.h>
 
 # ifndef BUFFER_SIZE
-#  define	BUFFER_SIZE	10000
+#  define BUFFER_SIZE	10000
 # endif
 
 # ifndef MAX_FD
-#  define	MAX_FD		65536
-#  define	FD_MAX		65536
+#  define MAX_FD		65536
+#  define FD_MAX		65536
 # endif
 
-# define	TRUE		1
-# define	FALSE		0
+# define TRUE		1
+# define FALSE		0
 
 typedef unsigned long long	t_ull;
 typedef struct s_list

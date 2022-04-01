@@ -6,7 +6,7 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/07 03:54:57 by jbettini          #+#    #+#             */
-/*   Updated: 2022/03/31 21:27:22 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/04/01 15:23:53 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ char	**ft_lst_to_dpt(t_list *lst)
 	tab[i] = NULL;
 	return (tab);
 }
+
 t_list	*ft_dpt_to_lst(char **tab)
 {
 	int		i;
