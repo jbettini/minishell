@@ -6,7 +6,7 @@
 /*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/11 04:03:54 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/01 15:11:02 by ydanset          ###   ########.fr       */
+/*   Updated: 2022/04/01 15:41:47 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ void	reset_routine(t_env *env, int ret)
 	if (!access(".heredoc_tmp", F_OK))
 		unlink(".heredoc_tmp");
 	wait_this_fk_process(env);
-	// printf("global %lld\n", g_exit_status);
 	env->child = 0;
 }
 
@@ -90,7 +89,9 @@ void	error_manag(int ret)
 		perror("parse error n");
 	else if (ret == CMD_ERROR)
 		perror("command not found ");
-	if (ret >= BF_ERROR)
+	if (ret == CMD_ERROR)
+		g_exit_status = 127;
+	else if (ret >= BF_ERROR)
 		g_exit_status = 1;
 }
 
@@ -137,9 +138,15 @@ int	exec_block(t_cmd *to_exec, t_env *env, int mod)
 	return (ret);
 }
 
+void	cette_fct_sert_pour_la_normt(t_env *env, const int mod, int ret)
+{
+	reset_routine(env, IN_CHILD);
+	error_manag(ret);
+}
+
 int	connecting_fct(t_list *cmd, t_env *env)
 {
-	int		ret;
+	int	ret;
 
 	ret = 0;
 	if (cmd->next != NULL)
@@ -155,14 +162,12 @@ int	connecting_fct(t_list *cmd, t_env *env)
 				ret = exec_block((t_cmd *)(cmd->content), env, LAST_PIPE_BLOCK);
 			cmd = cmd->next;
 		}
-		reset_routine(env, IN_CHILD);
-		error_manag(ret);
+		cette_fct_sert_pour_la_norm(env, IN_CHILD, ret);
 	}
 	else
 	{
 		ret = exec_block((t_cmd *)(cmd->content), env, IN_MAIN);
-		reset_routine(env, IN_MAIN);
-		error_manag(ret);
+		cette_fct_sert_pour_la_norm(env, IN_MAIN, ret);
 	}
 	return (SUCCESS);
 }

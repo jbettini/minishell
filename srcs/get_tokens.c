@@ -6,7 +6,7 @@
 /*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 14:26:35 by ydanset           #+#    #+#             */
-/*   Updated: 2022/02/16 21:17:43 by ydanset          ###   ########.fr       */
+/*   Updated: 2022/04/01 15:05:20 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static int	extract_word(char **line, t_token *tok)
 	int		i;
 
 	i = get_len_word(*line);
-	if (i == - 1)
+	if (i == -1)
 		return (error("quotes unclosed", 0));
 	tok->type = WORD;
 	tok->val = malloc(i + 1);

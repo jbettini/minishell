@@ -6,7 +6,7 @@
 /*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 14:26:15 by ydanset           #+#    #+#             */
-/*   Updated: 2022/04/01 15:14:40 by ydanset          ###   ########.fr       */
+/*   Updated: 2022/04/01 15:41:35 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,8 @@ void	expand_word(char **word, char **env)
 	{
 		if ((*word)[i] == '$')
 		{
-			if ((*word)[i + 1] == '?' || ft_isalpha((*word)[i + 1]) || (*word)[i + 1] == '_')
+			if ((*word)[i + 1] == '?' || ft_isalpha((*word)[i + 1]) \
+												|| (*word)[i + 1] == '_')
 				rearrange_word(word, &i, env);
 			else
 				i++;

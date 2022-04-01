@@ -6,7 +6,7 @@
 /*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 14:26:28 by ydanset           #+#    #+#             */
-/*   Updated: 2022/02/16 21:39:26 by ydanset          ###   ########.fr       */
+/*   Updated: 2022/04/01 15:04:34 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,8 @@ static t_cmd	*get_next_cmd(t_list **tokens)
 	while (*tokens && get_token_type((*tokens)->content) != PIPE)
 	{
 		if (get_token_type((*tokens)->content) == WORD)
-			cmd->args = strs_append(cmd->args, get_token_value((*tokens)->content));
+			cmd->args = strs_append(cmd->args, \
+					get_token_value((*tokens)->content));
 		else if (!add_redir(cmd, tokens))
 		{
 			free_cmd(cmd);

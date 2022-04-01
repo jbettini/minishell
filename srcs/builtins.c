@@ -6,14 +6,14 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/24 15:32:07 by jbettini          #+#    #+#             */
-/*   Updated: 2022/03/31 12:49:35 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/04/01 13:26:15 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-#define	HOME 1
-#define	OLD 2
+#define HOME 1
+#define OLD 2
 
 int	ft_cmd(char **args, t_env *env, int mod)
 {
@@ -48,7 +48,8 @@ void	cd_to_envvar(t_list **env, char *var)
 	while (tmp && !ft_strnequ(tmp->content, var, ft_strlen(var)))
 		tmp = tmp->next;
 	if (tmp)
-		my_chdir(ft_del_nl(ft_strnstr_out(tmp->content, var, ft_strlen(var))), env);
+		my_chdir(ft_del_nl(ft_strnstr_out(tmp->content, \
+								var, ft_strlen(var))), env);
 	else
 	{
 		if (ft_strnequ("HOME=", var, ft_strlen(var)))
@@ -91,7 +92,7 @@ void	ft_cd(char **args, t_list **env)
 			cd_to_envvar(env, "HOME=");
 		else if (ft_strequ_hd(args[1], "-"))
 			cd_to_envvar(env, "OLDPWD=");
-		else			// need 1 more else if for 3 arg
+		else // need 1 more else if for 3 arg
 			my_chdir(args[1], env);
 	}
 	else
@@ -100,7 +101,7 @@ void	ft_cd(char **args, t_list **env)
 
 int	exec_build_in_env(char **args, t_env *env)
 {
-	int ret;
+	int	ret;
 
 	ret = CMD_ERROR;
 	if (ft_strequ_hd(args[0], "unset"))

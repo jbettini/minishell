@@ -6,7 +6,7 @@
 /*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/04 17:03:54 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/01 15:28:47 by ydanset          ###   ########.fr       */
+/*   Updated: 2022/04/01 15:41:55 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,14 +41,13 @@ t_env	*env_manag(char **env, t_env *to_free, int mod)
 	return (env_set);
 }
 
-void wait_this_fk_process(t_env *env)
+void	wait_this_fk_process(t_env *env)
 {
 	int	i;
-	int status;
+	int	status;
 
 	i = -1;
 	status = 0;
-	// printf("child %d\n", env->child);
 	if (env->child)
 	{
 		while (++i < env->child)
@@ -59,7 +58,6 @@ void wait_this_fk_process(t_env *env)
 
 int	minishell(t_env *env_set)
 {
-	// TODO : get choice between char** and t_env
 	int		ret;
 	char	*line;
 	t_list	*cmds;
@@ -83,7 +81,7 @@ int	minishell(t_env *env_set)
 		if (cmds)
 		{
 			if (!expand_ev(cmds, env_set))
-				;
+				; // expand just before exec
 			set_sig(SIGINT, SIG_IGN);
 			ret = connecting_fct(cmds, env_set);
 		}
@@ -119,25 +117,3 @@ int	ft_exit(char **args, int print_exit, t_env *env_set)
 	}
 	return (BUILD_ERROR);
 }
-
-// int	routine(t_env *env_set)
-// {
-// 	char	*line;
-// 	int		ret;
-// 	t_list	*cmd;
-
-// 	ret = 0;
-// 	line = readline(PROMPT);
-// 	if (handle_eof_ctrl_d(line))
-// 		ret = -1;
-// 	else if (!ft_is_str_blank(line) && line)
-// 	{
-// 		add_history(line);
-// 		cmd = miniparser(line);
-// 		ret = connecting_fct(cmd, env_set);
-// 	}
-// 	free(line);
-// 	// ft_printf("0 routine ret = %d\n", ret); //! test
-// 	return (ret);
-// }
-
