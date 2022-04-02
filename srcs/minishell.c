@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/04 17:03:54 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/02 14:54:08 by ydanset          ###   ########.fr       */
+/*   Updated: 2022/04/02 15:50:28 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ t_env	*env_manag(char **env, t_env *to_free, int mod)
 	if (!env_set)
 		return (NULL);
 	env_set->child = 0;
+	g_check_hd = 0;
 	env_set->envp = ft_dpt_to_lst(env);
 	env_set->ex_env = ft_dpt_to_lst(env);
 	env_set->nbtfke = ft_lst_to_dpt(env_set->envp);
@@ -80,8 +81,6 @@ int	minishell(t_env *env_set)
 		cmds = parse(line);
 		if (cmds)
 		{
-			if (!expand_ev(cmds, env_set))
-				; // expand just before execs
 			set_sig(SIGINT, SIG_IGN);
 			ret = connecting_fct(cmds, env_set);
 		}

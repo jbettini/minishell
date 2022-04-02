@@ -6,7 +6,7 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/30 19:51:20 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/02 15:23:40 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/04/02 15:59:55 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@
 # define BACKSLASH	92
 
 long long	g_exit_status; // ! A garder ?
+long long	g_check_hd; // ! A garder ?
 
 enum	e_err
 {
@@ -90,6 +91,8 @@ typedef struct	s_g
 }	t_g;
 
 t_g	g;
+
+void	sig_hd_handler(int signum);
 
 /* minishell.c */
 t_env	*env_manag(char **env, t_env *to_free, int mod);

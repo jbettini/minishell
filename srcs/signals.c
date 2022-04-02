@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 18:55:54 by rahmed            #+#    #+#             */
-/*   Updated: 2022/04/02 15:17:23 by ydanset          ###   ########.fr       */
+/*   Updated: 2022/04/02 16:00:11 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,17 @@
 void	sigint_handler(int signum)
 {
 	(void)signum;
-	if (g.in_hd)
-	{
-		g.stop_hd = 1;
-		close(0);
-		return ;
-	}
 	write(1, "\n", 1);
 	rl_replace_line("", 0);
 	rl_on_new_line();
 	rl_redisplay();
+}
+
+void	sig_hd_handler(int signum)
+{
+	(void)signum;
+	close(0);
+	g_check_hd = 1;
 }
 
 void	set_sig(int signum, void (*handler)(int))

@@ -6,7 +6,7 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/11 04:03:54 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/02 15:30:00 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/04/02 15:53:52 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@ void	reset_routine(t_env *env, int ret)
 	close(env->oldstdout);
 	if (!access(".heredoc_tmp", F_OK))
 		unlink(".heredoc_tmp");
+	if (g_check_hd)
+		g_check_hd = 0;
 	wait_this_fk_process(env);
 	env->child = 0;
 }
@@ -149,15 +151,8 @@ int	exec_block(t_cmd *to_exec, t_env *env, int mod)
 
 void	cette_fct_sert_pour_la_norm(t_env *env, const int mod, int ret)
 {
-	if (ret == CTRL_C)
-	{
-		reset_routine
-	}
-	else
-	{
-		reset_routine(env, mod);
-		error_manag(ret);
-	}
+	reset_routine(env, mod);
+	error_manag(ret);
 }
 
 int		check_the_build_for_env(char *args)
@@ -182,6 +177,8 @@ int	manag_exec_in_env(t_list *cmd)
 	i = 0;
 	new_args = NULL;
 	args = ((t_cmd *)cmd->content)->args;
+	if (!args || !args[0])
+		return (0);
 	if (!ft_strequ_hd(args[0], "env"))
 		return (0);
 	while (ft_strequ_hd(args[i], "env") && args[i - 1])
@@ -205,8 +202,17 @@ int	connecting_fct(t_list *cmd, t_env *env)
 		{
 			if (manag_exec_in_env(cmd))
 			{
-				cmd = cmd->next;
-				continue ;
+				if (cmd->next)
+				{
+					cmd = cmd->next;
+					continue ;	
+				}
+				else
+				{
+					reset_routine(env, ret);
+					g_exit_status = CMD_ERROR;
+					return (SUCCESS);
+				}
 			}
 			if (!expand_ev(cmd, env))
 				;	
@@ -234,7 +240,10 @@ int	connecting_fct(t_list *cmd, t_env *env)
 			cette_fct_sert_pour_la_norm(env, IN_MAIN, ret);
 		}
 		else
+		{
 			reset_routine(env, IN_MAIN);
+			g_exit_status = CMD_ERROR;
+		}
 	}
 	return (SUCCESS);
 }

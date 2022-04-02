@@ -6,7 +6,7 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/07 04:17:11 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/02 15:33:13 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/04/02 15:59:01 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,15 +54,19 @@ char	**here_doc(char *stop)
 	rd_ret = NULL;
 	lst = NULL;
 	check = 1;
+	set_sig(SIGINT, &sig_hd_handler);
 	while (check)
 	{
 		rd_ret = readline("> ");
+		if (g_check_hd)
+			return (NULL);
 		if (!rd_ret || ft_strequ_hd(rd_ret, stop))
 			check--;
 		else
 			ft_lstadd_back(&lst, ft_lstnew(ft_strdup(rd_ret)));
 		free(rd_ret);
 	}
+	set_sig(SIGINT, SIG_IGN);
 	tab = ft_lst_to_dpt(lst);
 	ft_lstclear(&lst, free);
 	return (tab);
