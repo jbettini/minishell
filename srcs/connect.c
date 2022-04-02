@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   connect.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/11 04:03:54 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/02 15:11:56 by ydanset          ###   ########.fr       */
+/*   Updated: 2022/04/02 15:30:00 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,20 +79,23 @@ int	redir_lst(t_list *redir_lst, t_env *env)
 
 void	error_manag(int ret)
 {
-	if (ret == BF_ERROR)
-		perror("file not found ");
-	else if (ret == OP_ERROR)
-		perror("file open error ");
-	else if (ret == DUP_ERROR)
-		perror("dup2 ret error ");
-	else if (ret == OUT_ERROR)
-		perror("parse error n");
-	else if (ret == CMD_ERROR)
-		perror("command not found ");
-	if (ret == CMD_ERROR)
-		g_exit_status = 127;
-	else if (ret >= BF_ERROR)
-		g_exit_status = 1;
+	if (ret != CTRL_C)
+	{
+		if (ret == BF_ERROR)
+			perror("file not found ");
+		else if (ret == OP_ERROR)
+			perror("file open error ");
+		else if (ret == DUP_ERROR)
+			perror("dup2 ret error ");
+		else if (ret == OUT_ERROR)
+			perror("parse error n");
+		else if (ret == CMD_ERROR)
+			perror("command not found ");
+		if (ret == CMD_ERROR)
+			g_exit_status = 127;
+		else if (ret >= BF_ERROR)
+			g_exit_status = 1;
+	}
 }
 
 int	launch_exec(t_env *env, t_cmd *cmd, int mod)
@@ -146,8 +149,15 @@ int	exec_block(t_cmd *to_exec, t_env *env, int mod)
 
 void	cette_fct_sert_pour_la_norm(t_env *env, const int mod, int ret)
 {
-	reset_routine(env, mod);
-	error_manag(ret);
+	if (ret == CTRL_C)
+	{
+		reset_routine
+	}
+	else
+	{
+		reset_routine(env, mod);
+		error_manag(ret);
+	}
 }
 
 int		check_the_build_for_env(char *args)
@@ -207,6 +217,11 @@ int	connecting_fct(t_list *cmd, t_env *env)
 			}
 			else
 				ret = exec_block((t_cmd *)(cmd->content), env, LAST_PIPE_BLOCK);
+			if (ret == CTRL_C)
+			{
+				reset_routine(env, ret);
+				return (SUCCESS);
+			}
 			cmd = cmd->next;
 		}
 		cette_fct_sert_pour_la_norm(env, IN_CHILD, ret);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/07 04:17:11 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/02 15:17:45 by ydanset          ###   ########.fr       */
+/*   Updated: 2022/04/02 15:33:13 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ int	redir_heredoc(char *stop)
 	if (fd == -1)
 		return (OP_ERROR);
 	hd = here_doc(stop);
+	if (!hd)
+		return (CTRL_C);
 	while (hd[++i])
 		ft_putendl_fd(hd[i], fd);
 	close(fd);
@@ -47,23 +49,22 @@ char	**here_doc(char *stop)
 	char	**tab;
 	char	*rd_ret;
 	t_list	*lst;
+	int		check;
 
-	g.in_hd = 1;
-	g.stop_hd = 0;
 	rd_ret = NULL;
 	lst = NULL;
-	while (!g.stop_hd)
+	check = 1;
+	while (check)
 	{
 		rd_ret = readline("> ");
 		if (!rd_ret || ft_strequ_hd(rd_ret, stop))
-			g.stop_hd = 1;
+			check--;
 		else
 			ft_lstadd_back(&lst, ft_lstnew(ft_strdup(rd_ret)));
 		free(rd_ret);
 	}
 	tab = ft_lst_to_dpt(lst);
 	ft_lstclear(&lst, free);
-	g.in_hd = 0;
 	return (tab);
 }
 
