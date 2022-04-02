@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/04 17:03:54 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/02 15:50:28 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/04/02 20:24:38 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,14 +46,27 @@ void	wait_this_fk_process(t_env *env)
 {
 	int	i;
 	int	status;
+	int	x;
 
+	x = 0;
 	i = -1;
 	status = 0;
 	if (env->child)
 	{
 		while (++i < env->child)
+		{
 			waitpid(-1, &status, 0);
-		g_exit_status = status % 255;
+			if (WIFSIGNALED(status) && !x)
+			{
+				x = 1;		
+				if (WTERMSIG(status) == SIGQUIT)
+					write(STDOUT_FILENO, "Quit: 3", 7);
+				write(STDOUT_FILENO, "\n", 1);
+				g_exit_status = 128 + WTERMSIG(status);
+			}
+		}
+		if (!x)
+			g_exit_status = status % 255;
 	}
 }
 
@@ -72,6 +85,7 @@ int	minishell(t_env *env_set)
 	if (!line)
 	{
 		env_manag(NULL, env_set, 1);
+		reset_tty();
 		ft_putstr_fd("exit\n", 1);
 		exit(0);
 	}
@@ -104,6 +118,7 @@ int	ft_exit(char **args, int print_exit, t_env *env_set)
 		print_error("exit: too many arguments");
 	else
 	{
+		reset_tty();
 		if (args[1])
 		{
 			env_manag(NULL, env_set, 1);

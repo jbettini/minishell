@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   connect.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/11 04:03:54 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/02 15:53:52 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/04/02 20:04:39 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -215,7 +215,7 @@ int	connecting_fct(t_list *cmd, t_env *env)
 				}
 			}
 			if (!expand_ev(cmd, env))
-				;	
+				;
 			else if (cmd->next)
 			{
 				ret = exec_block((t_cmd *)(cmd->content), env, IN_PIPE);

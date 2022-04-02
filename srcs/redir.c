@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/07 04:17:11 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/02 15:59:01 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/04/02 20:03:19 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,10 @@ int	redir_heredoc(char *stop)
 		return (OP_ERROR);
 	hd = here_doc(stop);
 	if (!hd)
+	{
+		write(1, "\n", 1);
 		return (CTRL_C);
+	}
 	while (hd[++i])
 		ft_putendl_fd(hd[i], fd);
 	close(fd);

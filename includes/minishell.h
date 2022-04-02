@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/30 19:51:20 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/02 15:59:55 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/04/02 20:03:17 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,6 +181,10 @@ void	print_error(char *msg);
 void	exit_error(char *msg, int code);
 int		error(char *msg, int code);
 void	*error_null(char *msg);
+
+/* tty.c */
+void	set_tty(void);
+void	reset_tty(void);
 
 /* expand_ev.c */
 // static char	*get_ev_name(char *ev);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/25 14:38:36 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/01 21:13:45 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/04/02 20:05:36 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,7 @@ int	exec_in_child(char **args, t_env *env, int mod)
 	pid = fork();
 	if (!pid)
 	{
+		reset_tty();
 		set_sig(SIGINT, SIG_DFL);
 		set_sig(SIGQUIT, SIG_DFL);
 		execute_cmd(args, env, mod);
