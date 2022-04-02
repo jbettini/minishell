@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/30 19:51:20 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/01 21:11:49 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/04/02 15:13:51 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,14 @@ typedef struct s_env
 	int		out_check;
 	int		child;
 }		t_env;
+
+typedef struct	s_g
+{
+	int	in_hd;
+	int	stop_hd;
+}	t_g;
+
+t_g	g;
 
 /* minishell.c */
 t_env	*env_manag(char **env, t_env *to_free, int mod);

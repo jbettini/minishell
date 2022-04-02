@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/04 17:03:54 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/01 20:58:54 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/04/02 14:54:08 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ int	minishell(t_env *env_set)
 		if (cmds)
 		{
 			if (!expand_ev(cmds, env_set))
-				; // expand just before exec
+				; // expand just before execs
 			set_sig(SIGINT, SIG_IGN);
 			ret = connecting_fct(cmds, env_set);
 		}

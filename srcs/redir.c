@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/07 04:17:11 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/01 20:59:06 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/04/02 15:17:45 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,24 +47,23 @@ char	**here_doc(char *stop)
 	char	**tab;
 	char	*rd_ret;
 	t_list	*lst;
-	int		check;
 
-	set_sig(SIGINT, SIG_IGN);
-	check = 1;
+	g.in_hd = 1;
+	g.stop_hd = 0;
 	rd_ret = NULL;
 	lst = NULL;
-	while (check == 1)
+	while (!g.stop_hd)
 	{
 		rd_ret = readline("> ");
 		if (!rd_ret || ft_strequ_hd(rd_ret, stop))
-			check--;
+			g.stop_hd = 1;
 		else
 			ft_lstadd_back(&lst, ft_lstnew(ft_strdup(rd_ret)));
 		free(rd_ret);
 	}
 	tab = ft_lst_to_dpt(lst);
 	ft_lstclear(&lst, free);
-	set_sig(SIGINT, SIG_IGN);
+	g.in_hd = 0;
 	return (tab);
 }
 
