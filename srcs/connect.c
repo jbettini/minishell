@@ -6,7 +6,7 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/11 04:03:54 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/01 21:40:42 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/04/02 05:07:28 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,22 +159,28 @@ int		check_the_build_for_env(char *args)
 	else if (ft_strequ_hd(args, "exit"))
 		ft_putstr("env: exit: No such file or directory\n");
 	else
-		return (1);
-	return (0);
+		return (0);
+	return (1);
 }
 
 int	manag_exec_in_env(t_list *cmd)
 {
 	char	**args;
+	char	**new_args;
 	int		i;
 
 	i = 0;
+	new_args = NULL;
 	args = ((t_cmd *)cmd->content)->args;
+	if (!ft_strequ_hd(args[0], "env"))
+		return (0);
 	while (ft_strequ_hd(args[i], "env") && args[i - 1])
 		i++;
 	if (check_the_build_for_env(args[i]))
 		return (1);
-	
+	new_args = ft_dupdpt(&args[i]);
+	ft_free_split(args);
+	((t_cmd *)cmd->content)->args = new_args;
 	return (0);	
 }
 
@@ -207,9 +213,13 @@ int	connecting_fct(t_list *cmd, t_env *env)
 	}
 	else if (expand_ev(cmd, env))
 	{
-		manag_exec_in_env(cmd);
-		ret = exec_block((t_cmd *)(cmd->content), env, IN_MAIN);
-		cette_fct_sert_pour_la_norm(env, IN_MAIN, ret);
+		if (!manag_exec_in_env(cmd))
+		{
+			ret = exec_block((t_cmd *)(cmd->content), env, IN_MAIN);
+			cette_fct_sert_pour_la_norm(env, IN_MAIN, ret);
+		}
+		else
+			reset_routine(env, IN_MAIN);
 	}
 	return (SUCCESS);
 }
