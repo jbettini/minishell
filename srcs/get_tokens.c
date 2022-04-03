@@ -6,13 +6,11 @@
 /*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 14:26:35 by ydanset           #+#    #+#             */
-/*   Updated: 2022/04/01 15:05:20 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/04/03 08:54:58 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
-// #include "cmds.h"
-// #include "libft.h"
+#include "minishell.h"
 
 int	get_len_word(char *line)
 {
@@ -41,7 +39,7 @@ static int	extract_word(char **line, t_token *tok)
 
 	i = get_len_word(*line);
 	if (i == -1)
-		return (error("quotes unclosed", 0));
+		return (error(NULL, "quotes unclosed", 0));
 	tok->type = WORD;
 	tok->val = malloc(i + 1);
 	my_strncpy(tok->val, *line, i);
@@ -55,19 +53,11 @@ static int	extract_symbol(char **line, t_token *tok)
 	if (**line == '|')
 		tok->type = PIPE;
 	if (**line == '<' && *(*line + 1) == '<')
-	{
 		tok->type = REDIR_LL;
-		if (*(*line + 2) == '<')
-			return (error("syntax error near unexpected token '<'", 0));
-	}
 	else if (**line == '<')
 		tok->type = REDIR_L;
 	else if (**line == '>' && *(*line + 1) == '>')
-	{
 		tok->type = REDIR_RR;
-		if (*(*line + 2) == '>')
-			return (error("syntax error near unexpected token '>'", 0));
-	}
 	else if (**line == '>')
 		tok->type = REDIR_R;
 	if ((**line == '<' && *(*line + 1) == '<')
@@ -84,13 +74,7 @@ static t_token	*get_next_token(char **line)
 
 	tok = malloc(sizeof(t_token) * 1);
 	if (is_symbol(**line))
-	{
-		if (!extract_symbol(line, tok))
-		{
-			free(tok);
-			return (NULL);
-		}
-	}
+		extract_symbol(line, tok);
 	else if (!extract_word(line, tok))
 	{
 		free(tok);

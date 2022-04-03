@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strtok.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbettini <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/01 14:59:07 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/01 15:03:53 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/04/03 08:54:58 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "minishell.h"
 
-static int	is_in_set(char *str, char c)
+int	is_in_set(char *str, char c)
 {
 	int	i;
 
@@ -23,7 +23,7 @@ static int	is_in_set(char *str, char c)
 	return (0);
 }
 
-static int	get_len_res(char *str, char *delim)
+int	get_len_res(char *str, char *delim)
 {
 	int	i;
 	int	len;
@@ -42,7 +42,7 @@ static int	get_len_res(char *str, char *delim)
 	return (len);
 }
 
-static void	skip_quotes(char *str, int *j)
+void	skip_quotes(char *str, int *j)
 {
 	char	quote;
 

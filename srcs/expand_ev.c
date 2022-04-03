@@ -3,69 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   expand_ev.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 14:26:15 by ydanset           #+#    #+#             */
-/*   Updated: 2022/04/01 20:41:37 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/04/03 08:54:58 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
-
-static char	*get_ev_name(char *str)
-{
-	int		i;
-	char	*ev_name;
-
-	if (str[0] == '?')
-		return (ft_strdup("?"));
-	i = 0;
-	while (str[i] && (ft_isalnum(str[i]) || str[i] == '_'))
-		i++;
-	ev_name = malloc(i + 1);
-	my_strncpy(ev_name, str, i);
-	return (ev_name);
-}
-
-static char	*get_ev_value(char *ev_name, char **env)
-{
-	char	*ev_value;
-	char	*tmp;
-	int		i;
-
-	i = 0;
-	while (env[i])
-	{
-		tmp = get_ev_name(env[i]);
-		if (!my_strcmp(tmp, ev_name))
-		{
-			ev_value = get_str_truncated(env[i], 0, ft_strlen(ev_name) + 1);
-			free(tmp);
-			return (ev_value);
-		}
-		free(tmp);
-		i++;
-	}
-	ev_value = ft_strdup("");
-	return (ev_value);
-}
-
-static void	rearrange_word(char **word, int *i, char **env)
-{
-	char	*ev_name;
-	char	*ev_value;
-
-	ev_name = get_ev_name(&(*word)[*i + 1]);
-	*word = trunc_str(*word, *i + 1, ft_strlen(ev_name));
-	if (!my_strcmp(ev_name, "?"))
-		ev_value = ft_itoa(g_exit_status);
-	else
-		ev_value = get_ev_value(ev_name, env);
-	*word = str_insert(*word, ev_value, *i);
-	*i += ft_strlen(ev_value);
-	free(ev_value);
-	free(ev_name);
-}
+#include "minishell.h"
 
 void	expand_word(char **word, char **env)
 {
@@ -85,28 +30,6 @@ void	expand_word(char **word, char **env)
 		else if ((*word)[i++] == '\'')
 			while ((*word)[i] && (*word)[i] != '\'')
 				i++;
-	}
-}
-
-void	delete_quotes(char **word)
-{
-	int		i;
-	char	quote;
-
-	i = 0;
-	while ((*word)[i])
-	{
-		if ((*word)[i] == '\'' || (*word)[i] == '"')
-		{
-			quote = (*word)[i];
-			*word = trunc_str(*word, i, 1);
-			while ((*word)[i] && (*word)[i] != quote)
-				i++;
-			if ((*word)[i])
-				*word = trunc_str(*word, i, 1);
-		}
-		else
-			i++;
 	}
 }
 
@@ -151,16 +74,19 @@ int	redir_expanded_is_valid(char *word_expanded)
 int	expand_redir(t_list *redirs, char **env)
 {
 	t_redir	*redir;
+	char	*ev_name;
 
 	while (redirs)
 	{
 		redir = redirs->content;
 		if (redir->type != REDIR_LL)
 		{
+			ev_name = ft_strdup(redir->word);
 			expand_word(&redir->word, env);
 			if (!redir_expanded_is_valid(redir->word))
-				return (error("ambiguous redirect", 0));
+				return (error(ev_name, "ambiguous redirect", 0));
 			delete_quotes(&redir->word);
+			free(ev_name);
 		}
 		redirs = redirs->next;
 	}

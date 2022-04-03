@@ -6,18 +6,11 @@
 /*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/07 04:17:11 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/02 20:03:19 by ydanset          ###   ########.fr       */
+/*   Updated: 2022/04/03 08:54:58 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
-
-/*
-void	sigint_handler_heredoc(int signum)
-{
-	
-}
-*/
+#include "minishell.h"
 
 int	redir_heredoc(char *stop)
 {
@@ -61,8 +54,12 @@ char	**here_doc(char *stop)
 	while (check)
 	{
 		rd_ret = readline("> ");
-		if (g_check_hd)
+		if (g_set.g_check_hd)
+		{
+			set_sig(SIGINT, SIG_IGN);
+			ft_lstclear(&lst, &free);
 			return (NULL);
+		}
 		if (!rd_ret || ft_strequ_hd(rd_ret, stop))
 			check--;
 		else
@@ -71,7 +68,7 @@ char	**here_doc(char *stop)
 	}
 	set_sig(SIGINT, SIG_IGN);
 	tab = ft_lst_to_dpt(lst);
-	ft_lstclear(&lst, free);
+	ft_lstclear(&lst, &free);
 	return (tab);
 }
 
@@ -107,4 +104,29 @@ int	redir_to_stdin(void *file)
 		return (DUP_ERROR);
 	close(fd);
 	return (0);
+}
+
+void	ft_pipex(t_cmd *cmd, t_env *env)
+{
+	int	fd[2];
+	int	pid;
+
+	if (pipe(fd) == -1)
+		return ;
+	pid = fork();
+	if (!pid)
+	{
+		set_sig(SIGINT, SIG_DFL);
+		set_sig(SIGQUIT, SIG_DFL);
+		dup2(fd[1], 1);
+		close(fd[0]);
+		exec_in_main(cmd, env, IN_PIPE);
+	}
+	else
+	{
+		env->child++;
+		dup2(fd[0], 0);
+		close(fd[1]);
+		close(fd[0]);
+	}
 }

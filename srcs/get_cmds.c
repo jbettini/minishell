@@ -6,12 +6,11 @@
 /*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 14:26:28 by ydanset           #+#    #+#             */
-/*   Updated: 2022/04/01 15:04:34 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/04/03 08:54:58 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
-// #include "cmds.h"
+#include "minishell.h"
 
 static void	init_redir(t_redir **redir, int type)
 {
@@ -30,7 +29,10 @@ static int	add_redir(t_cmd *cmd, t_list **tokens)
 	if (!*tokens || get_token_type((*tokens)->content) != WORD)
 	{
 		free(redir);
-		return (error("missing word after redirection", 0));
+		if (redir->type == REDIR_L || redir->type == REDIR_LL)	
+			return (error(NULL, "syntax error near unexpected token '<'", 0));
+		else
+			return (error(NULL, "syntax error near unexpected token '>'", 0));
 	}
 	redir->word = ft_strdup(get_token_value((*tokens)->content));
 	new = ft_lstnew(redir);
@@ -72,7 +74,7 @@ static t_cmd	*get_next_cmd(t_list **tokens)
 		if (!*tokens || get_token_type((*tokens)->content) == PIPE)
 		{
 			free_cmd(cmd);
-			return (error_null("unexpected token '|'"));
+			return (error_null(NULL, "unexpected token '|'"));
 		}
 	}
 	return (cmd);

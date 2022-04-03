@@ -3,101 +3,62 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/23 05:33:04 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/01 18:45:17 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/04/03 09:42:22 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "minishell.h"
 
 #define EXPORT 1
 #define UNSET 0
 
-int	is_valide_var(char *str, int mod)
+void	ft_env(char **args, t_env *env)
 {
-	int	i;
-
-	i = 0;
-	if (str[0] != '_' && !ft_isalpha(str[0]))
-		return (0);
-	if (mod == EXPORT)
-	{
-		while (str[++i] && str[i] != '=')
-			if (!ft_isalnum(str[i]) && str[i] != '_')
-				return (0);
-	}
-	else if (mod == UNSET)
-	{
-		while (str[++i])
-			if (!ft_isalnum(str[i]) && str[i] != '_')
-				return (0);
-	}
-	return (1);
+	if (ft_strequ_hd(args[0], "env"))
+		ft_putlst(env->envp);
 }
 
-int	ft_strc_index(char *str, int c)
-{
-	size_t	i;
 
-	i = -1;
-	while (str[++i])
-	{
-		if (str[i] == c)
-			return (i);
-	}
-	return (-1);
+int	manag_exec_in_env(t_list *cmd)
+{
+	char	**args;
+	char	**new_args;
+	int		i;
+
+	i = 0;
+	new_args = NULL;
+	args = ((t_cmd *)cmd->content)->args;
+	if (!args || !args[0])
+		return (0);
+	if (!ft_strequ_hd(args[0], "env"))
+		return (0);
+	while (ft_strequ_hd(args[i], "env") && args[i - 1])
+		i++;
+	if (check_the_build_for_env(args[i]))
+		return (1);
+	new_args = ft_dupdpt(&args[i]);
+	ft_free_split(args);
+	((t_cmd *)cmd->content)->args = new_args;
+	return (0);	
 }
 
 int	ft_pwd(char **args)
 {
 	char	*pwd;
 
-	if (args[1])
-	{
-		print_error("pwd: too many arguments");
-		return (BUILD_ERROR);
-	}
+	// no need apparamment
+	//if (args[1])
+	//	return (error(ft_strdup("pwd"), "too many arguments", BUILD_ERROR));
+	(void)args;
 	pwd = getcwd(NULL, 0);
 	ft_putendl_fd(pwd, 1);
 	free(pwd);
 	return (0);
 }
 
-void	delref(t_list **lst, void *data_ref)
-{
-	t_list	*tmp;
-	t_list	*before;
-
-	tmp = *lst;
-	before = NULL;
-	if (ft_strnequ(tmp->content, data_ref, ft_strlen(data_ref)))
-	{
-		*lst = (*lst)->next;
-		free(tmp->content);
-		free(tmp);
-		return ;
-	}
-	while (tmp && !ft_strnequ(tmp->content, data_ref, ft_strlen(data_ref)))
-	{
-		before = tmp;
-		tmp = tmp->next;
-	}
-	if (tmp)
-	{
-		before->next = tmp->next;
-		free(tmp->content);
-		free(tmp);
-	}
-	free(data_ref);
-}
-
-static void	print_msg_err(char	*msg, char *arg)
-{
-	ft_putstr_fd(msg, 2);
-	ft_putendl_fd(arg, 2);
-}
 
 int	ft_unset(char **arg, t_env *env_set)
 {
@@ -120,39 +81,13 @@ int	ft_unset(char **arg, t_env *env_set)
 		}
 		else
 		{
-			print_msg_err("unset: invalid parameter name : ", arg[i]);
+			print_error(ft_strdup("unset"), "not a valid identifier");
 			ret = BUILD_ERROR;
 		}
 	}
 	return (ret);
 }
 
-void	add_ref(t_list **lst, void *data_ref, int idx)
-{
-	t_list	*tmp;
-
-	tmp = *lst;
-	while (tmp && !ft_strnequ(tmp->content, data_ref, idx))
-		tmp = tmp->next;
-	if (!tmp)
-		ft_lstadd_back(lst, ft_lstnew(ft_strjoin(data_ref, "\n")));
-	else
-	{
-		free(tmp->content);
-		tmp->content = NULL;
-		tmp->content = ft_strjoin(data_ref, "\n");
-	}
-}
-
-void	ft_putexport(t_list *lst)
-{
-	while (lst)
-	{
-		ft_putstr("declare -x ");
-		ft_putendl_fd(lst->content, 1);
-		lst = lst->next;
-	}
-}
 
 int	ft_export(char **arg, t_env *env_set)
 {
@@ -164,7 +99,7 @@ int	ft_export(char **arg, t_env *env_set)
 	equ = 0;
 	ret = 0;
 	if (!arg[1])
-		ft_putexport(env_set->ex_env);
+		; // ft_putexport(env_set->ex_env); what the hell joseph
 	else
 	{
 		while (arg[++i])
@@ -179,7 +114,7 @@ int	ft_export(char **arg, t_env *env_set)
 			}
 			else
 			{
-				print_msg_err("export: not valid in this context: ", arg[i]);
+				print_error(ft_strdup("export"), "not a valid identifier");
 				ret = BUILD_ERROR;
 			}
 		}

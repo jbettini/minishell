@@ -6,7 +6,7 @@
 /*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/30 19:51:20 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/02 20:03:17 by ydanset          ###   ########.fr       */
+/*   Updated: 2022/04/03 10:00:32 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,13 @@
 # define DQUOTE		34
 # define BACKSLASH	92
 
-long long	g_exit_status; // ! A garder ?
-long long	g_check_hd; // ! A garder ?
+typedef struct s_global
+{
+	long long	g_exit_status; // ! A garder ?
+	long long	g_check_hd; // ! A garder ?
+}	t_global;
+
+t_global	g_set;
 
 enum	e_err
 {
@@ -66,11 +71,13 @@ enum	e_redir_type
 	REDIR_R,
 	REDIR_RR
 };
+
 typedef struct s_token
 {
 	int		type;
 	char	*val;
 }	t_token;
+
 typedef struct s_env
 {
 	t_list	*envp;
@@ -84,157 +91,131 @@ typedef struct s_env
 	int		child;
 }		t_env;
 
-typedef struct	s_g
-{
-	int	in_hd;
-	int	stop_hd;
-}	t_g;
-
-t_g	g;
-
-void	sig_hd_handler(int signum);
-
-/* minishell.c */
-t_env	*env_manag(char **env, t_env *to_free, int mod);
-int		minishell(t_env *env_set);
-int		ft_exit(char **args, int print_exit, t_env *env_set);
-void	ft_export_exit_status(char *arg, t_list **env);
-void	wait_this_fk_process(t_env *env);
-void	set_path(t_env *env, char **args, int mod);
-char	**remake_path(t_env *env, char **args);
-
-/* builtins.c */
-int		ft_cmd(char **args, t_env *env);
-int		exec_build_in_env(char **args, t_env *env);
-int		ft_pwd(char **args);
-void	ft_cd(char **args, t_list **env);
-void	ft_write_oldpwd(t_list **env, char *pwd);
-char	*ft_my_getenv(t_list **env, char *key);
-void	ft_env(char **args, t_env *env);
-
-/* utils_builtins.c */
-int		get_env_name_len(char *str, int getequal);
-int		replace_existing_env(char *args, t_list *env);
-char	*ft_get_path(char *args);
-char	*ft_get_special_path(char *args);
+//		builtins.c
+void	cd_to_envvar(t_list **env, char *var);
 void	my_chdir(char *path, t_list **env);
+void	ft_cd(char **args, t_list **env);
+int		exec_build_in_env(char **args, t_env *env);
+void	ft_echo(char **arg);
 
-/* env.c */
+//		check.c
+int		check_the_build_for_env(char *args);
+int		check_unset_path(char **path, t_env *env);
+int		ft_isbuild(char *args);
+
+//		connect_utils.c                         
+void	set_path(t_env *env, char **args, int mod);
+void	reset_routine(t_env *env, int ret);
+int		redir_manag(t_redir *to_redir, t_env *env);
+int		redir_lst(t_list *redir_lst, t_env *env);
+int		launch_exec(t_env *env, t_cmd *cmd, int mod);
+
+//		connect.c
+int		connecting_fct(t_list *cmd, t_env *env);
+
+//		env_utils.c
+int		is_valide_var(char *str, int mod);
+int		ft_strc_index(char *str, int c);
+void	delref(t_list **lst, void *data_ref);
 void	add_ref(t_list **lst, void *data_ref, int idx);
+
+//		env.c
+void	ft_env(char **args, t_env *env);
+int		manag_exec_in_env(t_list *cmd);
+int		ft_pwd(char **args);
 int		ft_unset(char **arg, t_env *env_set);
 int		ft_export(char **arg, t_env *env_set);
 
-/* signal.c */
-int		handle_eof(char *str);
-void	set_sig(int signum, void (*handler)(int));
-void	sigint_handler(int signum);
-
-/* connect.c */
-int		redir_manag(t_redir *to_redir, t_env *env);
-int		redir_lst(t_list *redir_lst, t_env *env);
-// int		redir_all(t_list *in, t_list *out, t_env *env);
+//		error.c
+void	print_error(char *cmd, const char *msg);
+void	exit_error(char *cmd, const char *msg, int code);
+int		error(char *cmd, const char *msg, int code);
+void	*error_null(char *cmd, const char *msg);
 void	error_manag(int ret);
-int		launch_exec(t_env *env, t_cmd *cmd, int mod);
+
+//		exec.c
+int		ft_cmd(char **args, t_env *env);
 int		exec_block(t_cmd *to_exec, t_env *env, int mod);
-int		connecting_fct(t_list *line, t_env *env);
-
-/* exec.c */
-int		ft_isbuild(char *args);
-int		exec_in_main(t_cmd *cmd, t_env *env, int mod);
 int		execute_cmd(char **args, t_env *env, int mod);
+int		exec_in_main(t_cmd *cmd, t_env *env, int mod);
 int		exec_in_child(char **args, t_env *env, int mod);
-char	*parse_cmd(char **path, char **cmd);
 
-/* redir.c */
+//		expand_ev.c
+void	expand_word(char **word, char **env);
+char	**expand_args(char **args, char **env);
+int		redir_expanded_is_valid(char *word_expanded);
+int		expand_redir(t_list *redirs, char **env);
+int		expand_ev(t_list *cmds, t_env *env);
+
+//		expand_utils.c
+char	*get_ev_name(char *str);
+char	*get_ev_value(char *ev_name, char **env);
+void	rearrange_word(char **word, int *i, char **env);
+void	delete_quotes(char **word);
+
+//		free.c
+void	free_token(void *ptr);
+void	free_redir(void *ptr);
+void	free_cmd(void *ptr);
+
+//		ft_strtok.c
+char	**ft_strtok(char *str, char *delim);
+
+//		get_cmds.c
+t_list	*get_cmds(t_list *tokens);
+
+//		get_tokens.c
+t_list	*get_tokens(char *line);
+int		get_len_word(char *line);
+
+//		main.c
+t_env	*env_manag(char **env, t_env *to_free, int mod);
+void	wait_this_fk_process(t_env *env);
+int		minishell(t_env *env_set);
+int		ft_exit(char **args, int print_exit, t_env *env_set);
+int		main(int ac, char **av, char **env);
+
+//		parse.c
+t_list	*parse(char *line);
+char	*parse_cmd(char **path, char **cmd);
+void	cette_fct_sert_pour_la_norm(t_env *env, const int mod, int ret);
+
+//		redir.c
 int		redir_heredoc(char *stop);
 char	**here_doc(char *stop);
 int		redir_to_stdout(void *file, int mod);
 int		redir_to_stdin(void *file);
-
-/* echo.c */
-void	ft_echo(char **arg);
-
-/* pipe.c */
 void	ft_pipex(t_cmd *cmd, t_env *env);
 
-/* miniparser.c */
-int		ft_strequ_h(char const *s1, char const *s2);
-int		is_notredir(char *tab);
-int		tmp_utils(t_cmd **cmd, char **str, int mod);
-t_list	*redir(char *tmp, char *file);
-void	free_redir(void *ptr);
-void	destroy_biglst_content(t_list **lst);
-int		cmd_parser(t_cmd **cmd, char **tab);
-t_list	*cmd_maker(char *str);
-t_list	*miniparser(char *str);
-void	ft_print_dpt(char **split);
-void	print_redir_lst(t_list *lst);
-void	ft_putbiglst(t_list *lst);
+// 		signals.c                                       
+void	sigint_handler(int signum);
+void	sig_hd_handler(int signum);
+void	set_sig(int signum, void (*handler)(int));
 
-/* dev.c */
-void	print_tokens(t_list *tokens);
-void	print_redir(void *ptr);
-void	print_cmd(void *ptr);
-
-/* error.c */
-void	print_error(char *msg);
-void	exit_error(char *msg, int code);
-int		error(char *msg, int code);
-void	*error_null(char *msg);
-
-/* tty.c */
-void	set_tty(void);
-void	reset_tty(void);
-
-/* expand_ev.c */
-// static char	*get_ev_name(char *ev);
-// static char	*get_ev_value(char **local_env, char *ev_name);
-// static void	rearrange_line(char **line, int *i, char **local_env);
-int		expand_ev(t_list *cmds, t_env *env_set);
-
-/* free.c */
-void	free_token(void *ptr);
-// static void	free_redir(void *ptr);
-void	free_cmd(void *ptr);
-
-/* get_cmds.c */
-// static void	init_redir(t_redir **redir, int type);
-// static int	add_redir(t_cmd *cmd, t_list **tokens);
-// static void	init_cmd(t_cmd **cmd);
-// static t_cmd	*get_next_cmd(t_list **tokens);
-t_list	*get_cmds(t_list *tokens);
-
-/* get_tokens.c */
-// static int	get_len_word(char *line);
-// static int	extract_word(char **line, t_token *tok);
-// static int	extract_symbol(char **line, t_token *tok);
-// static t_token	*get_next_token(char **line);
-t_list	*get_tokens(char *line);
-
-/* parse.c */
-t_list	*parse(char *line);
-
-/* strs.c */
-void	print_strs(char **strs);
+//		strs.c
 void	free_strs(char **strs);
 char	**copy_strs(char **strs);
 int		strs_len(char **strs);
 char	**strs_append(char **strs, const char *str);
 char	**strs_join(char **strs1, char **strs2);
+void	print_strs(char **strs);
 
-/* utils.c */
-int		is_symbol(char c);
-int		is_whitespace(char c);
-void	skip_whitespace(char **line);
-void	my_strncpy(char *dst, const char *src, int n);
-int		my_strcmp(char *s1, char *s2);
+//		tty.c
+void	set_tty(void);
+void	reset_tty(void);
+
+//		utils.c.c
 char	*str_insert(char *dst, const char *src, size_t n);
 char	*get_str_truncated(const char *str, int start, int len);
 char	*trunc_str(char *str, int start, int len);
 int		get_token_type(t_token *tok);
 char	*get_token_value(t_token *tok);
 
-/* ft_strtok.c */
-char	**ft_strtok(char *str, char *delim);
+//		utils_2.c
+int		is_symbol(char c); 
+int		is_whitespace(char c);
+void	skip_whitespace(char **line);
+void	my_strncpy(char *dst, const char *src, int n);
+int		my_strcmp(char *s1, char *s2);
 
 #endif

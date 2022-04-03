@@ -6,33 +6,60 @@
 /*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 14:26:10 by ydanset           #+#    #+#             */
-/*   Updated: 2022/04/01 15:12:13 by ydanset          ###   ########.fr       */
+/*   Updated: 2022/04/03 09:20:54 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "minishell.h"
 
-void	print_error(char *msg)
+void	print_error(char *cmd, const char *msg)
 {
-	ft_putstr_fd("Error: ", STDERR_FILENO);
-	ft_putstr_fd(msg, STDERR_FILENO);
+	ft_putstr_fd("minishell: ", STDERR_FILENO);
+	if (cmd)
+	{
+		ft_putstr_fd(cmd, STDERR_FILENO);
+		ft_putstr_fd(": ",STDERR_FILENO);
+		free(cmd);
+	}
+	ft_putstr_fd((char *)msg, STDERR_FILENO);
 	ft_putstr_fd("\n", STDERR_FILENO);
 }
 
-void	exit_error(char *msg, int code)
+void	exit_error(char *cmd, const char *msg, int code)
 {
-	print_error(msg);
+	print_error(cmd, msg);
 	exit(code);
 }
 
-int	error(char *msg, int code)
+int	error(char *cmd, const char *msg, int code)
 {
-	print_error(msg);
+	print_error(cmd, msg);
 	return (code);
 }
 
-void	*error_null(char *msg)
+void	*error_null(char *cmd, const char *msg)
 {
-	print_error(msg);
+	print_error(cmd, msg);
 	return (NULL);
+}
+
+void	error_manag(int ret)
+{
+	if (ret != CTRL_C)
+	{
+		if (ret == BF_ERROR)
+			print_error(NULL, "file not found");
+		else if (ret == OP_ERROR)
+			print_error(NULL, "open() failed");
+		else if (ret == DUP_ERROR)
+			print_error(NULL, "dup2() failed");
+		else if (ret == OUT_ERROR)
+			print_error(NULL, "parse error");
+		else if (ret == CMD_ERROR)
+			print_error(NULL, "command not found");
+		if (ret == CMD_ERROR)
+			g_set.g_exit_status = 127;
+		else if (ret >= BF_ERROR)
+			g_set.g_exit_status = 1;
+	}
 }
