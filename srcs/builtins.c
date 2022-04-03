@@ -6,7 +6,7 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/24 15:32:07 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/01 21:12:26 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/04/03 03:43:37 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,29 +14,6 @@
 
 #define HOME 1
 #define OLD 2
-
-int	ft_cmd(char **args, t_env *env)
-{
-	if (args[0] == NULL)
-		return (0);
-	else if (ft_strequ_hd(args[0], "exit"))
-		return (ft_exit(args, 1, env));
-	else if (ft_strequ_hd(args[0], "unset"))
-		return (ft_unset(args, env));
-	else if (ft_strequ_hd(args[0], "export"))
-		return (ft_export(args, env));
-	else if (ft_strequ_hd(args[0], "pwd"))
-		return (ft_pwd(args));
-	else if (ft_strequ_hd(args[0], "echo"))
-		ft_echo(args);
-	else if (ft_strequ_hd(args[0], "cd"))
-		ft_cd(args, &(env->envp));
-	else if (ft_strequ_hd(args[0], "env"))
-		ft_env(args, env);
-	else
-		return (2);
-	return (0);
-}
 
 void	cd_to_envvar(t_list **env, char *var)
 {
@@ -112,8 +89,19 @@ int	exec_build_in_env(char **args, t_env *env)
 	return (ret);
 }
 
-void	ft_env(char **args, t_env *env)
+void	ft_echo(char **arg)
 {
-	if (ft_strequ_hd(args[0], "env"))
-		ft_putlst(env->envp);
+	int	i;
+
+	i = ft_strequ_hd(arg[1], "-n");
+	if (!arg[1] || (!arg[2] && ft_is_str_blank(arg[1])))
+		return (ft_putchar_fd('\n', 1));
+	while (arg[++i])
+	{
+		ft_putstr_fd(arg[i], 1);
+		if (arg[i + 1])
+			ft_putchar_fd(' ', 1);
+	}
+	if (!ft_strequ_hd(arg[1], "-n"))
+		ft_putchar_fd('\n', 1);
 }

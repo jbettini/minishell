@@ -3,25 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   strs.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbettini <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/01 15:19:26 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/01 15:20:32 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/04/03 03:10:16 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-void	print_strs(char **strs)
-{
-	int	i;
-
-	if (!strs)
-		return ;
-	i = 0;
-	while (strs[i])
-		ft_printf("%s\n", strs[i++]);
-}
 
 void	free_strs(char **strs)
 {

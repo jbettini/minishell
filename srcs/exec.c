@@ -3,32 +3,65 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/25 14:38:36 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/02 20:05:36 by ydanset          ###   ########.fr       */
+/*   Updated: 2022/04/03 04:29:09 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	ft_isbuild(char *args)
+
+int	ft_cmd(char **args, t_env *env)
 {
-	if (ft_strequ_hd(args, "exit"))
-		return (1);
-	else if (ft_strequ_hd(args, "env"))
-		return (1);
-	else if (ft_strequ_hd(args, "unset"))
-		return (1);
-	else if (ft_strequ_hd(args, "export"))
-		return (1);
-	else if (ft_strequ_hd(args, "pwd"))
-		return (1);
-	else if (ft_strequ_hd(args, "cd"))
-		return (1);
-	else if (ft_strequ_hd(args, "echo"))
-		return (1);
+	if (args[0] == NULL)
+		return (0);
+	else if (ft_strequ_hd(args[0], "exit"))
+		return (ft_exit(args, 1, env));
+	else if (ft_strequ_hd(args[0], "unset"))
+		return (ft_unset(args, env));
+	else if (ft_strequ_hd(args[0], "export"))
+		return (ft_export(args, env));
+	else if (ft_strequ_hd(args[0], "pwd"))
+		return (ft_pwd(args));
+	else if (ft_strequ_hd(args[0], "echo"))
+		ft_echo(args);
+	else if (ft_strequ_hd(args[0], "cd"))
+		ft_cd(args, &(env->envp));
+	else if (ft_strequ_hd(args[0], "env"))
+		ft_env(args, env);
+	else
+		return (2);
 	return (0);
+}
+
+int	exec_block(t_cmd *to_exec, t_env *env, int mod)
+{
+	int	ret;
+
+	ret = redir_lst(to_exec->redir_in, env);
+	if (ret)
+		return (ret);
+	if (mod == IN_MAIN)
+	{
+		ret = redir_lst(to_exec->redir_out, env);
+		if (ret)
+			return (ret);
+	}
+	if (to_exec->args)
+	{
+		set_path(env, to_exec->args, SET);
+		ret = launch_exec(env, to_exec, mod);
+		set_path(env, to_exec->args, DESTROY_SET);
+	}
+	else if (mod != IN_MAIN)
+	{
+		ret = redir_lst(to_exec->redir_out, env);
+		if (ret)
+			return (ret);
+	}
+	return (ret);
 }
 
 int	execute_cmd(char **args, t_env *env, int mod)
@@ -50,25 +83,6 @@ int	execute_cmd(char **args, t_env *env, int mod)
 	exit(ret);
 }
 
-int	check_unset_path(char **path, t_env *env)
-{
-	int	i;
-
-	i = 0;
-	while (path[i])
-	{
-		if (ft_strequ_hd(path[i], "PATH"))
-			break ;
-		i++;
-	}
-	if (path[i])
-	{
-		ft_free_split(env->path);
-		env->path = NULL;
-	}
-	return (0);
-}
-
 int	exec_in_main(t_cmd *cmd, t_env *env, int mod)
 {
 	int	ret;
@@ -78,7 +92,7 @@ int	exec_in_main(t_cmd *cmd, t_env *env, int mod)
 	{
 		ret = ft_cmd(cmd->args, env);
 		if (ret != 2)
-			g_exit_status = ret;
+			g_set.g_exit_status = ret;
 		else if (ret == 0 && ft_strequ_hd(cmd->args[0], "unset"))
 			check_unset_path(&cmd->args[1], env);
 		else if (ret == 2 && !env->cmd_path)
@@ -113,26 +127,3 @@ int	exec_in_child(char **args, t_env *env, int mod)
 	return (0);
 }
 
-char	*parse_cmd(char **path, char **cmd)
-{
-	char	*cmd_path;
-	char	*tmp;
-	size_t	i;
-
-	if (!path)
-		return (NULL);
-	i = -1;
-	tmp = ft_strjoin("/", cmd[0]);
-	while (path[++i])
-	{
-		cmd_path = ft_strjoin(path[i], tmp);
-		if (access(cmd_path, F_OK | X_OK) == 0)
-		{
-			free(tmp);
-			return (cmd_path);
-		}
-		free(cmd_path);
-	}
-	free(tmp);
-	return (NULL);
-}

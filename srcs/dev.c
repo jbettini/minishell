@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   dev.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 14:25:34 by ydanset           #+#    #+#             */
-/*   Updated: 2022/03/31 19:11:01 by ydanset          ###   ########.fr       */
+/*   Updated: 2022/04/03 03:21:49 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,4 +67,21 @@ void	print_cmd(void *ptr)
 	ft_lstiter(cmd->redir_in, &print_redir);
 	ft_printf("\033[1;33m--- redir_out ---\n\033[0m");
 	ft_lstiter(cmd->redir_out, &print_redir);
+}
+
+void	print_strs(char **strs)
+{
+	int	i;
+
+	if (!strs)
+		return ;
+	i = 0;
+	while (strs[i])
+		ft_printf("%s\n", strs[i++]);
+}
+
+void	print_msg_err(char	*msg, char *arg)
+{
+	ft_putstr_fd(msg, 2);
+	ft_putendl_fd(arg, 2);
 }

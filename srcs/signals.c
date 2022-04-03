@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 18:55:54 by rahmed            #+#    #+#             */
-/*   Updated: 2022/04/02 16:02:22 by ydanset          ###   ########.fr       */
+/*   Updated: 2022/04/03 04:25:13 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	sig_hd_handler(int signum)
 {
 	(void)signum;
 	close(0);
-	g_check_hd = 1;
+	g_set.g_check_hd = 1;
 }
 
 void	set_sig(int signum, void (*handler)(int))

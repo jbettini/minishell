@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 14:26:10 by ydanset           #+#    #+#             */
-/*   Updated: 2022/04/01 15:12:13 by ydanset          ###   ########.fr       */
+/*   Updated: 2022/04/03 04:29:02 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,4 +35,26 @@ void	*error_null(char *msg)
 {
 	print_error(msg);
 	return (NULL);
+}
+
+
+void	error_manag(int ret)
+{
+	if (ret != CTRL_C)
+	{
+		if (ret == BF_ERROR)
+			perror("file not found ");
+		else if (ret == OP_ERROR)
+			perror("file open error ");
+		else if (ret == DUP_ERROR)
+			perror("dup2 ret error ");
+		else if (ret == OUT_ERROR)
+			perror("parse error n");
+		else if (ret == CMD_ERROR)
+			perror("command not found ");
+		if (ret == CMD_ERROR)
+			g_set.g_exit_status = 127;
+		else if (ret >= BF_ERROR)
+			g_set.g_exit_status = 1;
+	}
 }
