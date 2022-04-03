@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/23 05:33:04 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/03 03:41:59 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/04/03 09:42:22 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "minishell.h"
 
 #define EXPORT 1
 #define UNSET 0
@@ -49,11 +49,10 @@ int	ft_pwd(char **args)
 {
 	char	*pwd;
 
-	if (args[1])
-	{
-		print_error("pwd: too many arguments");
-		return (BUILD_ERROR);
-	}
+	// no need apparamment
+	//if (args[1])
+	//	return (error(ft_strdup("pwd"), "too many arguments", BUILD_ERROR));
+	(void)args;
 	pwd = getcwd(NULL, 0);
 	ft_putendl_fd(pwd, 1);
 	free(pwd);
@@ -82,7 +81,7 @@ int	ft_unset(char **arg, t_env *env_set)
 		}
 		else
 		{
-			print_msg_err("unset: invalid parameter name : ", arg[i]);
+			print_error(ft_strdup("unset"), "not a valid identifier");
 			ret = BUILD_ERROR;
 		}
 	}
@@ -100,7 +99,7 @@ int	ft_export(char **arg, t_env *env_set)
 	equ = 0;
 	ret = 0;
 	if (!arg[1])
-		ft_putexport(env_set->ex_env);
+		; // ft_putexport(env_set->ex_env); what the hell joseph
 	else
 	{
 		while (arg[++i])
@@ -115,7 +114,7 @@ int	ft_export(char **arg, t_env *env_set)
 			}
 			else
 			{
-				print_msg_err("export: not valid in this context: ", arg[i]);
+				print_error(ft_strdup("export"), "not a valid identifier");
 				ret = BUILD_ERROR;
 			}
 		}

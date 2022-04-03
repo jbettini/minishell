@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 14:26:44 by ydanset           #+#    #+#             */
-/*   Updated: 2022/04/03 03:39:03 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/04/03 08:54:58 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
-// #include "cmds.h"
+#include "minishell.h"
 
 t_list	*parse(char *line)
 {
@@ -50,7 +49,7 @@ char	*parse_cmd(char **path, char **cmd)
 	return (NULL);
 }
 
-void	cette_fct_sert_pour_la_norm_pose_pas_de_question(t_env *env, const int mod, int ret)
+void	cette_fct_sert_pour_la_norm(t_env *env, const int mod, int ret)
 {
 	reset_routine(env, mod);
 	error_manag(ret);

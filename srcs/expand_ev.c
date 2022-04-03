@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   expand_ev.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 14:26:15 by ydanset           #+#    #+#             */
-/*   Updated: 2022/04/03 03:15:52 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/04/03 08:54:58 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "minishell.h"
 
 void	expand_word(char **word, char **env)
 {
@@ -74,16 +74,19 @@ int	redir_expanded_is_valid(char *word_expanded)
 int	expand_redir(t_list *redirs, char **env)
 {
 	t_redir	*redir;
+	char	*ev_name;
 
 	while (redirs)
 	{
 		redir = redirs->content;
 		if (redir->type != REDIR_LL)
 		{
+			ev_name = ft_strdup(redir->word);
 			expand_word(&redir->word, env);
 			if (!redir_expanded_is_valid(redir->word))
-				return (error("ambiguous redirect", 0));
+				return (error(ev_name, "ambiguous redirect", 0));
 			delete_quotes(&redir->word);
+			free(ev_name);
 		}
 		redirs = redirs->next;
 	}

@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/24 17:33:48 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/03 04:32:26 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/04/03 10:22:06 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "minishell.h"
 
 /* need review wait_this_fk_process() */
 t_env	*env_manag(char **env, t_env *to_free, int mod)
@@ -24,9 +24,9 @@ t_env	*env_manag(char **env, t_env *to_free, int mod)
 		ft_free_split(to_free->nbtfke);
 		if (to_free->path)
 			ft_free_split(to_free->path);
-		free(to_free);
 		close(to_free->oldstdin);
 		close(to_free->oldstdout);
+		free(to_free);
 		return (0);
 	}
 	env_set = malloc(sizeof(t_env));
@@ -107,19 +107,19 @@ int	minishell(t_env *env_set)
 
 int	ft_exit(char **args, int print_exit, t_env *env_set)
 {
+	reset_tty();
 	if (print_exit)
 		ft_putstr_fd("exit\n", 1);
 	if (args[1] && !ft_str_isdigit(args[1]))
 	{
-		print_error("exit: numeric argument required");
+		print_error(ft_strdup("exit"), "numeric argument required");
 		env_manag(NULL, env_set, 1);
 		exit(255);
 	}
 	else if (ft_double_strlen(args) > 2)
-		print_error("exit: too many arguments");
+		print_error(ft_strdup("exit"), "too many arguments");
 	else
 	{
-		reset_tty();
 		if (args[1])
 		{
 			env_manag(NULL, env_set, 1);
@@ -130,6 +130,7 @@ int	ft_exit(char **args, int print_exit, t_env *env_set)
 		system("leaks minishell");
 		exit(0);
 	}
+	set_tty();
 	return (BUILD_ERROR);
 }
 
@@ -139,6 +140,7 @@ int	main(int ac, char **av, char **env)
 
 	(void)ac;
 	(void)av;
+	
 	env_set = env_manag(env, NULL, 0);
 	set_tty();
 	while (1)

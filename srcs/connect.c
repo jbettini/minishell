@@ -3,14 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   connect.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/11 04:03:54 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/03 04:28:43 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/04/03 10:25:41 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "minishell.h"
+
+/*
+int	exec_one_cmd(t_cmd *cmd, t_env *env)
+{
+	
+}
+
+int	exec_multiple_cmds(t_list *cmds, t_env *env)
+{
+	
+}
+*/
 
 int	connecting_fct(t_list *cmd, t_env *env)
 {
@@ -36,7 +48,7 @@ int	connecting_fct(t_list *cmd, t_env *env)
 				}
 			}
 			if (!expand_ev(cmd, env))
-				;
+				continue ;
 			else if (cmd->next)
 			{
 				ret = exec_block((t_cmd *)(cmd->content), env, IN_PIPE);

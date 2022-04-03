@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/30 19:51:20 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/03 04:31:09 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/04/03 10:00:32 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,11 +71,13 @@ enum	e_redir_type
 	REDIR_R,
 	REDIR_RR
 };
+
 typedef struct s_token
 {
 	int		type;
 	char	*val;
 }	t_token;
+
 typedef struct s_env
 {
 	t_list	*envp;
@@ -88,12 +90,6 @@ typedef struct s_env
 	int		out_check;
 	int		child;
 }		t_env;
-
-typedef struct	s_g
-{
-	int	in_hd;
-	int	stop_hd;
-}	t_g;
 
 //		builtins.c
 void	cd_to_envvar(t_list **env, char *var);
@@ -117,13 +113,6 @@ int		launch_exec(t_env *env, t_cmd *cmd, int mod);
 //		connect.c
 int		connecting_fct(t_list *cmd, t_env *env);
 
-//		dev.c
-void	print_msg_err(char	*msg, char *arg);
-void	print_strs(char **strs);
-void	print_cmd(void *ptr);
-void	print_redir(void *ptr);
-void	print_tokens(t_list *tokens);
-
 //		env_utils.c
 int		is_valide_var(char *str, int mod);
 int		ft_strc_index(char *str, int c);
@@ -138,10 +127,10 @@ int		ft_unset(char **arg, t_env *env_set);
 int		ft_export(char **arg, t_env *env_set);
 
 //		error.c
-void	print_error(char *msg);
-void	exit_error(char *msg, int code);
-int		error(char *msg, int code);
-void	*error_null(char *msg);
+void	print_error(char *cmd, const char *msg);
+void	exit_error(char *cmd, const char *msg, int code);
+int		error(char *cmd, const char *msg, int code);
+void	*error_null(char *cmd, const char *msg);
 void	error_manag(int ret);
 
 //		exec.c
@@ -189,7 +178,7 @@ int		main(int ac, char **av, char **env);
 //		parse.c
 t_list	*parse(char *line);
 char	*parse_cmd(char **path, char **cmd);
-void	cette_fct_sert_pour_la_norm_pose_pas_de_question(t_env *env, const int mod, int ret);
+void	cette_fct_sert_pour_la_norm(t_env *env, const int mod, int ret);
 
 //		redir.c
 int		redir_heredoc(char *stop);
@@ -209,6 +198,7 @@ char	**copy_strs(char **strs);
 int		strs_len(char **strs);
 char	**strs_append(char **strs, const char *str);
 char	**strs_join(char **strs1, char **strs2);
+void	print_strs(char **strs);
 
 //		tty.c
 void	set_tty(void);
