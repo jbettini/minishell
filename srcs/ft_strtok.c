@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strtok.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/01 14:59:07 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/03 08:54:58 by ydanset          ###   ########.fr       */
+/*   Updated: 2022/04/03 21:11:59 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,30 +53,27 @@ void	skip_quotes(char *str, int *j)
 
 char	**ft_strtok(char *str, char *delim)
 {
-	int		i;
-	int		j;
-	int		k;
+	t_cpt	tmp;
 	char	**res;
 
+	init_cpt(&tmp);
 	res = malloc(sizeof(char *) * (get_len_res(str, delim) + 1));
-	i = 0;
-	k = 0;
-	while (str[i])
+	while (str[tmp.i])
 	{
-		while (str[i] && is_in_set(delim, str[i]))
-			i++;
-		j = 0;
-		while (str[i + j] && !is_in_set(delim, str[i + j]))
+		while (str[tmp.i] && is_in_set(delim, str[tmp.i]))
+			tmp.i++;
+		tmp.j = 0;
+		while (str[tmp.i + tmp.j] && !is_in_set(delim, str[tmp.i + tmp.j]))
 		{
-			if (str[i + j] == '\'' || str[i + j] == '"')
-				skip_quotes(str, &j);
-			j++;
+			if (str[tmp.i + tmp.j] == '\'' || str[tmp.i + tmp.j] == '"')
+				skip_quotes(str, &(tmp.j));
+			tmp.j++;
 		}
-		if (!j)
+		if (!(tmp.j))
 			break ;
-		res[k++] = ft_substr(str, i, j);
-		i += j;
+		res[tmp.k++] = ft_substr(str, tmp.i, tmp.j);
+		tmp.i += tmp.j;
 	}
-	res[k] = NULL;
+	res[tmp.k] = NULL;
 	return (res);
 }

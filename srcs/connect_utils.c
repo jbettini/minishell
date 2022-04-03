@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   connect_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/11 04:03:54 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/03 11:01:21 by ydanset          ###   ########.fr       */
+/*   Updated: 2022/04/03 20:01:56 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,6 @@ void	reset_routine(t_env *env, int ret)
 	close(env->oldstdout);
 	if (!access(".heredoc_tmp", F_OK))
 		unlink(".heredoc_tmp");
-	if (g_set.g_exit_status)
-		 g_set.g_exit_status = 0;
 	wait_this_fk_process(env);
 	env->child = 0;
 }

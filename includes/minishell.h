@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/30 19:51:20 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/03 13:06:54 by ydanset          ###   ########.fr       */
+/*   Updated: 2022/04/03 21:48:54 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,18 @@
 
 typedef struct s_global
 {
-	long long	g_exit_status; // ! A garder ?
-	long long	g_check_hd; // ! A garder ?
+	long long	g_exit_status;
+	long long	g_check_hd;
 }	t_global;
+
+typedef struct s_cpt
+{
+	int	i;
+	int	j;
+	int	k;
+	int	ret;
+	int	equ;
+}	t_cpt;
 
 t_global	g_set;
 
@@ -119,6 +128,7 @@ int		is_valide_var(char *str, int mod);
 int		ft_strc_index(char *str, int c);
 void	delref(t_list **lst, void *data_ref);
 void	add_ref(t_list **lst, void *data_ref, int idx);
+void	ft_putexport(t_list *lst);
 
 //		env.c
 void	ft_env(char **args, t_env *env);
@@ -180,7 +190,8 @@ int		main(int ac, char **av, char **env);
 //		parse.c
 t_list	*parse(char *line);
 char	*parse_cmd(char **path, char **cmd);
-void	cette_fct_sert_pour_la_norm(t_env *env, const int mod, int ret);
+void	print_strs(char **strs);
+void	init_cpt(t_cpt *cpt);
 
 //		redir.c
 int		redir_heredoc(char *stop);
@@ -200,7 +211,6 @@ char	**copy_strs(char **strs);
 int		strs_len(char **strs);
 char	**strs_append(char **strs, const char *str);
 char	**strs_join(char **strs1, char **strs2);
-void	print_strs(char **strs);
 
 //		tty.c
 void	set_tty(void);
@@ -214,10 +224,15 @@ int		get_token_type(t_token *tok);
 char	*get_token_value(t_token *tok);
 
 //		utils_2.c
-int		is_symbol(char c); 
+int		is_symbol(char c);
 int		is_whitespace(char c);
 void	skip_whitespace(char **line);
 void	my_strncpy(char *dst, const char *src, int n);
 int		my_strcmp(char *s1, char *s2);
+
+//		norm.c
+void	*cette_fct_sert_a_normer_le_hd(t_list **lst);
+void	cette_fct_sert_pour_la_norm(t_env *env, const int mod, int ret);
+void	cette_fct_seet_a_normer_minishell(t_env *env);
 
 #endif

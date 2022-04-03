@@ -3,17 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   check.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/03 03:34:18 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/03 09:20:45 by ydanset          ###   ########.fr       */
+/*   Updated: 2022/04/03 20:02:50 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-
-int		check_the_build_for_env(char *args)
+int	check_the_build_for_env(char *args)
 {
 	if (ft_strequ_hd(args, "unset"))
 		ft_putstr("env: export: No such file or directory\n");

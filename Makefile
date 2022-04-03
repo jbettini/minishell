@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+         #
+#    By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/03 04:39:29 by jbettini          #+#    #+#              #
-#    Updated: 2022/04/03 08:13:28 by ydanset          ###   ########.fr        #
+#    Updated: 2022/04/03 21:12:53 by jbettini         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,18 +16,18 @@ NAME	=	minishell
 I_DIR	=	includes
 SRC_DIR =	srcs
 OBJ_DIR =	srcs/objs
-USER	=	ydanset
+#USER	=	ydanset
 #USER	=	jbettini
 
  # IF NEEDED at 42 on MacOS10 Install :
  #  rm -rf $HOME/.brew && git clone --depth=1 https://github.com/Homebrew/brew $HOME/.brew && echo 'export PATH=$HOME/.brew/bin:$PATH' >> $HOME/.zshrc && source $HOME/.zshrc && brew update
  #  brew install readline
-LIBS	=	-L/Users/$(USER)/.brew/opt/readline/lib -lreadline -Llibft -lft
-HEADERS	=	-I$(I_DIR) -I/Users/$(USER)/.brew/opt/readline/include
+#LIBS	=	-L/Users/$(USER)/.brew/opt/readline/lib -lreadline -Llibft -lft
+#HEADERS	=	-I$(I_DIR) -I/Users/$(USER)/.brew/opt/readline/include
 
  # @HOME on MacOS12 Monterey
- #LIBS	=	-L/usr/local/opt/readline/lib -lreadline -Llibft -lft
- #HEADERS	=	-I$(I_DIR) -I/usr/local/opt/readline/include
+	LIBS	=	-L/usr/local/opt/readline/lib -lreadline -Llibft -lft
+	HEADERS	=	-I$(I_DIR) -I/usr/local/opt/readline/include
 
 OBJ_PFX = 	srcs/objs/main.o
 
@@ -52,7 +52,8 @@ SRC	= 	main.c \
 		env_utils.c	\
 		check.c	\
 		expand_utils.c	\
-		connect_utils.c
+		connect_utils.c	\
+		norm.c
 
 SRC_PFX =	$(addprefix $(SRC_DIR)/, $(SRC))
 

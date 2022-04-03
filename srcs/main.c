@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/24 17:33:48 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/03 13:00:21 by ydanset          ###   ########.fr       */
+/*   Updated: 2022/04/03 21:24:08 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,6 @@ t_env	*env_manag(char **env, t_env *to_free, int mod)
 		return (0);
 	}
 	env_set = malloc(sizeof(t_env));
-	if (!env_set)
-		return (NULL);
 	env_set->child = 0;
 	g_set.g_exit_status = 0;
 	env_set->envp = ft_dpt_to_lst(env);
@@ -59,7 +57,7 @@ void	wait_this_fk_process(t_env *env)
 			waitpid(-1, &status, 0);
 			if (WIFSIGNALED(status) && !x)
 			{
-				x = 1;		
+				x = 1;
 				if (WTERMSIG(status) == SIGQUIT)
 					write(STDOUT_FILENO, "Quit: 3", 7);
 				write(STDOUT_FILENO, "\n", 1);
@@ -84,12 +82,7 @@ int	minishell(t_env *env_set)
 	env_set->oldstdout = dup(1);
 	env_set->oldstdin = dup(0);
 	if (!line)
-	{
-		env_manag(NULL, env_set, 1);
-		reset_tty();
-		ft_putstr_fd("exit\n", 1);
-		exit(0);
-	}
+		cette_fct_seet_a_normer_minishell(env_set);
 	else if (!ft_is_str_blank(line) && line)
 	{
 		add_history(line);
@@ -98,7 +91,6 @@ int	minishell(t_env *env_set)
 		{
 			set_sig(SIGINT, SIG_IGN);
 			ret = exec_cmds(cmds, env_set);
-			// ret = connecting_fct(cmds, env_set);
 		}
 		ft_lstclear(&cmds, &free_cmd);
 	}
@@ -141,7 +133,6 @@ int	main(int ac, char **av, char **env)
 
 	(void)ac;
 	(void)av;
-	
 	env_set = env_manag(env, NULL, 0);
 	set_tty();
 	while (1)

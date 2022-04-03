@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/07 04:17:11 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/03 08:54:58 by ydanset          ###   ########.fr       */
+/*   Updated: 2022/04/03 21:15:02 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,11 +55,7 @@ char	**here_doc(char *stop)
 	{
 		rd_ret = readline("> ");
 		if (g_set.g_check_hd)
-		{
-			set_sig(SIGINT, SIG_IGN);
-			ft_lstclear(&lst, &free);
-			return (NULL);
-		}
+			return (cette_fct_sert_a_normer_le_hd(&lst));
 		if (!rd_ret || ft_strequ_hd(rd_ret, stop))
 			check--;
 		else

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   connect.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/11 04:03:54 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/03 13:10:07 by ydanset          ###   ########.fr       */
+/*   Updated: 2022/04/03 21:17:05 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int	exec_simple_cmd(t_cmd *cmd, t_env *env)
 {
 	int	ret;
-	
+
 	if (!expand_ev(cmd, env))
 		return (1);
 	ret = exec_block(cmd, env, IN_MAIN);

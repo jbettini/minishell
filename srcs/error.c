@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 14:26:10 by ydanset           #+#    #+#             */
-/*   Updated: 2022/04/03 12:33:16 by ydanset          ###   ########.fr       */
+/*   Updated: 2022/04/03 21:18:23 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	print_error(char *cmd, const char *msg)
 	if (cmd)
 	{
 		ft_putstr_fd(cmd, STDERR_FILENO);
-		ft_putstr_fd(": ",STDERR_FILENO);
+		ft_putstr_fd(": ", STDERR_FILENO);
 		free(cmd);
 	}
 	ft_putstr_fd((char *)msg, STDERR_FILENO);
