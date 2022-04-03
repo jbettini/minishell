@@ -6,7 +6,7 @@
 /*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/30 19:51:20 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/03 10:00:32 by ydanset          ###   ########.fr       */
+/*   Updated: 2022/04/03 13:06:54 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,8 @@ int		redir_lst(t_list *redir_lst, t_env *env);
 int		launch_exec(t_env *env, t_cmd *cmd, int mod);
 
 //		connect.c
-int		connecting_fct(t_list *cmd, t_env *env);
+//int		connecting_fct(t_list *cmd, t_env *env);
+int		exec_cmds(t_list *cmds, t_env *env);
 
 //		env_utils.c
 int		is_valide_var(char *str, int mod);
@@ -145,7 +146,8 @@ void	expand_word(char **word, char **env);
 char	**expand_args(char **args, char **env);
 int		redir_expanded_is_valid(char *word_expanded);
 int		expand_redir(t_list *redirs, char **env);
-int		expand_ev(t_list *cmds, t_env *env);
+//int		expand_ev(t_list *cmds, t_env *env);
+int		expand_ev(t_cmd *cmd, t_env *env);
 
 //		expand_utils.c
 char	*get_ev_name(char *str);

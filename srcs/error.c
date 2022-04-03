@@ -6,7 +6,7 @@
 /*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 14:26:10 by ydanset           #+#    #+#             */
-/*   Updated: 2022/04/03 09:20:54 by ydanset          ###   ########.fr       */
+/*   Updated: 2022/04/03 12:33:16 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,21 +45,20 @@ void	*error_null(char *cmd, const char *msg)
 
 void	error_manag(int ret)
 {
-	if (ret != CTRL_C)
-	{
-		if (ret == BF_ERROR)
-			print_error(NULL, "file not found");
-		else if (ret == OP_ERROR)
-			print_error(NULL, "open() failed");
-		else if (ret == DUP_ERROR)
-			print_error(NULL, "dup2() failed");
-		else if (ret == OUT_ERROR)
-			print_error(NULL, "parse error");
-		else if (ret == CMD_ERROR)
-			print_error(NULL, "command not found");
-		if (ret == CMD_ERROR)
-			g_set.g_exit_status = 127;
-		else if (ret >= BF_ERROR)
-			g_set.g_exit_status = 1;
-	}
+	if (ret == CTRL_C)
+		return ;
+	if (ret == BF_ERROR)
+		print_error(NULL, "file not found");
+	else if (ret == OP_ERROR)
+		print_error(NULL, "open() failed");
+	else if (ret == DUP_ERROR)
+		print_error(NULL, "dup2() failed");
+	else if (ret == OUT_ERROR)
+		print_error(NULL, "parse error");
+	else if (ret == CMD_ERROR)
+		print_error(NULL, "command not found");
+	if (ret == CMD_ERROR)
+		g_set.g_exit_status = 127;
+	else if (ret >= BF_ERROR)
+		g_set.g_exit_status = 1;
 }

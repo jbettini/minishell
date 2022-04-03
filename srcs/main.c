@@ -6,7 +6,7 @@
 /*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/24 17:33:48 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/03 10:22:06 by ydanset          ###   ########.fr       */
+/*   Updated: 2022/04/03 13:00:21 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,8 @@ int	minishell(t_env *env_set)
 		if (cmds)
 		{
 			set_sig(SIGINT, SIG_IGN);
-			ret = connecting_fct(cmds, env_set);
+			ret = exec_cmds(cmds, env_set);
+			// ret = connecting_fct(cmds, env_set);
 		}
 		ft_lstclear(&cmds, &free_cmd);
 	}
