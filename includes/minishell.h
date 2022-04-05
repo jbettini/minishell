@@ -6,7 +6,7 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/30 19:51:20 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/03 21:48:54 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/04/05 05:04:18 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,16 +46,17 @@ typedef struct s_cpt
 
 t_global	g_set;
 
-enum	e_err
+enum	e_err_cmd
 {
+	CTRL_C = -1,
 	SUCCESS,
 	BUILD_ERROR,
-	TMP,
 	BF_ERROR,
 	OP_ERROR,
 	DUP_ERROR,
 	OUT_ERROR,
-	CTRL_C,
+	EXPAND_ERROR,
+	PERM_ERROR,
 	CMD_ERROR = 127
 };
 
@@ -98,7 +99,10 @@ typedef struct s_env
 	int		oldstdout;
 	int		out_check;
 	int		child;
+	int		last_pid;
 }		t_env;
+
+int	all_error(int ret, char *error);
 
 //		builtins.c
 void	cd_to_envvar(t_list **env, char *var);
@@ -109,7 +113,7 @@ void	ft_echo(char **arg);
 
 //		check.c
 int		check_the_build_for_env(char *args);
-int		check_unset_path(char **path, t_env *env);
+void	check_unset_path(char **path, t_env *env);
 int		ft_isbuild(char *args);
 
 //		connect_utils.c                         
@@ -121,6 +125,7 @@ int		launch_exec(t_env *env, t_cmd *cmd, int mod);
 
 //		connect.c
 //int		connecting_fct(t_list *cmd, t_env *env);
+int		exec_simple_cmd(t_cmd *cmd, t_env *env);
 int		exec_cmds(t_list *cmds, t_env *env);
 
 //		env_utils.c

@@ -6,7 +6,7 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/11 04:03:54 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/03 22:15:59 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/04/05 05:36:32 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	set_path(t_env *env, char **args, int mod)
 	{
 		if (ft_strchr(args[0], '/'))
 		{	
-			if (access(args[0], F_OK | X_OK))
+			if (access(args[0], F_OK | X_OK) != 0)
 				env->cmd_path = 0;
 			else
 				env->cmd_path = ft_strdup(args[0]);
@@ -62,7 +62,9 @@ int	redir_manag(t_redir *to_redir, t_env *env)
 		ret = redir_to_stdout(to_redir->word, O_APPEND);
 	else if (to_redir->type == REDIR_R)
 		ret = redir_to_stdout(to_redir->word, O_TRUNC);
-	return (ret);
+	if (ret)
+		return (all_error(ret , to_redir->word));
+	return (0);
 }
 
 int	redir_lst(t_list *redir_lst, t_env *env)

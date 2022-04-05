@@ -6,7 +6,7 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/03 03:34:18 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/03 20:02:50 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/04/05 04:34:14 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,23 +25,21 @@ int	check_the_build_for_env(char *args)
 	return (1);
 }
 
-int	check_unset_path(char **path, t_env *env)
+void	check_unset_path(char **args, t_env *env)
 {
 	int	i;
 
 	i = 0;
-	while (path[i])
+	while (args[++i])
 	{
-		if (ft_strequ_hd(path[i], "PATH"))
+		if (ft_strequ_hd(args[i], "PATH"))
 			break ;
-		i++;
 	}
-	if (path[i])
+	if (args[i])
 	{
 		ft_free_split(env->path);
 		env->path = NULL;
 	}
-	return (0);
 }
 
 int	ft_isbuild(char *args)

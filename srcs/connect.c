@@ -6,22 +6,34 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/11 04:03:54 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/03 21:17:05 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/04/05 04:33:08 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	exec_simple_cmd(t_cmd *cmd, t_env *env)
-{
-	int	ret;
 
-	if (!expand_ev(cmd, env))
-		return (1);
-	ret = exec_block(cmd, env, IN_MAIN);
-	reset_routine(env, IN_MAIN);
-	error_manag(ret);
-	return (ret);
+int	ft_cmd(char **args, t_env *env)
+{
+	if (args[0] == NULL)
+		return (0);
+	else if (ft_strequ_hd(args[0], "exit"))
+		return (ft_exit(args, 1, env));
+	else if (ft_strequ_hd(args[0], "unset"))
+		return (ft_unset(args, env));
+	else if (ft_strequ_hd(args[0], "export"))
+		return (ft_export(args, env));
+	else if (ft_strequ_hd(args[0], "pwd"))
+		return (ft_pwd(args));
+	else if (ft_strequ_hd(args[0], "echo"))
+		ft_echo(args);
+	else if (ft_strequ_hd(args[0], "cd"))
+		ft_cd(args, &(env->envp));
+	else if (ft_strequ_hd(args[0], "env"))
+		ft_env(args, env);
+	else
+		return (2);
+	return (0);
 }
 
 int	exec_multiple_cmds(t_list *cmds, t_env *env)

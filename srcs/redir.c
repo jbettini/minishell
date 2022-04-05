@@ -6,7 +6,7 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/07 04:17:11 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/03 21:15:02 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/04/05 04:02:02 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,10 +75,13 @@ int	redir_to_stdout(void *file, int mod)
 	fd = 0;
 	if (file == NULL || ft_strequ_hd(file, "|"))
 		return (OUT_ERROR);
+	if (access(file, F_OK) == 0)
+		if (access(file, W_OK) == -1)
+			return (PERM_ERROR);
 	if (mod == O_TRUNC)
-		fd = open(file, O_CREAT | O_RDWR | O_TRUNC, 0744);
+		fd = open(file, O_CREAT | O_WRONLY | O_TRUNC, 0744);
 	else if (mod == O_APPEND)
-		fd = open(file, O_CREAT | O_RDWR | O_APPEND, 0744);
+		fd = open(file, O_CREAT | O_WRONLY | O_APPEND, 0744);
 	if (fd == -1)
 		return (OP_ERROR);
 	if (dup2(fd, 1) == -1)
@@ -93,6 +96,8 @@ int	redir_to_stdin(void *file)
 
 	if (access(file, F_OK) == -1)
 		return (BF_ERROR);
+	if (access(file, R_OK) == -1)
+		return (PERM_ERROR);
 	fd = open(file, O_RDONLY);
 	if (fd == -1)
 		return (OP_ERROR);

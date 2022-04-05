@@ -6,34 +6,13 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/25 14:38:36 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/03 20:02:26 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/04/05 04:36:47 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_cmd(char **args, t_env *env)
-{
-	if (args[0] == NULL)
-		return (0);
-	else if (ft_strequ_hd(args[0], "exit"))
-		return (ft_exit(args, 1, env));
-	else if (ft_strequ_hd(args[0], "unset"))
-		return (ft_unset(args, env));
-	else if (ft_strequ_hd(args[0], "export"))
-		return (ft_export(args, env));
-	else if (ft_strequ_hd(args[0], "pwd"))
-		return (ft_pwd(args));
-	else if (ft_strequ_hd(args[0], "echo"))
-		ft_echo(args);
-	else if (ft_strequ_hd(args[0], "cd"))
-		ft_cd(args, &(env->envp));
-	else if (ft_strequ_hd(args[0], "env"))
-		ft_env(args, env);
-	else
-		return (2);
-	return (0);
-}
+
 
 int	exec_block(t_cmd *to_exec, t_env *env, int mod)
 {
