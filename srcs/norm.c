@@ -6,7 +6,7 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/03 21:02:15 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/03 21:33:40 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/04/05 06:19:30 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,11 @@ void	*cette_fct_sert_a_normer_le_hd(t_list **lst)
 	return (NULL);
 }
 
-void	cette_fct_seet_a_normer_minishell(t_env *env)
+int	cette_fct_seet_a_normer_minishell(void)
 {
-	env_manag(NULL, env, 1);
 	reset_tty();
 	ft_putstr_fd("exit\n", 1);
-	exit(0);
+	return (-1);
 }
 
 void	init_cpt(t_cpt *cpt)

@@ -6,7 +6,7 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/24 17:33:48 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/05 05:59:42 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/04/05 06:19:50 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ int	minishell(t_env *env_set)
 	env_set->oldstdout = dup(1);
 	env_set->oldstdin = dup(0);
 	if (!line)
-		cette_fct_seet_a_normer_minishell(env_set);
+		return (cette_fct_seet_a_normer_minishell());
 	else if (!ft_is_str_blank(line) && line)
 	{
 		add_history(line);

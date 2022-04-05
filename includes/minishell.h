@@ -6,7 +6,7 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/30 19:51:20 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/05 05:04:18 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/04/05 06:19:40 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -238,6 +238,6 @@ int		my_strcmp(char *s1, char *s2);
 //		norm.c
 void	*cette_fct_sert_a_normer_le_hd(t_list **lst);
 void	cette_fct_sert_pour_la_norm(t_env *env, const int mod, int ret);
-void	cette_fct_seet_a_normer_minishell(t_env *env);
+int		cette_fct_seet_a_normer_minishell(void);
 
 #endif

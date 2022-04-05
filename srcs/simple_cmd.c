@@ -6,7 +6,7 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/11 04:03:54 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/05 05:36:21 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/04/05 07:04:52 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,8 @@ void	exec_cmd_sc(char **args, t_env *env)
 {
     int		pid;
 
-	pid = fork();
     set_path(env, args, SET);
+	pid = fork();
 	if (!pid)
 	{
 		reset_tty();
