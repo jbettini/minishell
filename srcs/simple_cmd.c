@@ -6,7 +6,7 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/11 04:03:54 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/05 07:04:52 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/04/07 01:37:29 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,8 @@ void    reset_routine_sc(t_env *env, int ret)
 		wait_this_fk_process(env);
 	else
 		g_set.g_exit_status = ret;
+	if (ret == CTRL_C)
+		g_set.g_exit_status = 1;
 	env->child = 0;
 	if (g_set.g_check_hd)
 		g_set.g_check_hd = 0;
@@ -93,7 +95,7 @@ int	exec_simple_cmd(t_cmd *cmd, t_env *env)
 	if (!expand_ev(cmd, env))
 		ret = EXPAND_ERROR;
 	ret = redir_all(cmd, env);
-	if (!ret && cmd->args[0])
+	if (!ret && cmd->args)
 	{
 		if (ft_isbuild(cmd->args[0]))
 		{

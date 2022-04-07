@@ -6,7 +6,7 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/07 04:17:11 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/05 04:02:02 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/04/07 00:00:14 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,29 +105,4 @@ int	redir_to_stdin(void *file)
 		return (DUP_ERROR);
 	close(fd);
 	return (0);
-}
-
-void	ft_pipex(t_cmd *cmd, t_env *env)
-{
-	int	fd[2];
-	int	pid;
-
-	if (pipe(fd) == -1)
-		return ;
-	pid = fork();
-	if (!pid)
-	{
-		set_sig(SIGINT, SIG_DFL);
-		set_sig(SIGQUIT, SIG_DFL);
-		dup2(fd[1], 1);
-		close(fd[0]);
-		exec_in_main(cmd, env, IN_PIPE);
-	}
-	else
-	{
-		env->child++;
-		dup2(fd[0], 0);
-		close(fd[1]);
-		close(fd[0]);
-	}
 }

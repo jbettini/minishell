@@ -6,7 +6,7 @@
 #    By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/03 04:39:29 by jbettini          #+#    #+#              #
-#    Updated: 2022/04/05 03:34:40 by jbettini         ###   ########.fr        #
+#    Updated: 2022/04/07 01:20:14 by jbettini         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -54,6 +54,7 @@ SRC	= 	main.c \
 		expand_utils.c	\
 		connect_utils.c	\
 		simple_cmd.c	\
+		multiple_cmds.c	\
 		norm.c
 
 SRC_PFX =	$(addprefix $(SRC_DIR)/, $(SRC))

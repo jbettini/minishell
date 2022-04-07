@@ -6,7 +6,7 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/30 19:51:20 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/05 06:19:40 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/04/07 01:17:18 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,10 @@ typedef struct s_env
 	int		last_pid;
 }		t_env;
 
+int redir_all(t_cmd *cmd, t_env *env);
 int	all_error(int ret, char *error);
+int	exec_build(char **args, t_env *env);
+int	exec_multiple_cmds(t_list *cmds, t_env *env);
 
 //		builtins.c
 void	cd_to_envvar(t_list **env, char *var);

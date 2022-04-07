@@ -6,7 +6,7 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 14:26:10 by ydanset           #+#    #+#             */
-/*   Updated: 2022/04/05 06:02:05 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/04/07 01:23:12 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,14 +61,7 @@ int	all_error(int ret, char *error)
 
 void	error_manag(int ret)
 {
-	if (ret == BF_ERROR)
-		print_error(NULL, "file not found");
-	else if (ret == OP_ERROR)
-		print_error(NULL, "open() failed");
-	else if (ret == DUP_ERROR)
-		print_error(NULL, "dup2() failed");
-	else if (ret == OUT_ERROR)
-		print_error(NULL, "parse error");
-	else if (ret == CMD_ERROR)
-		print_error(NULL, "command not found");
+	if (ret)
+		return;
+	return;
 }
