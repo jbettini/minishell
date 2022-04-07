@@ -14,22 +14,29 @@
 
 void	expand_word(char **word, char **env)
 {
+	int		in_double_quotes;
 	int		i;
 
+	in_double_quotes = 0;
 	i = 0;
 	while ((*word)[i])
 	{
-		if ((*word)[i] == '$')
+		if ((*word)[i] == '"' && !in_double_quotes)
+			in_double_quotes = 1;
+		else if ((*word)[i] == '"' && in_double_quotes)
+			in_double_quotes = 0;
+		if ((*word)[i] == '$' && ((*word)[i + 1] == '?'
+			|| ft_isalpha((*word)[i + 1]) || (*word)[i + 1] == '_'))
+			rearrange_word(word, &i, env);
+		else if ((*word)[i] == '\'' && !in_double_quotes)
 		{
-			if ((*word)[i + 1] == '?' || ft_isalpha((*word)[i + 1]) \
-												|| (*word)[i + 1] == '_')
-				rearrange_word(word, &i, env);
-			else
+			i++;
+			while ((*word)[i] != '\'')
 				i++;
+			i++;
 		}
-		else if ((*word)[i++] == '\'')
-			while ((*word)[i] && (*word)[i] != '\'')
-				i++;
+		else
+			i++;
 	}
 }
 
