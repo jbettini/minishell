@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   strs.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/01 15:19:26 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/03 10:00:22 by ydanset          ###   ########.fr       */
+/*   Updated: 2022/04/03 20:00:03 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,15 +108,4 @@ char	**strs_join(char **strs1, char **strs2)
 	free_strs(strs1);
 	free_strs(strs2);
 	return (new);
-}
-
-void	print_strs(char **strs)
-{
-	int	i;
-
-	if (!strs)
-		return ;
-	i = 0;
-	while (strs[i])
-		printf("%s\n", strs[i++]);
 }

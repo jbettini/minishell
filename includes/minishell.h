@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/30 19:51:20 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/03 10:00:32 by ydanset          ###   ########.fr       */
+/*   Updated: 2022/04/07 01:17:18 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,22 +31,32 @@
 
 typedef struct s_global
 {
-	long long	g_exit_status; // ! A garder ?
-	long long	g_check_hd; // ! A garder ?
+	long long	g_exit_status;
+	long long	g_check_hd;
 }	t_global;
+
+typedef struct s_cpt
+{
+	int	i;
+	int	j;
+	int	k;
+	int	ret;
+	int	equ;
+}	t_cpt;
 
 t_global	g_set;
 
-enum	e_err
+enum	e_err_cmd
 {
+	CTRL_C = -1,
 	SUCCESS,
 	BUILD_ERROR,
-	TMP,
 	BF_ERROR,
 	OP_ERROR,
 	DUP_ERROR,
 	OUT_ERROR,
-	CTRL_C,
+	EXPAND_ERROR,
+	PERM_ERROR,
 	CMD_ERROR = 127
 };
 
@@ -89,7 +99,13 @@ typedef struct s_env
 	int		oldstdout;
 	int		out_check;
 	int		child;
+	int		last_pid;
 }		t_env;
+
+int redir_all(t_cmd *cmd, t_env *env);
+int	all_error(int ret, char *error);
+int	exec_build(char **args, t_env *env);
+int	exec_multiple_cmds(t_list *cmds, t_env *env);
 
 //		builtins.c
 void	cd_to_envvar(t_list **env, char *var);
@@ -100,7 +116,7 @@ void	ft_echo(char **arg);
 
 //		check.c
 int		check_the_build_for_env(char *args);
-int		check_unset_path(char **path, t_env *env);
+void	check_unset_path(char **path, t_env *env);
 int		ft_isbuild(char *args);
 
 //		connect_utils.c                         
@@ -111,13 +127,16 @@ int		redir_lst(t_list *redir_lst, t_env *env);
 int		launch_exec(t_env *env, t_cmd *cmd, int mod);
 
 //		connect.c
-int		connecting_fct(t_list *cmd, t_env *env);
+//int		connecting_fct(t_list *cmd, t_env *env);
+int		exec_simple_cmd(t_cmd *cmd, t_env *env);
+int		exec_cmds(t_list *cmds, t_env *env);
 
 //		env_utils.c
 int		is_valide_var(char *str, int mod);
 int		ft_strc_index(char *str, int c);
 void	delref(t_list **lst, void *data_ref);
 void	add_ref(t_list **lst, void *data_ref, int idx);
+void	ft_putexport(t_list *lst);
 
 //		env.c
 void	ft_env(char **args, t_env *env);
@@ -145,7 +164,8 @@ void	expand_word(char **word, char **env);
 char	**expand_args(char **args, char **env);
 int		redir_expanded_is_valid(char *word_expanded);
 int		expand_redir(t_list *redirs, char **env);
-int		expand_ev(t_list *cmds, t_env *env);
+//int		expand_ev(t_list *cmds, t_env *env);
+int		expand_ev(t_cmd *cmd, t_env *env);
 
 //		expand_utils.c
 char	*get_ev_name(char *str);
@@ -178,7 +198,8 @@ int		main(int ac, char **av, char **env);
 //		parse.c
 t_list	*parse(char *line);
 char	*parse_cmd(char **path, char **cmd);
-void	cette_fct_sert_pour_la_norm(t_env *env, const int mod, int ret);
+void	print_strs(char **strs);
+void	init_cpt(t_cpt *cpt);
 
 //		redir.c
 int		redir_heredoc(char *stop);
@@ -198,7 +219,6 @@ char	**copy_strs(char **strs);
 int		strs_len(char **strs);
 char	**strs_append(char **strs, const char *str);
 char	**strs_join(char **strs1, char **strs2);
-void	print_strs(char **strs);
 
 //		tty.c
 void	set_tty(void);
@@ -212,10 +232,15 @@ int		get_token_type(t_token *tok);
 char	*get_token_value(t_token *tok);
 
 //		utils_2.c
-int		is_symbol(char c); 
+int		is_symbol(char c);
 int		is_whitespace(char c);
 void	skip_whitespace(char **line);
 void	my_strncpy(char *dst, const char *src, int n);
 int		my_strcmp(char *s1, char *s2);
+
+//		norm.c
+void	*cette_fct_sert_a_normer_le_hd(t_list **lst);
+void	cette_fct_sert_pour_la_norm(t_env *env, const int mod, int ret);
+int		cette_fct_seet_a_normer_minishell(void);
 
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/07 04:17:11 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/03 08:54:58 by ydanset          ###   ########.fr       */
+/*   Updated: 2022/04/07 00:00:14 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,11 +55,7 @@ char	**here_doc(char *stop)
 	{
 		rd_ret = readline("> ");
 		if (g_set.g_check_hd)
-		{
-			set_sig(SIGINT, SIG_IGN);
-			ft_lstclear(&lst, &free);
-			return (NULL);
-		}
+			return (cette_fct_sert_a_normer_le_hd(&lst));
 		if (!rd_ret || ft_strequ_hd(rd_ret, stop))
 			check--;
 		else
@@ -79,10 +75,13 @@ int	redir_to_stdout(void *file, int mod)
 	fd = 0;
 	if (file == NULL || ft_strequ_hd(file, "|"))
 		return (OUT_ERROR);
+	if (access(file, F_OK) == 0)
+		if (access(file, W_OK) == -1)
+			return (PERM_ERROR);
 	if (mod == O_TRUNC)
-		fd = open(file, O_CREAT | O_RDWR | O_TRUNC, 0744);
+		fd = open(file, O_CREAT | O_WRONLY | O_TRUNC, 0744);
 	else if (mod == O_APPEND)
-		fd = open(file, O_CREAT | O_RDWR | O_APPEND, 0744);
+		fd = open(file, O_CREAT | O_WRONLY | O_APPEND, 0744);
 	if (fd == -1)
 		return (OP_ERROR);
 	if (dup2(fd, 1) == -1)
@@ -97,6 +96,8 @@ int	redir_to_stdin(void *file)
 
 	if (access(file, F_OK) == -1)
 		return (BF_ERROR);
+	if (access(file, R_OK) == -1)
+		return (PERM_ERROR);
 	fd = open(file, O_RDONLY);
 	if (fd == -1)
 		return (OP_ERROR);
@@ -104,29 +105,4 @@ int	redir_to_stdin(void *file)
 		return (DUP_ERROR);
 	close(fd);
 	return (0);
-}
-
-void	ft_pipex(t_cmd *cmd, t_env *env)
-{
-	int	fd[2];
-	int	pid;
-
-	if (pipe(fd) == -1)
-		return ;
-	pid = fork();
-	if (!pid)
-	{
-		set_sig(SIGINT, SIG_DFL);
-		set_sig(SIGQUIT, SIG_DFL);
-		dup2(fd[1], 1);
-		close(fd[0]);
-		exec_in_main(cmd, env, IN_PIPE);
-	}
-	else
-	{
-		env->child++;
-		dup2(fd[0], 0);
-		close(fd[1]);
-		close(fd[0]);
-	}
 }

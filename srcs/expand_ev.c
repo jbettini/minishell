@@ -6,7 +6,7 @@
 /*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 14:26:15 by ydanset           #+#    #+#             */
-/*   Updated: 2022/04/03 08:54:58 by ydanset          ###   ########.fr       */
+/*   Updated: 2022/04/03 13:10:05 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,22 @@ int	expand_redir(t_list *redirs, char **env)
 	return (1);
 }
 
+int	expand_ev(t_cmd *cmd, t_env *env)
+{
+	char	**envp;
+	int		ret;
+
+	ret = 1;
+	envp = ft_lst_to_dpt(env->envp);
+	cmd->args = expand_args(cmd->args, envp);
+	if (!expand_redir(cmd->redir_in, envp)
+		|| !expand_redir(cmd->redir_out, envp))
+		ret = 0;
+	free_strs(envp);
+	return (ret);
+}
+
+/*
 int	expand_ev(t_list *cmds, t_env *env)
 {
 	t_cmd	*cmd;
@@ -121,3 +137,4 @@ int	expand_ev(t_list *cmds, t_env *env)
 	free_strs(envp);
 	return (1);
 }
+*/

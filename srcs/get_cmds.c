@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_cmds.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 14:26:28 by ydanset           #+#    #+#             */
-/*   Updated: 2022/04/03 08:54:58 by ydanset          ###   ########.fr       */
+/*   Updated: 2022/04/03 21:17:50 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static int	add_redir(t_cmd *cmd, t_list **tokens)
 	if (!*tokens || get_token_type((*tokens)->content) != WORD)
 	{
 		free(redir);
-		if (redir->type == REDIR_L || redir->type == REDIR_LL)	
+		if (redir->type == REDIR_L || redir->type == REDIR_LL)
 			return (error(NULL, "syntax error near unexpected token '<'", 0));
 		else
 			return (error(NULL, "syntax error near unexpected token '>'", 0));

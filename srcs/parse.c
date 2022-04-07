@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 14:26:44 by ydanset           #+#    #+#             */
-/*   Updated: 2022/04/03 08:54:58 by ydanset          ###   ########.fr       */
+/*   Updated: 2022/04/03 21:49:09 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,13 @@ char	*parse_cmd(char **path, char **cmd)
 	return (NULL);
 }
 
-void	cette_fct_sert_pour_la_norm(t_env *env, const int mod, int ret)
+void	print_strs(char **strs)
 {
-	reset_routine(env, mod);
-	error_manag(ret);
+	int	i;
+
+	if (!strs)
+		return ;
+	i = -1;
+	while (strs[i])
+		printf("%s\n", strs[i++]);
 }

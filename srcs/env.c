@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/23 05:33:04 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/03 09:42:22 by ydanset          ###   ########.fr       */
+/*   Updated: 2022/04/03 21:35:59 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ void	ft_env(char **args, t_env *env)
 	if (ft_strequ_hd(args[0], "env"))
 		ft_putlst(env->envp);
 }
-
 
 int	manag_exec_in_env(t_list *cmd)
 {
@@ -42,23 +41,19 @@ int	manag_exec_in_env(t_list *cmd)
 	new_args = ft_dupdpt(&args[i]);
 	ft_free_split(args);
 	((t_cmd *)cmd->content)->args = new_args;
-	return (0);	
+	return (0);
 }
 
 int	ft_pwd(char **args)
 {
 	char	*pwd;
 
-	// no need apparamment
-	//if (args[1])
-	//	return (error(ft_strdup("pwd"), "too many arguments", BUILD_ERROR));
 	(void)args;
 	pwd = getcwd(NULL, 0);
 	ft_putendl_fd(pwd, 1);
 	free(pwd);
 	return (0);
 }
-
 
 int	ft_unset(char **arg, t_env *env_set)
 {
@@ -88,36 +83,31 @@ int	ft_unset(char **arg, t_env *env_set)
 	return (ret);
 }
 
-
 int	ft_export(char **arg, t_env *env_set)
 {
-	int	i;
-	int	equ;
-	int	ret;
+	t_cpt	t;
 
-	i = 0;
-	equ = 0;
-	ret = 0;
+	init_cpt(&t);
 	if (!arg[1])
-		; // ft_putexport(env_set->ex_env); what the hell joseph
+		ft_putexport(env_set->ex_env);
 	else
 	{
-		while (arg[++i])
+		while (arg[++(t.i)])
 		{
-			if (is_valide_var(arg[i], EXPORT))
+			if (is_valide_var(arg[t.i], EXPORT))
 			{
-				equ = ft_strc_index(arg[i], '=');
-				if (equ != -1)
-					add_ref(&(env_set->envp), arg[i], equ + 1);
+				t.equ = ft_strc_index(arg[t.i], '=');
+				if (t.equ != -1)
+					add_ref(&(env_set->envp), arg[t.i], t.equ + 1);
 				else
-					add_ref(&(env_set->ex_env), arg[i], ft_strlen(arg[i]));
+					add_ref(&(env_set->ex_env), arg[t.i], ft_strlen(arg[t.i]));
 			}
 			else
 			{
 				print_error(ft_strdup("export"), "not a valid identifier");
-				ret = BUILD_ERROR;
+				t.ret = BUILD_ERROR;
 			}
 		}
 	}
-	return (ret);
+	return (t.ret);
 }

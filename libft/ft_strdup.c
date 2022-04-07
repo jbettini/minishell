@@ -6,7 +6,7 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/27 20:05:19 by rahmed            #+#    #+#             */
-/*   Updated: 2022/04/02 04:54:49 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/04/03 21:48:03 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ char	*ft_strdup(const char *s1)
 
 char	**ft_dupdpt(char **src)
 {
-	char **cpy;
+	char	**cpy;
 	int		i;
 
 	i = -1;

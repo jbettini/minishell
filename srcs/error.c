@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 14:26:10 by ydanset           #+#    #+#             */
-/*   Updated: 2022/04/03 09:20:54 by ydanset          ###   ########.fr       */
+/*   Updated: 2022/04/07 01:23:12 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@ void	print_error(char *cmd, const char *msg)
 	if (cmd)
 	{
 		ft_putstr_fd(cmd, STDERR_FILENO);
-		ft_putstr_fd(": ",STDERR_FILENO);
-		free(cmd);
+		ft_putstr_fd(": ", STDERR_FILENO);
+		//free(cmd);
 	}
 	ft_putstr_fd((char *)msg, STDERR_FILENO);
 	ft_putstr_fd("\n", STDERR_FILENO);
@@ -42,24 +42,26 @@ void	*error_null(char *cmd, const char *msg)
 	print_error(cmd, msg);
 	return (NULL);
 }
+int	all_error(int ret, char *error)
+{
+	if (ret == BF_ERROR)
+		print_error(error, "file not found");
+	else if (ret == OP_ERROR)
+		print_error(error, "open() failed");
+	else if (ret == DUP_ERROR)
+		print_error(error, "dup2() failed");
+	else if (ret == OUT_ERROR)
+		print_error(error, "parse error");
+	else if (ret == CMD_ERROR)
+		print_error(error, "command not found");
+	else if (ret == PERM_ERROR)
+		print_error(error, "Permission denied");
+	return (1);
+}
 
 void	error_manag(int ret)
 {
-	if (ret != CTRL_C)
-	{
-		if (ret == BF_ERROR)
-			print_error(NULL, "file not found");
-		else if (ret == OP_ERROR)
-			print_error(NULL, "open() failed");
-		else if (ret == DUP_ERROR)
-			print_error(NULL, "dup2() failed");
-		else if (ret == OUT_ERROR)
-			print_error(NULL, "parse error");
-		else if (ret == CMD_ERROR)
-			print_error(NULL, "command not found");
-		if (ret == CMD_ERROR)
-			g_set.g_exit_status = 127;
-		else if (ret >= BF_ERROR)
-			g_set.g_exit_status = 1;
-	}
+	if (ret)
+		return;
+	return;
 }

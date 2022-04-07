@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/23 05:33:04 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/03 08:54:58 by ydanset          ###   ########.fr       */
+/*   Updated: 2022/04/04 22:33:24 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,6 @@ void	delref(t_list **lst, void *data_ref)
 	free(data_ref);
 }
 
-
 void	add_ref(t_list **lst, void *data_ref, int idx)
 {
 	t_list	*tmp;
@@ -87,12 +86,12 @@ void	add_ref(t_list **lst, void *data_ref, int idx)
 	while (tmp && !ft_strnequ(tmp->content, data_ref, idx))
 		tmp = tmp->next;
 	if (!tmp)
-		ft_lstadd_back(lst, ft_lstnew(ft_strjoin(data_ref, "\n")));
+		ft_lstadd_back(lst, ft_lstnew(ft_strdup(data_ref)));
 	else
 	{
 		free(tmp->content);
 		tmp->content = NULL;
-		tmp->content = ft_strjoin(data_ref, "\n");
+		tmp->content = ft_strdup(data_ref);
 	}
 }
 
@@ -101,7 +100,7 @@ void	ft_putexport(t_list *lst)
 	while (lst)
 	{
 		ft_putstr("declare -x ");
-		ft_putendl_fd(lst->content, 1);
+		ft_putendl_fd(lst->content, 2);
 		lst = lst->next;
 	}
 }

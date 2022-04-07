@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+         #
+#    By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/03 04:39:29 by jbettini          #+#    #+#              #
-#    Updated: 2022/04/03 08:13:28 by ydanset          ###   ########.fr        #
+#    Updated: 2022/04/07 01:20:14 by jbettini         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,6 +19,7 @@ OBJ_DIR =	srcs/objs
 #USER	=	ydanset
 #USER	=	jbettini
 
+OBJ_PFX = 	srcs/objs/main.o
 # IF NEEDED at 42 on MacOS10 Install :
 #  rm -rf $HOME/.brew && git clone --depth=1 https://github.com/Homebrew/brew $HOME/.brew && echo 'export PATH=$HOME/.brew/bin:$PATH' >> $HOME/.zshrc && source $HOME/.zshrc && brew update
 #  brew install readline
@@ -50,7 +51,10 @@ SRC	= 	main.c \
 		env_utils.c	\
 		check.c	\
 		expand_utils.c	\
-		connect_utils.c
+		connect_utils.c	\
+		simple_cmd.c	\
+		multiple_cmds.c	\
+		norm.c
 
 SRC_PFX =	$(addprefix $(SRC_DIR)/, $(SRC))
 
