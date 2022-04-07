@@ -6,7 +6,7 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/24 15:32:07 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/07 19:38:53 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/04/07 19:44:03 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,24 +70,6 @@ void	ft_cd(char **args, t_list **env)
 	else
 		my_chdir(args[1], env);
 }
-
-// int	exec_build_in_env(char **args, t_env *env)
-// {
-// 	int	ret;
-
-// 	ret = CMD_ERROR;
-// 	if (ft_strequ_hd(args[0], "unset"))
-// 		ft_putstr("env: export: No such file or directory\n");
-// 	else if (ft_strequ_hd(args[0], "export"))
-// 		ft_putstr("env: export: No such file or directory\n");
-// 	else if (ft_strequ_hd(args[0], "exit"))
-// 		ft_putstr("env: exit: No such file or directory\n");
-// 	else
-// 		ret = 0;
-// 	if (ret == 0)
-// 		ret = ft_cmd(args, env);
-// 	return (ret);
-// }
 
 void	ft_echo(char **arg)
 {
