@@ -6,7 +6,7 @@
 #    By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/03 04:39:29 by jbettini          #+#    #+#              #
-#    Updated: 2022/04/07 01:20:14 by jbettini         ###   ########.fr        #
+#    Updated: 2022/04/09 08:43:57 by jbettini         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -51,7 +51,6 @@ SRC	= 	main.c \
 		env_utils.c	\
 		check.c	\
 		expand_utils.c	\
-		connect_utils.c	\
 		simple_cmd.c	\
 		multiple_cmds.c	\
 		norm.c
