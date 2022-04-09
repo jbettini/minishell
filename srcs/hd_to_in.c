@@ -6,7 +6,7 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/24 17:33:48 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/09 09:00:22 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/04/09 22:59:05 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ int convert_a_hd(t_redir *redir, char *name)
 	while (hd[++i])
 		ft_putendl_fd(hd[i], fd);
     redir->type = REDIR_L;
+    free((redir->word));
     redir->word = ft_strdup(name);
     close(fd);
     ft_free_split(hd);
@@ -74,16 +75,18 @@ int convert_all_hd(t_list *r_in, int i, t_env *env)
 {
     char    *name;
 
-    name = ft_join_free_s2(".heredoc_tmp", ft_itoa(i));
+    name = ft_join_free_ss(ft_join_free_s1(getcwd(NULL, 0), "/"), ft_join_free_s2(".heredoc_tmp", ft_itoa(i)));
     ft_lstadd_back(&(env->hd_to_unlink), ft_lstnew(ft_strdup(name)));
     while (r_in)
     {
         if (((t_redir *)r_in->content)->type == REDIR_LL)
             if (convert_a_hd(r_in->content, name) == CTRL_C)
+            {
+                free(name);
                 return (CTRL_C);
+            }
         r_in = r_in->next;
     }
-
     free(name);
     return (SUCCESS);
 }

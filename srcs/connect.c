@@ -6,7 +6,7 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/11 04:03:54 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/07 19:44:07 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/04/09 23:23:26 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,10 @@ void	set_path(t_env *env, char **args, int mod)
 		return ;
 	}
 	if (env->cmd_path)
+	{
 		free(env->cmd_path);
+		env->cmd_path = NULL;
+	}
 }
 
 int	redir_manag(t_redir *to_redir, t_env *env)

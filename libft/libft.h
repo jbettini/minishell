@@ -6,7 +6,7 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/06 15:51:31 by rahmed            #+#    #+#             */
-/*   Updated: 2022/04/02 04:55:22 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/04/09 22:41:12 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ typedef struct s_list
 	struct s_list	*next;
 }	t_list;
 
+char		*ft_join_free_ss(char *s1, char *s2);
 char		**ft_dupdpt(char **src);
 char		*ft_join_free_s1(char *s1, char *s2);
 char		*ft_join_free_s2(char *s1, char *s2);

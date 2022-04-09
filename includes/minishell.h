@@ -6,7 +6,7 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/30 19:51:20 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/09 08:47:04 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/04/09 23:01:18 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,8 @@ t_global	g_set;
 
 enum	e_err_cmd
 {
-	CTRL_C = -1,
+	CTRL_C = -2,
+	CTRL_D,
 	SUCCESS,
 	BUILD_ERROR,
 	BF_ERROR,

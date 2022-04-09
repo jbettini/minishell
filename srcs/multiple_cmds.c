@@ -6,7 +6,7 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/11 04:03:54 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/09 08:53:24 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/04/09 22:47:59 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,9 +64,8 @@ void    reset_routine_mc(t_env *env, int mod)
 	dup2(env->oldstdout, 1);
 	close(env->oldstdin);
 	close(env->oldstdout);
-	if (!access(".heredoc_tmp", F_OK))
-		unlink(".heredoc_tmp");
-    unlink_all(env);
+	// if (!access(".heredoc_tmp", F_OK))
+	// 	unlink(".heredoc_tmp");
 	if (env->child)
 		wait_this_fk_process(env);
     if (env->last_pid != 0)
@@ -76,6 +75,7 @@ void    reset_routine_mc(t_env *env, int mod)
     if (g_set.g_check_hd == 1)
         g_set.g_check_hd = 0;
 	env->child = 0;
+    unlink_all(env);
 }
 
 void	ft_pipex(t_cmd *cmd, t_env *env)
@@ -129,7 +129,7 @@ int	exec_multiple_cmds(t_list *cmds, t_env *env)
 	while (cmds)
 	{
 		cmds_tmp = (t_cmd *)(cmds->content);
-		if (!expand_ev(cmds_tmp, env))
+		if (!expand_ev(cmds->content, env))
 			cmds = cmds->next;
         else
         {
@@ -143,9 +143,9 @@ int	exec_multiple_cmds(t_list *cmds, t_env *env)
             else
             {
     		    if (cmds->next)
-    			    ft_pipex(cmds_tmp, env);
+    			    ft_pipex(cmds->content, env);
     		    else
-    			    exec_last_pipe(cmds_tmp, env);
+    			    exec_last_pipe(cmds->content, env);
     		    cmds = cmds->next;
             }
     		set_path(env, NULL, DESTROY_SET);
