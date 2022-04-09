@@ -6,7 +6,7 @@
 #    By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/03 04:39:29 by jbettini          #+#    #+#              #
-#    Updated: 2022/04/09 08:43:57 by jbettini         ###   ########.fr        #
+#    Updated: 2022/04/09 08:58:45 by jbettini         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,32 +27,33 @@ OBJ_DIR =	srcs/objs
 
  # @HOME on MacOS12 Monterey
 	LIBS	=	-L/usr/local/opt/readline/lib -lreadline -Llibft -lft
-	HEADERS	=	-I$(I_DIR) -I/usr/local/opt/readline/include
+	HEADERS	=	-I$(I_DIR) -I/usr/local/opt/readline/include 
 
 OBJ_PFX = 	srcs/objs/main.o
 
-SRC	= 	main.c \
- 		builtins.c \
- 		env.c \
- 		redir.c \
- 		connect.c \
- 		error.c \
- 		expand_ev.c \
- 		free.c \
- 		get_cmds.c \
- 		get_tokens.c \
- 		parse.c \
- 		strs.c \
- 		utils.c	\
-		utils2.c	\
- 		signals.c \
- 		ft_strtok.c	\
-		tty.c	\
-		env_utils.c	\
-		check.c	\
+SRC	= 	main.c 			\
+ 		builtins.c 		\
+ 		env.c 			\
+ 		redir.c 		\
+ 		connect.c 		\
+ 		error.c 		\
+ 		expand_ev.c 	\
+ 		free.c 			\
+ 		get_cmds.c 		\
+ 		get_tokens.c 	\
+ 		parse.c 		\
+ 		strs.c 			\
+ 		utils.c			\
+		utils2.c		\
+ 		signals.c 		\
+ 		ft_strtok.c		\
+		tty.c			\
+		env_utils.c		\
+		check.c			\
 		expand_utils.c	\
 		simple_cmd.c	\
 		multiple_cmds.c	\
+		hd_to_in.c		\
 		norm.c
 
 SRC_PFX =	$(addprefix $(SRC_DIR)/, $(SRC))

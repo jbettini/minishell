@@ -6,7 +6,7 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/30 19:51:20 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/07 01:17:18 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/04/09 08:47:04 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,7 @@ typedef struct s_env
 {
 	t_list	*envp;
 	t_list	*ex_env;
+	t_list	*hd_to_unlink;
 	char	**nbtfke;
 	char	**path;
 	char	*cmd_path;
@@ -242,5 +243,11 @@ int		my_strcmp(char *s1, char *s2);
 void	*cette_fct_sert_a_normer_le_hd(t_list **lst);
 void	cette_fct_sert_pour_la_norm(t_env *env, const int mod, int ret);
 int		cette_fct_seet_a_normer_minishell(void);
+
+void    unlink_all(t_env *env);
+int		no_bad_file(t_list *r_in);
+int 	convert_a_hd(t_redir *redir, char *name);
+int 	convert_all_hd(t_list *r_in, int i, t_env *env);
+int 	hd_to_infile(t_list *cmds, t_env *env);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/24 17:33:48 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/07 01:09:41 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/04/09 08:47:29 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ t_env	*env_manag(char **env, t_env *to_free, int mod)
 	env_set->child = 0;
 	env_set->last_pid = 0;
 	g_set.g_exit_status = 0;
+	env_set->hd_to_unlink = NULL;
 	env_set->envp = ft_dpt_to_lst(env);
 	env_set->ex_env = ft_dpt_to_lst(env);
 	env_set->nbtfke = ft_lst_to_dpt(env_set->envp);

@@ -6,7 +6,7 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/11 04:03:54 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/07 02:19:18 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/04/09 08:53:24 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void    pipe_routine(t_cmd *cmd, t_env *env)
     int ret;
 
     // ret = redir_all(cmd, env);       BETTER_SPEED_PROCESS_BUT_NEED_TO_WORK_IT
-    ret = redir_lst(cmd->redir_out, env);
+    ret = redir_all(cmd, env);
     if (ret)
         exit(ret);
     if (!(cmd->args))
@@ -66,15 +66,15 @@ void    reset_routine_mc(t_env *env, int mod)
 	close(env->oldstdout);
 	if (!access(".heredoc_tmp", F_OK))
 		unlink(".heredoc_tmp");
+    unlink_all(env);
 	if (env->child)
-    {
 		wait_this_fk_process(env);
-        // printf("LAST PIPE PID : %d\n", env->last_pid);
-    }
     if (env->last_pid != 0)
         wait_last_pid(env);
     if (mod == CTRL_C)
         g_set.g_exit_status = 1;
+    if (g_set.g_check_hd == 1)
+        g_set.g_check_hd = 0;
 	env->child = 0;
 }
 
@@ -124,7 +124,6 @@ void    exec_last_pipe(t_cmd *cmd, t_env *env)
 
 int	exec_multiple_cmds(t_list *cmds, t_env *env)
 {
-	int		ret;
 	t_cmd	*cmds_tmp;
 
 	while (cmds)
@@ -135,16 +134,11 @@ int	exec_multiple_cmds(t_list *cmds, t_env *env)
         else
         {
         	set_path(env, cmds_tmp->args, SET);
-            ret = redir_lst(cmds_tmp->redir_in, env);
-            if (ret)
+            if (hd_to_infile(cmds, env) == CTRL_C)
             {
-                if (ret == CTRL_C || cmds->next == NULL)
-    		    {
-                    set_path(env, NULL, DESTROY_SET);
-    			    reset_routine_mc(env, CTRL_C);
-    			    return (SUCCESS);
-    		    }
-    			cmds = cmds->next;
+                set_path(env, NULL, DESTROY_SET);
+    			reset_routine_mc(env, CTRL_C);
+                return (CTRL_C);
     		}
             else
             {
@@ -157,5 +151,6 @@ int	exec_multiple_cmds(t_list *cmds, t_env *env)
     		set_path(env, NULL, DESTROY_SET);
         }
 	}
+	reset_routine_mc(env, 0);
     return (SUCCESS);
 }
