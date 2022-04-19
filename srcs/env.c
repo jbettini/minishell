@@ -6,7 +6,7 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/23 05:33:04 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/09 08:44:25 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/04/19 18:04:27 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,10 @@ int	ft_export(char **arg, t_env *env_set)
 			{
 				t.equ = ft_strc_index(arg[t.i], '=');
 				if (t.equ != -1)
+				{
 					add_ref(&(env_set->envp), arg[t.i], t.equ + 1);
+					add_ref(&(env_set->ex_env), arg[t.i], ft_strlen(arg[t.i]));
+				}
 				else
 					add_ref(&(env_set->ex_env), arg[t.i], ft_strlen(arg[t.i]));
 			}

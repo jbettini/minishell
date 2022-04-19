@@ -6,7 +6,7 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/24 17:33:48 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/09 08:47:29 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/04/19 16:49:19 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ t_env	*env_manag(char **env, t_env *to_free, int mod)
 	}
 	env_set = malloc(sizeof(t_env));
 	env_set->child = 0;
+	env_set->cmd_path = NULL;
 	env_set->last_pid = 0;
 	g_set.g_exit_status = 0;
 	env_set->hd_to_unlink = NULL;

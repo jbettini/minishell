@@ -6,7 +6,7 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/11 04:03:54 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/09 23:23:26 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/04/19 16:45:24 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	set_path(t_env *env, char **args, int mod)
 			env->cmd_path = parse_cmd(env->path, args);
 		return ;
 	}
-	if (env->cmd_path)
+	if (env->cmd_path && mod == DESTROY_SET)
 	{
 		free(env->cmd_path);
 		env->cmd_path = NULL;
