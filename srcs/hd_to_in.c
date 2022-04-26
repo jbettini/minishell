@@ -6,7 +6,7 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/24 17:33:48 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/19 16:40:44 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/04/24 19:10:19 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,6 @@ int no_bad_file(t_list *r_in)
     while(r_in)
     {
         tmp = (t_redir *)r_in->content;
-        if (tmp->type == REDIR_L && access(tmp->word, F_OK | R_OK) == -1)
-            return (0);
         if (tmp->type == REDIR_LL && hd != 1)
             hd++;
         r_in = r_in->next;

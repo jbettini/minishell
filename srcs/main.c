@@ -13,22 +13,25 @@
 #include "minishell.h"
 
 /* need review wait_this_fk_process() */
+void	*env_free(t_env *to_free)
+{
+	ft_lstclear(&(to_free->envp), free);
+	ft_lstclear(&(to_free->ex_env), free);
+	ft_free_split(to_free->nbtfke);
+	if (to_free->path)
+		ft_free_split(to_free->path);
+	close(to_free->oldstdin);
+	close(to_free->oldstdout);
+	free(to_free);
+	return (0);
+}
+
 t_env	*env_manag(char **env, t_env *to_free, int mod)
 {
 	t_env	*env_set;
 
 	if (mod)
-	{
-		ft_lstclear(&(to_free->envp), free);
-		ft_lstclear(&(to_free->ex_env), free);
-		ft_free_split(to_free->nbtfke);
-		if (to_free->path)
-			ft_free_split(to_free->path);
-		close(to_free->oldstdin);
-		close(to_free->oldstdout);
-		free(to_free);
-		return (0);
-	}
+		return (env_free(to_free));
 	env_set = malloc(sizeof(t_env));
 	env_set->child = 0;
 	env_set->cmd_path = NULL;

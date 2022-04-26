@@ -6,7 +6,7 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/11 04:03:54 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/19 16:45:24 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/04/24 19:44:20 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int	redir_manag(t_redir *to_redir, t_env *env)
 	if (ret == CTRL_C)
 		return (ret);
 	else if (ret)
-		return (all_error(ret , to_redir->word));
+		return (all_error(ret, to_redir->word));
 	return (0);
 }
 
@@ -80,7 +80,7 @@ int	exec_cmds(t_list *cmds, t_env *env)
 
 	ret = 0;
 	if (cmds->next)
-		ret = exec_multiple_cmds(cmds, env);
+		ret = exec_pipe(cmds, env);
 	else
 		ret = exec_simple_cmd((t_cmd *)(cmds->content), env);
 	return (ret);

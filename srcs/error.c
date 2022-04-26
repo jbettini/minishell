@@ -42,6 +42,7 @@ void	*error_null(char *cmd, const char *msg)
 	print_error(cmd, msg);
 	return (NULL);
 }
+
 int	all_error(int ret, char *error)
 {
 	if (ret == BF_ERROR)
@@ -57,11 +58,4 @@ int	all_error(int ret, char *error)
 	else if (ret == PERM_ERROR)
 		print_error(ft_strdup(error), "Permission denied");
 	return (1);
-}
-
-void	error_manag(int ret)
-{
-	if (ret)
-		return;
-	return;
 }

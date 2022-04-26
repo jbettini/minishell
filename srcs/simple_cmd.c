@@ -6,7 +6,7 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/11 04:03:54 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/07 01:37:29 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/04/25 11:44:00 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,42 +33,42 @@ int	exec_build(char **args, t_env *env)
 	return (0);
 }
 
-int redir_all(t_cmd *cmd, t_env *env)
+int	redir_all(t_cmd *cmd, t_env *env)
 {
-    int ret;
+	int	ret;
 
-    ret = redir_lst(cmd->redir_in, env);
-    if (ret)
-        return (ret);
-    ret = redir_lst(cmd->redir_out, env);
-    if (ret)
-        return (ret);
-    return (0);
+	ret = redir_lst(cmd->redir_in, env);
+	if (ret)
+		return (ret);
+	ret = redir_lst(cmd->redir_out, env);
+	if (ret)
+		return (ret);
+	return (0);
 }
 
 void	exec_cmd_sc(char **args, t_env *env)
 {
-    int		pid;
+	int	pid;
 
-    set_path(env, args, SET);
+	set_path(env, args, SET);
 	pid = fork();
 	if (!pid)
 	{
 		reset_tty();
 		set_sig(SIGINT, SIG_DFL);
 		set_sig(SIGQUIT, SIG_DFL);
-        if (env->cmd_path)
-            execve(env->cmd_path, args, env->nbtfke);
-        exit(127);
+		if (env->cmd_path)
+			execve(env->cmd_path, args, env->nbtfke);
+		exit(127);
 	}
 	else
-    {
-        set_path(env, args, DESTROY_SET);
+	{
+		set_path(env, args, DESTROY_SET);
 		env->child++;
-    }
+	}
 }
 
-void    reset_routine_sc(t_env *env, int ret)
+void	reset_routine_sc(t_env *env, int ret)
 {
 	ft_free_split(env->nbtfke);
 	env->nbtfke = ft_lst_to_dpt(env->envp);
@@ -88,10 +88,11 @@ void    reset_routine_sc(t_env *env, int ret)
 	if (g_set.g_check_hd)
 		g_set.g_check_hd = 0;
 }
+
 int	exec_simple_cmd(t_cmd *cmd, t_env *env)
 {
-    int ret;
-    
+	int	ret;
+
 	if (!expand_ev(cmd, env))
 		ret = EXPAND_ERROR;
 	ret = redir_all(cmd, env);
@@ -101,7 +102,7 @@ int	exec_simple_cmd(t_cmd *cmd, t_env *env)
 		{
 			ret = exec_build(cmd->args, env);
 			check_unset_path(cmd->args, env);
-		}	
+		}
 		else
 			exec_cmd_sc(cmd->args, env);
 	}
@@ -110,4 +111,3 @@ int	exec_simple_cmd(t_cmd *cmd, t_env *env)
 		all_error(CMD_ERROR, cmd->args[0]);
 	return (ret);
 }
-

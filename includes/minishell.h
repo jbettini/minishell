@@ -6,7 +6,7 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/30 19:51:20 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/09 23:01:18 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/04/24 19:44:04 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,13 +102,18 @@ typedef struct s_env
 	int		out_check;
 	int		child;
 	int		last_pid;
+	int		in;
+	int		out;
 }		t_env;
 
-int redir_all(t_cmd *cmd, t_env *env);
-int	all_error(int ret, char *error);
-int	exec_build(char **args, t_env *env);
-int	exec_multiple_cmds(t_list *cmds, t_env *env);
-
+int		exec_pipe(t_list *cmds, t_env *env);
+int		redir_all(t_cmd *cmd, t_env *env);
+int		all_error(int ret, char *error);
+int		exec_build(char **args, t_env *env);
+int		exec_multiple_cmds(t_list *cmds, t_env *env);
+void	exec_in_pipe_child(t_list *cmds, t_env *env, int to_close);
+void	set_next_pipe(t_env *env, int *pipefd);
+void    pipe_routine(t_cmd *cmd, t_env *env);
 //		builtins.c
 void	cd_to_envvar(t_list **env, char *var);
 void	my_chdir(char *path, t_list **env);
@@ -152,7 +157,6 @@ void	print_error(char *cmd, const char *msg);
 void	exit_error(char *cmd, const char *msg, int code);
 int		error(char *cmd, const char *msg, int code);
 void	*error_null(char *cmd, const char *msg);
-void	error_manag(int ret);
 
 //		exec.c
 int		ft_cmd(char **args, t_env *env);

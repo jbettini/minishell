@@ -6,7 +6,7 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/03 21:02:15 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/07 19:39:42 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/04/24 19:41:45 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,4 +40,26 @@ void	init_cpt(t_cpt *cpt)
 	cpt->k = 0;
 	cpt->equ = 0;
 	cpt->ret = 0;
+}
+
+
+
+void	exec_in_pipe_child(t_list *cmds, t_env *env, int to_close)
+{
+	if (cmds->next)
+		close(to_close);
+	signal(SIGQUIT, sigint_handler);
+	dup2(env->in, STDIN_FILENO);
+	dup2(env->out, STDOUT_FILENO);
+	if (!expand_ev(cmds->content, env))
+		exit(1);
+	pipe_routine(cmds->content, env);
+}
+
+void	set_next_pipe(t_env *env, int *pipefd)
+{
+	if (env->in != STDIN_FILENO)
+		close(env->in);
+	close(pipefd[1]);
+	env->in = pipefd[0];
 }

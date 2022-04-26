@@ -21,29 +21,6 @@ void	ft_env(char **args, t_env *env)
 		ft_putlst(env->envp);
 }
 
-// int	manag_exec_in_env(t_list *cmd)
-// {
-// 	char	**args;
-// 	char	**new_args;
-// 	int		i;
-
-// 	i = 0;
-// 	new_args = NULL;
-// 	args = ((t_cmd *)cmd->content)->args;
-// 	if (!args || !args[0])
-// 		return (0);
-// 	if (!ft_strequ_hd(args[0], "env"))
-// 		return (0);
-// 	while (ft_strequ_hd(args[i], "env") && args[i - 1])
-// 		i++;
-// 	if (check_the_build_for_env(args[i]))
-// 		return (1);
-// 	new_args = ft_dupdpt(&args[i]);
-// 	ft_free_split(args);
-// 	((t_cmd *)cmd->content)->args = new_args;
-// 	return (0);
-// }
-
 int	ft_pwd(char **args)
 {
 	char	*pwd;
