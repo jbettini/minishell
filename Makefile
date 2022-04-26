@@ -6,12 +6,12 @@
 #    By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/03 04:39:29 by jbettini          #+#    #+#              #
-#    Updated: 2022/04/26 11:54:04 by jbettini         ###   ########.fr        #
+#    Updated: 2022/04/26 18:45:38 by jbettini         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC		=	gcc
-CFLAGS	=	-Wall -Wextra -Werror -g
+CFLAGS	=	#-Wall -Wextra -Werror -g
 NAME	=	minishell
 I_DIR	=	includes
 SRC_DIR =	srcs

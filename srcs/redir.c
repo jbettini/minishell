@@ -6,7 +6,7 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/07 04:17:11 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/26 18:40:37 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/04/26 19:10:58 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,14 +51,9 @@ char	**here_doc(char *stop)
 	{
 		write(STDOUT_FILENO, "> ", 2);
 		rd_ret = ft_get_next_line(STDIN_FILENO);
-		if (g.hd_exited_from_sigint)
-		{
-			g.in_hd = 0;
-			return (NULL);
-		}
 		if (rd_ret && rd_ret[0])
 			rd_ret = ft_str_del_nl(rd_ret);
-		if (!rd_ret || ft_strequ_hd(rd_ret, stop))
+		if (!rd_ret || ft_strequ_hd(rd_ret, stop) || g.hd_exited_from_sigint)
 		{
 			g.in_hd = 0;
 			free(rd_ret);
@@ -67,6 +62,8 @@ char	**here_doc(char *stop)
 		ft_lstadd_back(&lst, ft_lstnew(ft_strdup(rd_ret)));
 		free(rd_ret);
 	}
+	if (g.hd_exited_from_sigint)
+		return (NULL);
 	tab = ft_lst_to_dpt(lst);
 	ft_lstclear(&lst, &free);
 	return (tab);

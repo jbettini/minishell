@@ -6,7 +6,7 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/24 17:33:48 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/26 18:30:18 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/04/26 18:57:44 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,6 @@ int	ft_exit(char **args, int print_exit, t_env *env_set)
 		//system("leaks minishell");
 		exit(0);
 	}
-	set_tty();
 	return (BUILD_ERROR);
 }
 
@@ -105,6 +104,11 @@ int	main(int ac, char **av, char **env)
 {
 	t_env	*env_set;
 
+	/*
+	set_tty();
+	printf("> ");
+	char *line = ft_get_next_line(0);
+	reset_tty();*/
 	(void)ac;
 	(void)av;
 	env_set = env_manag(env, NULL, 0);
