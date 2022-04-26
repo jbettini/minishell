@@ -6,7 +6,7 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/03 21:02:15 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/24 19:41:45 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/04/26 18:26:30 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@
 
 void	*cette_fct_sert_a_normer_le_hd(t_list **lst)
 {
-	set_sig(SIGINT, SIG_IGN);
 	ft_lstclear(lst, &free);
 	return (NULL);
 }
@@ -42,13 +41,10 @@ void	init_cpt(t_cpt *cpt)
 	cpt->ret = 0;
 }
 
-
-
 void	exec_in_pipe_child(t_list *cmds, t_env *env, int to_close)
 {
 	if (cmds->next)
 		close(to_close);
-	signal(SIGQUIT, sigint_handler);
 	dup2(env->in, STDIN_FILENO);
 	dup2(env->out, STDOUT_FILENO);
 	if (!expand_ev(cmds->content, env))

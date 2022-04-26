@@ -6,7 +6,7 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/03 21:15:24 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/03 21:15:38 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/04/26 18:12:19 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void	rearrange_word(char **word, int *i, char **env)
 	ev_name = get_ev_name(&(*word)[*i + 1]);
 	*word = trunc_str(*word, *i + 1, ft_strlen(ev_name));
 	if (!my_strcmp(ev_name, "?"))
-		ev_value = ft_itoa(g_set.g_exit_status);
+		ev_value = ft_itoa(g.exit_status);
 	else
 		ev_value = get_ev_value(ev_name, env);
 	*word = str_insert(*word, ev_value, *i);

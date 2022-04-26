@@ -6,7 +6,7 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/07 05:26:11 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/09 22:40:54 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/04/26 14:23:17 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ char	*ft_join_free_s2(char *s1, char *s2)
 	free(s2);
 	return (join);
 }
+
 char	*ft_join_free_ss(char *s1, char *s2)
 {
 	size_t	i;

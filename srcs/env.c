@@ -6,7 +6,7 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/23 05:33:04 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/19 18:04:27 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/04/26 12:42:19 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,13 +60,19 @@ int	ft_unset(char **arg, t_env *env_set)
 	return (ret);
 }
 
-int	ft_export(char **arg, t_env *env_set)
+void	nex(t_list **envp, t_list **ex, char *arg, int equ)
+{
+	add_ref(envp, arg, equ);
+	add_ref(ex, arg, ft_strlen(arg));
+}
+
+int	ft_export(char **arg, t_env *env)
 {
 	t_cpt	t;
 
 	init_cpt(&t);
 	if (!arg[1])
-		ft_putexport(env_set->ex_env);
+		ft_putexport(env->ex_env);
 	else
 	{
 		while (arg[++(t.i)])
@@ -75,12 +81,9 @@ int	ft_export(char **arg, t_env *env_set)
 			{
 				t.equ = ft_strc_index(arg[t.i], '=');
 				if (t.equ != -1)
-				{
-					add_ref(&(env_set->envp), arg[t.i], t.equ + 1);
-					add_ref(&(env_set->ex_env), arg[t.i], ft_strlen(arg[t.i]));
-				}
+					nex(&(env->envp), &(env->ex_env), arg[t.i], t.equ + 1);
 				else
-					add_ref(&(env_set->ex_env), arg[t.i], ft_strlen(arg[t.i]));
+					add_ref(&(env->ex_env), arg[t.i], ft_strlen(arg[t.i]));
 			}
 			else
 			{

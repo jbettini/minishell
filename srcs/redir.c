@@ -6,7 +6,7 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/07 04:17:11 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/07 00:00:14 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/04/26 18:40:37 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,7 @@ int	redir_heredoc(char *stop)
 		return (OP_ERROR);
 	hd = here_doc(stop);
 	if (!hd)
-	{
-		write(1, "\n", 1);
 		return (CTRL_C);
-	}
 	while (hd[++i])
 		ft_putendl_fd(hd[i], fd);
 	close(fd);
@@ -45,24 +42,31 @@ char	**here_doc(char *stop)
 	char	**tab;
 	char	*rd_ret;
 	t_list	*lst;
-	int		check;
 
 	rd_ret = NULL;
 	lst = NULL;
-	check = 1;
-	set_sig(SIGINT, &sig_hd_handler);
-	while (check)
+	g.in_hd = 1;
+	g.hd_exited_from_sigint = 0;
+	while (1)
 	{
-		rd_ret = readline("> ");
-		if (g_set.g_check_hd)
-			return (cette_fct_sert_a_normer_le_hd(&lst));
+		write(STDOUT_FILENO, "> ", 2);
+		rd_ret = ft_get_next_line(STDIN_FILENO);
+		if (g.hd_exited_from_sigint)
+		{
+			g.in_hd = 0;
+			return (NULL);
+		}
+		if (rd_ret && rd_ret[0])
+			rd_ret = ft_str_del_nl(rd_ret);
 		if (!rd_ret || ft_strequ_hd(rd_ret, stop))
-			check--;
-		else
-			ft_lstadd_back(&lst, ft_lstnew(ft_strdup(rd_ret)));
+		{
+			g.in_hd = 0;
+			free(rd_ret);
+			break ;
+		}
+		ft_lstadd_back(&lst, ft_lstnew(ft_strdup(rd_ret)));
 		free(rd_ret);
 	}
-	set_sig(SIGINT, SIG_IGN);
 	tab = ft_lst_to_dpt(lst);
 	ft_lstclear(&lst, &free);
 	return (tab);

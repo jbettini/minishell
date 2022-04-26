@@ -6,7 +6,7 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/30 19:51:20 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/24 19:44:04 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/04/26 18:40:45 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,15 +24,16 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 
-# define PROMPT		"minishell$> "
+# define PROMPT		"\033[0;32mminishell$> \033[0m"
 # define QUOTE		39
 # define DQUOTE		34
 # define BACKSLASH	92
 
 typedef struct s_global
 {
-	long long	g_exit_status;
-	long long	g_check_hd;
+	long long	exit_status;
+	int			hd_exited_from_sigint;
+	int			in_hd;
 }	t_global;
 
 typedef struct s_cpt
@@ -44,7 +45,7 @@ typedef struct s_cpt
 	int	equ;
 }	t_cpt;
 
-t_global	g_set;
+t_global	g;
 
 enum	e_err_cmd
 {
@@ -104,6 +105,7 @@ typedef struct s_env
 	int		last_pid;
 	int		in;
 	int		out;
+	int		pid;
 }		t_env;
 
 int		exec_pipe(t_list *cmds, t_env *env);
@@ -113,7 +115,7 @@ int		exec_build(char **args, t_env *env);
 int		exec_multiple_cmds(t_list *cmds, t_env *env);
 void	exec_in_pipe_child(t_list *cmds, t_env *env, int to_close);
 void	set_next_pipe(t_env *env, int *pipefd);
-void    pipe_routine(t_cmd *cmd, t_env *env);
+void	pipe_routine(t_cmd *cmd, t_env *env);
 //		builtins.c
 void	cd_to_envvar(t_list **env, char *var);
 void	my_chdir(char *path, t_list **env);
@@ -249,10 +251,10 @@ void	*cette_fct_sert_a_normer_le_hd(t_list **lst);
 void	cette_fct_sert_pour_la_norm(t_env *env, const int mod, int ret);
 int		cette_fct_seet_a_normer_minishell(void);
 
-void    unlink_all(t_env *env);
+void	unlink_all(t_env *env);
 int		no_bad_file(t_list *r_in);
-int 	convert_a_hd(t_redir *redir, char *name);
-int 	convert_all_hd(t_list *r_in, int i, t_env *env);
-int 	hd_to_infile(t_list *cmds, t_env *env);
+int		convert_a_hd(t_redir *redir, char *name);
+int		convert_all_hd(t_list *r_in, int i, t_env *env);
+int		hd_to_infile(t_list *cmds, t_env *env);
 
 #endif

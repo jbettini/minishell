@@ -6,7 +6,7 @@
 #    By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/08/06 15:51:13 by rahmed            #+#    #+#              #
-#    Updated: 2022/02/08 01:49:50 by jbettini         ###   ########.fr        #
+#    Updated: 2022/04/26 15:09:32 by jbettini         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,6 +14,7 @@ NAME	=	libft.a
 
 SRCS	=	ft_atoi.c \
 			ft_atoll.c \
+			ft_str_del_nl.c \
 			ft_bzero.c \
 			ft_calloc.c \
 			ft_isalnum.c \

@@ -6,7 +6,7 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/11 04:03:54 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/25 11:44:00 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/04/26 18:22:20 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,6 @@ void	exec_cmd_sc(char **args, t_env *env)
 	pid = fork();
 	if (!pid)
 	{
-		reset_tty();
 		set_sig(SIGINT, SIG_DFL);
 		set_sig(SIGQUIT, SIG_DFL);
 		if (env->cmd_path)
@@ -81,12 +80,12 @@ void	reset_routine_sc(t_env *env, int ret)
 	if (env->child)
 		wait_this_fk_process(env);
 	else
-		g_set.g_exit_status = ret;
+		g.exit_status = ret;
 	if (ret == CTRL_C)
-		g_set.g_exit_status = 1;
+		g.exit_status = 1;
 	env->child = 0;
-	if (g_set.g_check_hd)
-		g_set.g_check_hd = 0;
+	if (g.hd_exited_from_sigint)
+		g.hd_exited_from_sigint = 0;
 }
 
 int	exec_simple_cmd(t_cmd *cmd, t_env *env)
@@ -96,6 +95,8 @@ int	exec_simple_cmd(t_cmd *cmd, t_env *env)
 	if (!expand_ev(cmd, env))
 		ret = EXPAND_ERROR;
 	ret = redir_all(cmd, env);
+	reset_tty();
+	set_sig(SIGINT, SIG_IGN);
 	if (!ret && cmd->args)
 	{
 		if (ft_isbuild(cmd->args[0]))
@@ -107,7 +108,7 @@ int	exec_simple_cmd(t_cmd *cmd, t_env *env)
 			exec_cmd_sc(cmd->args, env);
 	}
 	reset_routine_sc(env, ret);
-	if (g_set.g_exit_status == CMD_ERROR)
+	if (g.exit_status == CMD_ERROR)
 		all_error(CMD_ERROR, cmd->args[0]);
 	return (ret);
 }

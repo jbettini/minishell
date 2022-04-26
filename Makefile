@@ -6,7 +6,7 @@
 #    By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/03 04:39:29 by jbettini          #+#    #+#              #
-#    Updated: 2022/04/19 15:36:04 by jbettini         ###   ########.fr        #
+#    Updated: 2022/04/26 11:54:04 by jbettini         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,17 +17,17 @@ I_DIR	=	includes
 SRC_DIR =	srcs
 OBJ_DIR =	srcs/objs
 #USER	=	ydanset
-#USER	=	jbettini
+USER	=	jbettini
 
  # IF NEEDED at 42 on MacOS10 Install :
 #  rm -rf $HOME/.brew && git clone --depth=1 https://github.com/Homebrew/brew $HOME/.brew && echo 'export PATH=$HOME/.brew/bin:$PATH' >> $HOME/.zshrc && source $HOME/.zshrc && brew update
  #  brew install readline
-#LIBS	=	-L/Users/$(USER)/.brew/opt/readline/lib -lreadline -Llibft -lft
-#HEADERS	=	-I$(I_DIR) -I/Users/$(USER)/.brew/opt/readline/include
+LIBS	=	-L/Users/$(USER)/.brew/opt/readline/lib -lreadline -Llibft -lft
+HEADERS	=	-I$(I_DIR) -I/Users/$(USER)/.brew/opt/readline/include
 
  # @HOME on MacOS12 Monterey
-	LIBS	=	-L/usr/local/opt/readline/lib -lreadline -Llibft -lft
-	HEADERS	=	-I$(I_DIR) -I/usr/local/opt/readline/include 
+#	LIBS	=	-L/usr/local/opt/readline/lib -lreadline -Llibft -lft
+#	HEADERS	=	-I$(I_DIR) -I/usr/local/opt/readline/include 
 
 OBJ_PFX = 	srcs/objs/main.o
 

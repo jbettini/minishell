@@ -6,7 +6,7 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/06 15:51:31 by rahmed            #+#    #+#             */
-/*   Updated: 2022/04/09 22:41:12 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/04/26 15:08:23 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <stdarg.h>
+# include <stdio.h>
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE	10000
@@ -73,6 +74,7 @@ char		**ft_split(char const *s, char c);
 char		*ft_strchr(const char *s, int c);
 char		*ft_strchr_nl(const char *s);
 char		*ft_strdup(const char *s1);
+char		*ft_str_del_nl(char *str);
 void		ft_striteri(char *s, void (*f)(unsigned int, char*));
 char		*ft_strjoin(char const *s1, char const *s2);
 size_t		ft_strlcat(char *dst, const char *src, size_t dstsize);

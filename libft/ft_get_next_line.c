@@ -3,77 +3,49 @@
 /*                                                        :::      ::::::::   */
 /*   ft_get_next_line.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rahmed <rahmed@student.42.fr>              +#+  +:+       +#+        */
+/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/09 18:11:01 by rahmed            #+#    #+#             */
-/*   Updated: 2021/12/10 21:30:00 by rahmed           ###   ########.fr       */
+/*   Updated: 2022/04/26 17:00:42 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static size_t	read_buffer(int fd, char **rest, char **buffer)
+static char	*ft_append_char(char *str, char c)
 {
-	size_t	nbytes;
-	char	*tmprest;
+	char	*res;
+	int		i;
 
-	nbytes = 1;
-	while (!(ft_strchr_nl(*rest)) && nbytes)
+	res = malloc(sizeof(char) * (ft_strlen(str) + 2));
+	if (!res)
+		return (NULL);
+	if (!str)
 	{
-		nbytes = read(fd, *buffer, BUFFER_SIZE);
-		(*buffer)[nbytes] = '\0';
-		tmprest = *rest;
-		*rest = ft_strjoin(*rest, *buffer);
-		ft_free_ptr(tmprest);
+		res[0] = c;
+		res[1] = '\0';
+		return (res);
 	}
-	ft_free_ptr(*buffer);
-	return (nbytes);
-}
-
-static char	*set_lines(char **rest, char **line)
-{
-	size_t	lenrest;
-	char	*tmprest;
-
-	lenrest = 0;
-	tmprest = *rest;
-	while (((*rest)[lenrest] != '\0') && ((*rest)[lenrest] != '\n'))
-		lenrest++;
-	if (ft_strchr_nl(*rest))
-	{
-		*line = ft_substr(*rest, 0, lenrest + 1);
-		*rest = ft_strdup(*rest + lenrest + 1);
-	}
-	else
-	{
-		*line = ft_strdup(tmprest);
-		*rest = NULL;
-	}
-	ft_free_ptr(tmprest);
-	return (*line);
+	i = -1;
+	while (str[++i])
+		res[i] = str[i];
+	res[i] = c;
+	res[++i] = '\0';
+	free(str);
+	return (res);
 }
 
 char	*ft_get_next_line(int fd)
 {
-	size_t		nbytes;
-	char		*line;
-	char		*buffer;
-	static char	*rest[MAX_FD];
-
-	if ((BUFFER_SIZE > 0) && (fd >= 0))
-	{
-		buffer = ft_calloc((BUFFER_SIZE + 1), sizeof(char));
-		if (!buffer)
-			return (NULL);
-		if (read(fd, buffer, 0) < 0)
-			return (ft_free_ptr(buffer));
-		if (!rest[fd])
-			rest[fd] = ft_strdup("");
-		nbytes = read_buffer(fd, &rest[fd], &buffer);
-		set_lines(&rest[fd], &line);
-		if ((nbytes == 0) && (*line == '\0'))
-			return (ft_free_ptr(line));
-		return (line);
-	}
-	return (NULL);
+	char	c;
+	char	*line;
+			
+	line = NULL;
+	if (read(fd, &c, 0) == -1)
+		return (NULL);
+	while (read(fd, &c, 1) > 0 && c != '\n')
+		line = ft_append_char(line, c);
+	if (c == '\n')
+		line = ft_append_char(line, c);
+	return (line);
 }

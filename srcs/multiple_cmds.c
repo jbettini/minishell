@@ -6,7 +6,7 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/11 04:03:54 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/25 11:43:35 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/04/26 18:30:39 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,14 +44,13 @@ void	wait_last_pid(t_env *env)
 		{
 			write(STDOUT_FILENO, "Quit: 3", 7);
 			write(STDOUT_FILENO, "\n", 1);
-			g_set.g_exit_status = 128 + WTERMSIG(status);
+			g.exit_status = 128 + WTERMSIG(status);
 		}
 	}
 	else
-		g_set.g_exit_status = status % 255;
+		g.exit_status = status % 255;
 	while (wait(NULL) > 0)
 		;
-	printf("in wlp %lld \n", g_set.g_exit_status);
 }
 
 void	reset_routine_mc(t_env *env, int mod)
@@ -60,17 +59,18 @@ void	reset_routine_mc(t_env *env, int mod)
 	env->nbtfke = ft_lst_to_dpt(env->envp);
 	wait_last_pid(env);
 	if (mod == CTRL_C)
-		g_set.g_exit_status = 1;
-	if (g_set.g_check_hd == 1)
-		g_set.g_check_hd = 0;
+		g.exit_status = 1;
+	if (g.hd_exited_from_sigint == 1)
+		g.hd_exited_from_sigint = 0;
 	env->child = 0;
 	unlink_all(env);
+	if (mod == CTRL_C)
+		dup2(env->oldstdin, 0);
 }
 
 void	_pipex(t_list *cmds, t_env *env)
 {
 	int	pipefd[2];
-	int	pid;
 
 	if (!cmds)
 	{
@@ -86,12 +86,12 @@ void	_pipex(t_list *cmds, t_env *env)
 	else
 		env->out = STDOUT_FILENO;
 	set_path(env, ((t_cmd *)cmds->content)->args, SET);
-	pid = fork();
-	if (pid == 0)
+	env->pid = fork();
+	if (env->pid == 0)
 		exec_in_pipe_child(cmds, env, pipefd[0]);
 	set_path(env, NULL, DESTROY_SET);
 	if (!cmds->next)
-		env->last_pid = pid;
+		env->last_pid = env->pid;
 	if (cmds->next)
 		set_next_pipe(env, pipefd);
 	return (_pipex(cmds->next, env));
@@ -108,8 +108,10 @@ int	exec_pipe(t_list *cmds, t_env *env)
 		reset_routine_mc(env, CTRL_C);
 		return (CTRL_C);
 	}
+	reset_tty();
 	env->in = STDIN_FILENO;
 	env->out = STDOUT_FILENO;
+	set_sig(SIGINT, SIG_IGN);
 	_pipex(cmds, env);
 	reset_routine_mc(env, 0);
 	return (SUCCESS);

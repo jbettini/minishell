@@ -6,7 +6,7 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/03 03:34:18 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/07 19:40:36 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/04/26 18:12:19 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,4 +46,32 @@ int	ft_isbuild(char *args)
 	else if (ft_strequ_hd(args, "echo"))
 		return (1);
 	return (0);
+}
+
+void	wait_this_fk_process(t_env *env)
+{
+	int	i;
+	int	status;
+	int	x;
+
+	x = 0;
+	i = -1;
+	status = 0;
+	if (env->child)
+	{
+		while (++i < env->child)
+		{
+			waitpid(-1, &status, 0);
+			if (WIFSIGNALED(status) && !x)
+			{
+				x = 1;
+				if (WTERMSIG(status) == SIGQUIT)
+					write(STDOUT_FILENO, "Quit: 3", 7);
+				write(STDOUT_FILENO, "\n", 1);
+				g.exit_status = 128 + WTERMSIG(status);
+			}
+		}
+		if (!x)
+			g.exit_status = status % 255;
+	}
 }
