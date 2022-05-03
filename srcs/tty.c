@@ -3,51 +3,39 @@
 /*                                                        :::      ::::::::   */
 /*   tty.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/30 16:20:27 by ydanset           #+#    #+#             */
-/*   Updated: 2022/04/26 19:13:04 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/05/03 16:54:18 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	set_tty(void)
+void	save_usr_tty_config(t_env *env)
 {
-	struct termios	term;
-	int				tty_fd;
-
-	tty_fd = -1;
-	if (isatty(STDIN_FILENO))
-		tty_fd = STDIN_FILENO;
-	else if (isatty(STDOUT_FILENO))
-		tty_fd = STDOUT_FILENO;
-	else if (isatty(STDERR_FILENO))
-		tty_fd = STDERR_FILENO;
-	if (tty_fd != -1)
-	{
-		tcgetattr(tty_fd, &term);
-		term.c_lflag &= ~ECHOCTL;
-		tcsetattr(tty_fd, TCSANOW, &term);
-	}
+	tcgetattr(STDIN_FILENO, &env->usr_tty_config);
 }
 
-void	reset_tty(void)
+void	reset_usr_tty_config(t_env *env)
+{
+	tcsetattr(STDIN_FILENO, TCSANOW, &env->usr_tty_config);
+}
+
+void	tty_hide_ctrl(void)
 {
 	struct termios	term;
-	int				tty_fd;
 
-	tty_fd = -1;
-	if (isatty(STDIN_FILENO))
-		tty_fd = STDIN_FILENO;
-	else if (isatty(STDOUT_FILENO))
-		tty_fd = STDOUT_FILENO;
-	else if (isatty(STDERR_FILENO))
-		tty_fd = STDERR_FILENO;
-	if (tty_fd != -1)
-	{
-		tcgetattr(tty_fd, &term);
-		term.c_lflag |= ECHOCTL;
-		tcsetattr(tty_fd, TCSANOW, &term);
-	}
+	tcgetattr(STDIN_FILENO, &term);
+	term.c_lflag &= ~(ECHOCTL);
+	tcsetattr(STDIN_FILENO, TCSANOW, &term);
+}
+
+void	tty_show_ctrl(void)
+{
+	struct termios	term;
+
+	tcgetattr(STDIN_FILENO, &term);
+	term.c_lflag |= ECHOCTL;
+	tcsetattr(STDIN_FILENO, TCSANOW, &term);
 }

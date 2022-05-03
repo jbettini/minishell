@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/24 17:33:48 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/26 18:57:44 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/05/03 17:31:56 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ void	*env_free(t_env *to_free)
 	close(to_free->oldstdin);
 	close(to_free->oldstdout);
 	free(to_free);
+	reset_usr_tty_config(to_free);
 	return (0);
 }
 
@@ -44,6 +45,7 @@ t_env	*env_manag(char **env, t_env *to_free, int mod)
 	env_set->path = ft_split(getenv("PATH"), ':');
 	if (!(env_set->envp) || !(env_set->path))
 		return (NULL);
+	save_usr_tty_config(env_set);
 	return (env_set);
 }
 
@@ -72,54 +74,20 @@ int	minishell(t_env *env_set)
 	return (ret);
 }
 
-int	ft_exit(char **args, int print_exit, t_env *env_set)
-{
-	reset_tty();
-	if (print_exit)
-		ft_putstr_fd("exit\n", 1);
-	if (args[1] && !ft_str_isdigit(args[1]))
-	{
-		print_error(ft_strdup("exit"), "numeric argument required");
-		env_manag(NULL, env_set, 1);
-		exit(255);
-	}
-	else if (ft_double_strlen(args) > 2)
-		print_error(ft_strdup("exit"), "too many arguments");
-	else
-	{
-		if (args[1])
-		{
-			env_manag(NULL, env_set, 1);
-			//system("leaks minishell");
-			exit(ft_atoll(args[1]));
-		}
-		env_manag(NULL, env_set, 1);
-		//system("leaks minishell");
-		exit(0);
-	}
-	return (BUILD_ERROR);
-}
-
 int	main(int ac, char **av, char **env)
 {
 	t_env	*env_set;
 
-	/*
-	set_tty();
-	printf("> ");
-	char *line = ft_get_next_line(0);
-	reset_tty();*/
 	(void)ac;
 	(void)av;
 	env_set = env_manag(env, NULL, 0);
 	set_sig(SIGQUIT, SIG_IGN);
 	while (1)
 	{
-		set_tty();
+		tty_hide_ctrl();
 		if (minishell(env_set) == -1)
 			break ;
 	}
 	env_manag(NULL, env_set, 1);
-	//system("leaks minishell");
 	return (g.exit_status);
 }

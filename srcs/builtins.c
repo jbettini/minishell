@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/24 15:32:07 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/07 19:44:03 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/05/03 19:02:12 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,12 @@
 #define HOME 1
 #define OLD 2
 
-void	cd_to_envvar(t_list **env, char *var)
+void	cd_to_envvar(t_env *env, char *var)
 {
 	t_list	*tmp;
 	char	*str;
 
-	tmp = *env;
+	tmp = env->envp;
 	str = NULL;
 	while (tmp && !ft_strnequ(tmp->content, var, ft_strlen(var)))
 		tmp = tmp->next;
@@ -36,7 +36,7 @@ void	cd_to_envvar(t_list **env, char *var)
 	}
 }
 
-void	my_chdir(char *path, t_list **env)
+void	my_chdir(char *path, t_env *env)
 {
 	char	*pwd;
 	char	*oldpwd;
@@ -50,18 +50,20 @@ void	my_chdir(char *path, t_list **env)
 	else
 	{
 		tmp = ft_strjoin("OLDPWD=", oldpwd);
-		add_ref(env, tmp, 8);
+		add_ref(&env->envp, tmp, 8, 0);
+		add_ref(&env->ex_env, tmp, 8, 0);
 		free(tmp);
 		pwd = getcwd(NULL, 0);
 		tmp = ft_strjoin("PWD=", pwd);
-		add_ref(env, tmp, 5);
+		add_ref(&env->ex_env, tmp, 5, 0);
+		add_ref(&env->envp, tmp, 5, 0);
 		free(pwd);
 		free(tmp);
 	}
 	free(oldpwd);
 }
 
-void	ft_cd(char **args, t_list **env)
+void	ft_cd(char **args, t_env *env)
 {
 	if (!args[1])
 		cd_to_envvar(env, "HOME=");
@@ -76,8 +78,6 @@ void	ft_echo(char **arg)
 	int	i;
 
 	i = ft_strequ_hd(arg[1], "-n");
-	if (!arg[1] || (!arg[2] && ft_is_str_blank(arg[1])))
-		return (ft_putchar_fd('\n', 1));
 	while (arg[++i])
 	{
 		ft_putstr_fd(arg[i], 1);

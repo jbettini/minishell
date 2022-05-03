@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   simple_cmd.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/11 04:03:54 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/26 19:11:33 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/05/03 18:57:57 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	exec_build(char **args, t_env *env)
 	else if (ft_strequ_hd(args[0], "echo"))
 		ft_echo(args);
 	else if (ft_strequ_hd(args[0], "cd"))
-		ft_cd(args, &(env->envp));
+		ft_cd(args, env);
 	else if (ft_strequ_hd(args[0], "env"))
 		ft_env(args, env);
 	return (0);
@@ -95,7 +95,6 @@ int	exec_simple_cmd(t_cmd *cmd, t_env *env)
 	if (!expand_ev(cmd, env))
 		ret = EXPAND_ERROR;
 	ret = redir_all(cmd, env);
-	reset_tty();
 	set_sig(SIGINT, SIG_IGN);
 	if (!ret && cmd->args)
 	{

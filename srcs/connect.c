@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   connect.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/11 04:03:54 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/26 18:40:40 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/05/03 17:02:01 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ int	exec_cmds(t_list *cmds, t_env *env)
 	int	ret;
 
 	ret = 0;
+	tty_show_ctrl();
 	if (cmds->next)
 		ret = exec_pipe(cmds, env);
 	else

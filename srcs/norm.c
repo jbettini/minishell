@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   norm.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/03 21:02:15 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/26 18:26:30 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/05/03 17:10:09 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	*cette_fct_sert_a_normer_le_hd(t_list **lst)
 
 int	cette_fct_seet_a_normer_minishell(void)
 {
-	reset_tty();
+	tty_show_ctrl();
 	ft_putstr_fd("exit\n", 1);
 	return (-1);
 }
@@ -43,6 +43,8 @@ void	init_cpt(t_cpt *cpt)
 
 void	exec_in_pipe_child(t_list *cmds, t_env *env, int to_close)
 {
+	set_sig(SIGINT, SIG_DFL);
+	set_sig(SIGQUIT, SIG_DFL);
 	if (cmds->next)
 		close(to_close);
 	dup2(env->in, STDIN_FILENO);

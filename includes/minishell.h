@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/30 19:51:20 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/26 18:40:45 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/05/03 19:02:00 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 # include "cmds.h"
 # include <sys/types.h>
 # include <sys/wait.h>
+# include <limits.h>
 
 # define PROMPT		"\033[0;32mminishell$> \033[0m"
 # define QUOTE		39
@@ -106,6 +107,7 @@ typedef struct s_env
 	int		in;
 	int		out;
 	int		pid;
+	struct termios	usr_tty_config;
 }		t_env;
 
 int		exec_pipe(t_list *cmds, t_env *env);
@@ -117,11 +119,12 @@ void	exec_in_pipe_child(t_list *cmds, t_env *env, int to_close);
 void	set_next_pipe(t_env *env, int *pipefd);
 void	pipe_routine(t_cmd *cmd, t_env *env);
 //		builtins.c
-void	cd_to_envvar(t_list **env, char *var);
-void	my_chdir(char *path, t_list **env);
-void	ft_cd(char **args, t_list **env);
+void	cd_to_envvar(t_env *env, char *var);
+void	my_chdir(char *path, t_env *env);
+void	ft_cd(char **args, t_env *env);
 int		exec_build_in_env(char **args, t_env *env);
 void	ft_echo(char **arg);
+int		ft_exit(char **args, int print_exit, t_env *env_set);
 
 //		check.c
 int		check_the_build_for_env(char *args);
@@ -144,7 +147,7 @@ int		exec_cmds(t_list *cmds, t_env *env);
 int		is_valide_var(char *str, int mod);
 int		ft_strc_index(char *str, int c);
 void	delref(t_list **lst, void *data_ref);
-void	add_ref(t_list **lst, void *data_ref, int idx);
+void	add_ref(t_list **lst, void *data_ref, int idx, int mod);
 void	ft_putexport(t_list *lst);
 
 //		env.c
@@ -200,7 +203,6 @@ int		get_len_word(char *line);
 t_env	*env_manag(char **env, t_env *to_free, int mod);
 void	wait_this_fk_process(t_env *env);
 int		minishell(t_env *env_set);
-int		ft_exit(char **args, int print_exit, t_env *env_set);
 int		main(int ac, char **av, char **env);
 
 //		parse.c
@@ -229,8 +231,10 @@ char	**strs_append(char **strs, const char *str);
 char	**strs_join(char **strs1, char **strs2);
 
 //		tty.c
-void	set_tty(void);
-void	reset_tty(void);
+void	save_usr_tty_config(t_env *env);
+void	reset_usr_tty_config(t_env *env);
+void	tty_hide_ctrl(void);
+void	tty_show_ctrl(void);
 
 //		utils.c.c
 char	*str_insert(char *dst, const char *src, size_t n);

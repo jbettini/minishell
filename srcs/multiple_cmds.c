@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   multiple_cmds.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/11 04:03:54 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/26 19:11:24 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/05/03 17:17:16 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,11 +41,9 @@ void	wait_last_pid(t_env *env)
 	if (WIFSIGNALED(status))
 	{
 		if (WTERMSIG(status) == SIGQUIT)
-		{
 			write(STDOUT_FILENO, "Quit: 3", 7);
-			write(STDOUT_FILENO, "\n", 1);
-			g.exit_status = 128 + WTERMSIG(status);
-		}
+		write(STDOUT_FILENO, "\n", 1);
+		g.exit_status = 128 + WTERMSIG(status);
 	}
 	else
 		g.exit_status = status % 255;
@@ -108,7 +106,6 @@ int	exec_pipe(t_list *cmds, t_env *env)
 		reset_routine_mc(env, CTRL_C);
 		return (CTRL_C);
 	}
-	reset_tty();
 	env->in = STDIN_FILENO;
 	env->out = STDOUT_FILENO;
 	set_sig(SIGINT, SIG_IGN);

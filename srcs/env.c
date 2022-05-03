@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/23 05:33:04 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/26 12:42:19 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/05/03 18:39:01 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@
 
 void	ft_env(char **args, t_env *env)
 {
-	if (ft_strequ_hd(args[0], "env"))
-		ft_putlst(env->envp);
+	(void)args;
+	ft_putlst(env->envp);
 }
 
 int	ft_pwd(char **args)
@@ -43,13 +43,8 @@ int	ft_unset(char **arg, t_env *env_set)
 	{
 		if (is_valide_var(arg[i], UNSET))
 		{
-			if (ft_strchr(arg[i], '='))
-			{
-				delref(&(env_set->envp), ft_strjoin(arg[i], "="));
-				delref(&(env_set->ex_env), ft_strjoin(arg[i], "="));
-			}
-			else
-				delref(&(env_set->ex_env), ft_strdup(arg[i]));
+			delref(&(env_set->envp), ft_strjoin(arg[i], "="));
+			delref(&(env_set->ex_env), ft_strjoin(arg[i], "="));
 		}
 		else
 		{
@@ -62,8 +57,8 @@ int	ft_unset(char **arg, t_env *env_set)
 
 void	nex(t_list **envp, t_list **ex, char *arg, int equ)
 {
-	add_ref(envp, arg, equ);
-	add_ref(ex, arg, ft_strlen(arg));
+	add_ref(envp, arg, equ, 0);
+	add_ref(ex, arg, ft_strlen(arg), 0);
 }
 
 int	ft_export(char **arg, t_env *env)
@@ -83,7 +78,7 @@ int	ft_export(char **arg, t_env *env)
 				if (t.equ != -1)
 					nex(&(env->envp), &(env->ex_env), arg[t.i], t.equ + 1);
 				else
-					add_ref(&(env->ex_env), arg[t.i], ft_strlen(arg[t.i]));
+					add_ref(&(env->ex_env), arg[t.i], ft_strlen(arg[t.i]), 1);
 			}
 			else
 			{

@@ -3,33 +3,29 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+         #
+#    By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/03 04:39:29 by jbettini          #+#    #+#              #
-#    Updated: 2022/04/26 18:45:38 by jbettini         ###   ########.fr        #
+#    Updated: 2022/05/03 17:41:02 by ydanset          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC		=	gcc
-CFLAGS	=	#-Wall -Wextra -Werror -g
+CFLAGS	=	-Wall -Wextra -Werror
 NAME	=	minishell
 I_DIR	=	includes
 SRC_DIR =	srcs
 OBJ_DIR =	srcs/objs
-#USER	=	ydanset
-USER	=	jbettini
 
- # IF NEEDED at 42 on MacOS10 Install :
-#  rm -rf $HOME/.brew && git clone --depth=1 https://github.com/Homebrew/brew $HOME/.brew && echo 'export PATH=$HOME/.brew/bin:$PATH' >> $HOME/.zshrc && source $HOME/.zshrc && brew update
- #  brew install readline
+# IF NEEDED at 42 on MacOS10 Install :
+# rm -rf $HOME/.brew && git clone --depth=1 https://github.com/Homebrew/brew $HOME/.brew && echo 'export PATH=$HOME/.brew/bin:$PATH' >> $HOME/.zshrc && source $HOME/.zshrc && brew update
+# brew install readline
 LIBS	=	-L/Users/$(USER)/.brew/opt/readline/lib -lreadline -Llibft -lft
 HEADERS	=	-I$(I_DIR) -I/Users/$(USER)/.brew/opt/readline/include
 
- # @HOME on MacOS12 Monterey
-#	LIBS	=	-L/usr/local/opt/readline/lib -lreadline -Llibft -lft
-#	HEADERS	=	-I$(I_DIR) -I/usr/local/opt/readline/include 
-
-OBJ_PFX = 	srcs/objs/main.o
+# @HOME on MacOS12 Monterey
+# LIBS	=	-L/usr/local/opt/readline/lib -lreadline -Llibft -lft
+# HEADERS	=	-I$(I_DIR) -I/usr/local/opt/readline/include 
 
 SRC	= 	main.c 			\
  		builtins.c 		\
@@ -54,12 +50,10 @@ SRC	= 	main.c 			\
 		simple_cmd.c	\
 		multiple_cmds.c	\
 		hd_to_in.c		\
-		norm.c
-
-SRC_PFX =	$(addprefix $(SRC_DIR)/, $(SRC))
+		norm.c	\
+		ft_exit.c	\
 
 OBJ	=	$(SRC:%.c=%.o)
-
 OBJ_PFX = $(addprefix $(OBJ_DIR)/, $(OBJ))
 
 all: $(NAME)

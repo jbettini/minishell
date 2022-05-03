@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/23 05:33:04 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/26 12:38:37 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/05/03 18:26:29 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ void	delref(t_list **lst, void *data_ref)
 	free(data_ref);
 }
 
-void	add_ref(t_list **lst, void *data_ref, int idx)
+void	add_ref(t_list **lst, void *data_ref, int idx, int mod)
 {
 	t_list	*tmp;
 
@@ -89,10 +89,30 @@ void	add_ref(t_list **lst, void *data_ref, int idx)
 		ft_lstadd_back(lst, ft_lstnew(ft_strdup(data_ref)));
 	else
 	{
+		if (mod)
+			return ;
 		free(tmp->content);
 		tmp->content = NULL;
 		tmp->content = ft_strdup(data_ref);
 	}
+}
+
+void	ft_putendl_export(char const *s)
+{
+	int	i;
+
+	i = 0;
+	while (s[i] && s[i] != '=')
+		ft_putchar(s[i++]);
+	if (!s[i])
+	{
+		ft_putchar('\n');
+		return ;
+	}
+	ft_putstr("=\"");
+	while (s[++i])
+		ft_putchar(s[i]);
+	ft_putstr("\"\n");
 }
 
 void	ft_putexport(t_list *lst)
@@ -100,7 +120,7 @@ void	ft_putexport(t_list *lst)
 	while (lst)
 	{
 		ft_putstr("declare -x ");
-		ft_putendl_fd(lst->content, 2);
+		ft_putendl_export(lst->content);
 		lst = lst->next;
 	}
 }
