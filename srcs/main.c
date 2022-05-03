@@ -74,6 +74,8 @@ int	minishell(t_env *env_set)
 	return (ret);
 }
 
+// check exit status after ctrl+C in hd
+// what to do when redir all returns an error
 int	main(int ac, char **av, char **env)
 {
 	t_env	*env_set;

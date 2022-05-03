@@ -25,7 +25,7 @@ void	sigint_handler(int signum)
 	else
 	{
 		close(0);
-		g.hd_exited_from_sigint = 1;
+		g.sigint_in_hd = 1;
 	}
 }
 

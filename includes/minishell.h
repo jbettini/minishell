@@ -24,6 +24,7 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <limits.h>
+# include <sys/errno.h>
 
 # define PROMPT		"\033[0;32mminishell$> \033[0m"
 # define QUOTE		39
@@ -33,7 +34,7 @@
 typedef struct s_global
 {
 	long long	exit_status;
-	int			hd_exited_from_sigint;
+	int			sigint_in_hd;
 	int			in_hd;
 }	t_global;
 
@@ -134,9 +135,10 @@ int		ft_isbuild(char *args);
 //		connect_utils.c                         
 void	set_path(t_env *env, char **args, int mod);
 void	reset_routine(t_env *env, int ret);
-int		redir_manag(t_redir *to_redir, t_env *env);
+int		redir_manag(t_redir *to_redir);
 int		redir_lst(t_list *redir_lst, t_env *env);
 int		launch_exec(t_env *env, t_cmd *cmd, int mod);
+void	reset_routine_mc(t_env *env, int mod);
 
 //		connect.c
 //int		connecting_fct(t_list *cmd, t_env *env);
@@ -170,18 +172,16 @@ int		execute_cmd(char **args, t_env *env, int mod);
 int		exec_in_main(t_cmd *cmd, t_env *env, int mod);
 int		exec_in_child(char **args, t_env *env, int mod);
 
-//		expand_ev.c
-void	expand_word(char **word, char **env);
-char	**expand_args(char **args, char **env);
+//		expand.c
+void	expand_word(char **word, t_env *env);
+char	**expand_args(char **args, t_env *env);
 int		redir_expanded_is_valid(char *word_expanded);
-int		expand_redir(t_list *redirs, char **env);
-//int		expand_ev(t_list *cmds, t_env *env);
-int		expand_ev(t_cmd *cmd, t_env *env);
+int		expand_redir(t_redir *redir, t_env *env);
 
 //		expand_utils.c
 char	*get_ev_name(char *str);
 char	*get_ev_value(char *ev_name, char **env);
-void	rearrange_word(char **word, int *i, char **env);
+void	rearrange_word(char **word, int *i, t_env *env);
 void	delete_quotes(char **word);
 
 //		free.c
@@ -191,6 +191,9 @@ void	free_cmd(void *ptr);
 
 //		ft_strtok.c
 char	**ft_strtok(char *str, char *delim);
+
+//		get_next_line_hd.c
+char	*get_next_line_hd(int fd);
 
 //		get_cmds.c
 t_list	*get_cmds(t_list *tokens);
@@ -257,7 +260,7 @@ int		cette_fct_seet_a_normer_minishell(void);
 
 void	unlink_all(t_env *env);
 int		no_bad_file(t_list *r_in);
-int		convert_a_hd(t_redir *redir, char *name);
+int		convert_a_hd(t_redir *redir);
 int		convert_all_hd(t_list *r_in, int i, t_env *env);
 int		hd_to_infile(t_list *cmds, t_env *env);
 

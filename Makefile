@@ -33,7 +33,7 @@ SRC	= 	main.c 			\
  		redir.c 		\
  		connect.c 		\
  		error.c 		\
- 		expand_ev.c 	\
+ 		expand.c 	\
  		free.c 			\
  		get_cmds.c 		\
  		get_tokens.c 	\
@@ -52,6 +52,7 @@ SRC	= 	main.c 			\
 		hd_to_in.c		\
 		norm.c	\
 		ft_exit.c	\
+		get_next_line_hd.c	\
 
 OBJ	=	$(SRC:%.c=%.o)
 OBJ_PFX = $(addprefix $(OBJ_DIR)/, $(OBJ))

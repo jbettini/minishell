@@ -33,19 +33,6 @@ int	exec_build(char **args, t_env *env)
 	return (0);
 }
 
-int	redir_all(t_cmd *cmd, t_env *env)
-{
-	int	ret;
-
-	ret = redir_lst(cmd->redir_in, env);
-	if (ret)
-		return (ret);
-	ret = redir_lst(cmd->redir_out, env);
-	if (ret)
-		return (ret);
-	return (0);
-}
-
 void	exec_cmd_sc(char **args, t_env *env)
 {
 	int	pid;
@@ -84,17 +71,16 @@ void	reset_routine_sc(t_env *env, int ret)
 	if (ret == CTRL_C)
 		g.exit_status = 1;
 	env->child = 0;
-	if (g.hd_exited_from_sigint)
-		g.hd_exited_from_sigint = 0;
+	if (g.sigint_in_hd)
+		g.sigint_in_hd = 0;
 }
 
 int	exec_simple_cmd(t_cmd *cmd, t_env *env)
 {
 	int	ret;
 
-	if (!expand_ev(cmd, env))
-		ret = EXPAND_ERROR;
 	ret = redir_all(cmd, env);
+	cmd->args = expand_args(cmd->args, env);
 	set_sig(SIGINT, SIG_IGN);
 	if (!ret && cmd->args)
 	{

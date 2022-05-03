@@ -34,52 +34,18 @@ void	set_path(t_env *env, char **args, int mod)
 	}
 }
 
-int	redir_manag(t_redir *to_redir, t_env *env)
-{
-	int	ret;
-
-	ret = 0;
-	if (to_redir->type == REDIR_L)
-		ret = redir_to_stdin(to_redir->word);
-	else if (to_redir->type == REDIR_LL)
-	{
-		dup2(env->oldstdin, 0);
-		ret = redir_heredoc(to_redir->word);
-	}
-	else if (to_redir->type == REDIR_RR)
-		ret = redir_to_stdout(to_redir->word, O_APPEND);
-	else if (to_redir->type == REDIR_R)
-		ret = redir_to_stdout(to_redir->word, O_TRUNC);
-	if (ret == CTRL_C)
-		return (ret);
-	else if (ret)
-		return (all_error(ret, to_redir->word));
-	return (0);
-}
-
-int	redir_lst(t_list *redir_lst, t_env *env)
-{
-	t_redir	*to_redir;
-	int		ret;
-
-	ret = 0;
-	while (redir_lst)
-	{
-		to_redir = (t_redir *)redir_lst->content;
-		ret = redir_manag(to_redir, env);
-		if (ret)
-			return (ret);
-		redir_lst = redir_lst->next;
-	}
-	return (SUCCESS);
-}
-
 int	exec_cmds(t_list *cmds, t_env *env)
 {
 	int	ret;
 
 	ret = 0;
 	tty_show_ctrl();
+	if (hd_to_infile(cmds, env) == CTRL_C)
+	{
+		set_path(env, NULL, DESTROY_SET);
+		reset_routine_mc(env, CTRL_C);
+		return (CTRL_C);
+	}
 	if (cmds->next)
 		ret = exec_pipe(cmds, env);
 	else

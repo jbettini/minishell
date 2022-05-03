@@ -27,68 +27,52 @@ void	unlink_all(t_env *env)
 	env->hd_to_unlink = NULL;
 }
 
-int	no_bad_file(t_list *r_in)
+int	convert_a_hd(t_redir *redir)
 {
-	t_redir	*tmp;
-	int		hd;
-
-	hd = 0;
-	while (r_in)
-	{
-		tmp = (t_redir *)r_in->content;
-		if (tmp->type == REDIR_LL && hd != 1)
-			hd++;
-		r_in = r_in->next;
-	}
-	return (hd);
-}
-
-int	convert_a_hd(t_redir *redir, char *name)
-{
-	char	**hd;
+	char	*line;
 	int		fd;
-	int		i;
 
-	i = -1;
-	fd = open(name, O_CREAT | O_RDWR | O_TRUNC, 0744);
+	fd = open(redir->filename, O_CREAT | O_RDWR | O_TRUNC, 0744);
 	if (fd == -1)
-		return (OP_ERROR);
-	hd = here_doc(redir->word);
-	if (!hd)
 	{
-		write(1, "\n", 1);
-		return (CTRL_C);
+		print_error(NULL, strerror(errno));
+		return (OP_ERROR);
 	}
-	while (hd[++i])
-		ft_putendl_fd(hd[i], fd);
-	redir->type = REDIR_L;
-	free((redir->word));
-	redir->word = ft_strdup(name);
+	g.in_hd = 1;
+	g.sigint_in_hd = 0;
+	while (1)
+	{
+		write(STDOUT_FILENO, "> ", 2);
+		line = get_next_line_hd(STDIN_FILENO);
+		if (g.sigint_in_hd || !line || !my_strcmp(redir->keyword, line))
+		{
+			free(line);
+			break ;
+		}
+		ft_putendl_fd(line, fd);
+		free(line);
+	}
+	g.in_hd = 0;
+	if (g.sigint_in_hd)
+		return (CTRL_C);
 	close(fd);
-	ft_free_split(hd);
 	return (SUCCESS);
 }
 
-int	convert_all_hd(t_list *r_in, int i, t_env *env)
+int	convert_all_hd(t_list *redirs, int i, t_env *env)
 {
-	char	*name;
-
-	name = ft_join_free_ss(ft_join_free_s1(getcwd(NULL, 0), "/"), \
-							ft_join_free_s2(".heredoc_tmp", ft_itoa(i)));
-	ft_lstadd_back(&(env->hd_to_unlink), ft_lstnew(ft_strdup(name)));
-	while (r_in)
+	while (redirs)
 	{
-		if (((t_redir *)r_in->content)->type == REDIR_LL)
+		if (((t_redir *)redirs->content)->type == REDIR_LL)
 		{
-			if (convert_a_hd(r_in->content, name) == CTRL_C)
-			{
-				free(name);
+			((t_redir *)redirs->content)->filename = ft_join_free_ss(ft_join_free_s1(getcwd(NULL, 0), "/"), \
+							ft_join_free_s2(".heredoc_tmp", ft_itoa(i)));
+			ft_lstadd_back(&(env->hd_to_unlink), ft_lstnew(ft_strdup(((t_redir *)redirs->content)->filename)));
+			if (convert_a_hd(redirs->content) == CTRL_C)
 				return (CTRL_C);
-			}
 		}
-		r_in = r_in->next;
+		redirs = redirs->next;
 	}
-	free(name);
 	return (SUCCESS);
 }
 
@@ -99,8 +83,7 @@ int	hd_to_infile(t_list *cmds, t_env *env)
 	i = 0;
 	while (cmds)
 	{
-		if (no_bad_file(((t_cmd *)cmds->content)->redir_in))
-			if (convert_all_hd(((t_cmd *)cmds->content)->redir_in, \
+			if (convert_all_hd(((t_cmd *)cmds->content)->redirs, \
 														i, env) == CTRL_C)
 				return (CTRL_C);
 		i++;

@@ -49,8 +49,6 @@ void	exec_in_pipe_child(t_list *cmds, t_env *env, int to_close)
 		close(to_close);
 	dup2(env->in, STDIN_FILENO);
 	dup2(env->out, STDOUT_FILENO);
-	if (!expand_ev(cmds->content, env))
-		exit(1);
 	pipe_routine(cmds->content, env);
 }
 

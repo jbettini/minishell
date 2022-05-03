@@ -21,6 +21,7 @@ void	pipe_routine(t_cmd *cmd, t_env *env)
 		exit(ret);
 	if (!(cmd->args))
 		exit(0);
+	cmd->args = expand_args(cmd->args, env);
 	if (ft_isbuild(cmd->args[0]))
 		exit(exec_build(cmd->args, env));
 	else
@@ -58,8 +59,8 @@ void	reset_routine_mc(t_env *env, int mod)
 	wait_last_pid(env);
 	if (mod == CTRL_C)
 		g.exit_status = 1;
-	if (g.hd_exited_from_sigint == 1)
-		g.hd_exited_from_sigint = 0;
+	if (g.sigint_in_hd == 1)
+		g.sigint_in_hd = 0;
 	env->child = 0;
 	unlink_all(env);
 	if (mod == CTRL_C)
@@ -100,12 +101,6 @@ int	exec_pipe(t_list *cmds, t_env *env)
 	int	ret;
 
 	ret = 0;
-	if (hd_to_infile(cmds, env) == CTRL_C)
-	{
-		set_path(env, NULL, DESTROY_SET);
-		reset_routine_mc(env, CTRL_C);
-		return (CTRL_C);
-	}
 	env->in = STDIN_FILENO;
 	env->out = STDOUT_FILENO;
 	set_sig(SIGINT, SIG_IGN);

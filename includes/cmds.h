@@ -16,14 +16,18 @@
 typedef struct s_redir
 {
 	int		type;
-	char	*word;
+	char	*keyword;
+	char	*filename;
 }	t_redir;
 
 typedef struct s_cmd
 {
 	char	**args;
+	t_list	*redirs;
+	/*
 	t_list	*redir_in;
 	t_list	*redir_out;
+	*/
 }	t_cmd;
 
 #endif
