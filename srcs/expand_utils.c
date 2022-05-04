@@ -54,7 +54,7 @@ void	rearrange_word(char **word, int *i, t_var *var)
 {
 	char	*ev_name;
 	char	*ev_value;
-	char	**envp;
+	char	**local_env;
 
 	ev_name = get_ev_name(&(*word)[*i + 1]);
 	*word = trunc_str(*word, *i + 1, ft_strlen(ev_name));
@@ -62,9 +62,9 @@ void	rearrange_word(char **word, int *i, t_var *var)
 		ev_value = ft_itoa(g.exit_status);
 	else
 	{
-		envp = ft_lst_to_dpt(var->envp);
-		ev_value = get_ev_value(ev_name, envp);
-		free_strs(envp);
+		local_env = ft_lst_to_dpt(var->local_env);
+		ev_value = get_ev_value(ev_name, local_env);
+		free_strs(local_env);
 	}
 	*word = str_insert(*word, ev_value, *i);
 	*i += ft_strlen(ev_value);

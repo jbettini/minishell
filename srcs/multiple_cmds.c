@@ -27,7 +27,7 @@ void	pipe_routine(t_cmd *cmd, t_var *var)
 	else
 	{
 		if (var->cmd_path)
-			execve(var->cmd_path, cmd->args, var->nbtfke);
+			execve(var->cmd_path, cmd->args, var->envp);
 		print_error(cmd->args[0], "command not found");
 		exit(127);
 	}
@@ -54,8 +54,8 @@ void	wait_last_pid(t_var *var)
 
 void	reset_routine_mc(t_var *var, int mode)
 {
-	ft_free_split(var->nbtfke);
-	var->nbtfke = ft_lst_to_dpt(var->envp);
+	ft_free_split(var->envp);
+	var->envp = ft_lst_to_dpt(var->local_env);
 	wait_last_pid(var);
 	if (mode == CTRL_C)
 		g.exit_status = 1;

@@ -44,7 +44,7 @@ void	exec_cmd_sc(char **args, t_var *var)
 		set_sig(SIGINT, SIG_DFL);
 		set_sig(SIGQUIT, SIG_DFL);
 		if (var->cmd_path)
-			execve(var->cmd_path, args, var->nbtfke);
+			execve(var->cmd_path, args, var->envp);
 		exit(127);
 	}
 	else
@@ -56,8 +56,8 @@ void	exec_cmd_sc(char **args, t_var *var)
 
 void	reset_routine_sc(t_var *var, int ret)
 {
-	ft_free_split(var->nbtfke);
-	var->nbtfke = ft_lst_to_dpt(var->envp);
+	ft_free_split(var->envp);
+	var->envp = ft_lst_to_dpt(var->local_env);
 	dup2(var->oldstdin, 0);
 	dup2(var->oldstdout, 1);
 	close(var->oldstdin);

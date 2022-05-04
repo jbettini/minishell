@@ -6,7 +6,7 @@
 void	ft_env(char **args, t_var *var)
 {
 	(void)args;
-	ft_putlst(var->envp);
+	ft_putlst(var->local_env);
 }
 
 int	ft_pwd(char **args)
@@ -31,8 +31,8 @@ int	ft_unset(char **arg, t_var *var)
 	{
 		if (is_valide_var(arg[i], UNSET))
 		{
-			delref(&(var->envp), ft_strjoin(arg[i], "="));
-			delref(&(var->ex_env), ft_strjoin(arg[i], "="));
+			delref(&(var->local_env), ft_strjoin(arg[i], "="));
+			delref(&(var->local_export), ft_strjoin(arg[i], "="));
 		}
 		else
 		{
@@ -43,9 +43,9 @@ int	ft_unset(char **arg, t_var *var)
 	return (ret);
 }
 
-void	nex(t_list **envp, t_list **ex, char *arg, int equ)
+void	nex(t_list **local_env, t_list **ex, char *arg, int equ)
 {
-	add_ref(envp, arg, equ, 0);
+	add_ref(local_env, arg, equ, 0);
 	add_ref(ex, arg, ft_strlen(arg), 0);
 }
 
@@ -55,7 +55,7 @@ int	ft_export(char **arg, t_var *var)
 
 	init_cpt(&t);
 	if (!arg[1])
-		ft_putexport(var->ex_env);
+		ft_putexport(var->local_export);
 	else
 	{
 		while (arg[++(t.i)])
@@ -64,9 +64,9 @@ int	ft_export(char **arg, t_var *var)
 			{
 				t.equ = ft_strc_index(arg[t.i], '=');
 				if (t.equ != -1)
-					nex(&(var->envp), &(var->ex_env), arg[t.i], t.equ + 1);
+					nex(&(var->local_env), &(var->local_export), arg[t.i], t.equ + 1);
 				else
-					add_ref(&(var->ex_env), arg[t.i], ft_strlen(arg[t.i]), 1);
+					add_ref(&(var->local_export), arg[t.i], ft_strlen(arg[t.i]), 1);
 			}
 			else
 			{

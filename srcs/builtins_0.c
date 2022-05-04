@@ -17,7 +17,7 @@ void	cd_to_envvar(t_var *var, char *ev_name)
 	t_list	*tmp;
 	char	*str;
 
-	tmp = var->envp;
+	tmp = var->local_env;
 	str = NULL;
 	while (tmp && !ft_strnequ(tmp->content, ev_name, ft_strlen(ev_name)))
 		tmp = tmp->next;
@@ -47,13 +47,13 @@ void	my_chdir(char *path, t_var *var)
 	else
 	{
 		tmp = ft_strjoin("OLDPWD=", oldpwd);
-		add_ref(&var->envp, tmp, 8, 0);
-		add_ref(&var->ex_env, tmp, 8, 0);
+		add_ref(&var->local_env, tmp, 8, 0);
+		add_ref(&var->local_export, tmp, 8, 0);
 		free(tmp);
 		pwd = getcwd(NULL, 0);
 		tmp = ft_strjoin("PWD=", pwd);
-		add_ref(&var->ex_env, tmp, 5, 0);
-		add_ref(&var->envp, tmp, 5, 0);
+		add_ref(&var->local_export, tmp, 5, 0);
+		add_ref(&var->local_env, tmp, 5, 0);
 		free(pwd);
 		free(tmp);
 	}

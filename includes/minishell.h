@@ -94,15 +94,14 @@ typedef struct s_token
 
 typedef struct s_var
 {
-	t_list	*envp;
-	t_list	*ex_env;
+	t_list	*local_env;
+	t_list	*local_export;
 	t_list	*hd_to_unlink;
-	char	**nbtfke;
+	char	**envp;
 	char	**path;
 	char	*cmd_path;
 	int		oldstdin;
 	int		oldstdout;
-	int		out_check;
 	int		child;
 	int		last_pid;
 	int		in;

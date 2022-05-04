@@ -14,9 +14,9 @@
 
 void	*free_var(t_var *to_free)
 {
-	ft_lstclear(&(to_free->envp), free);
-	ft_lstclear(&(to_free->ex_env), free);
-	ft_free_split(to_free->nbtfke);
+	ft_lstclear(&(to_free->local_env), free);
+	ft_lstclear(&(to_free->local_export), free);
+	ft_free_split(to_free->envp);
 	if (to_free->path)
 		ft_free_split(to_free->path);
 	close(to_free->oldstdin);
@@ -38,11 +38,11 @@ t_var	*var_manager(char **env, t_var *to_free, int mode)
 	var->last_pid = 0;
 	g.exit_status = 0;
 	var->hd_to_unlink = NULL;
-	var->envp = ft_dpt_to_lst(env);
-	var->ex_env = ft_dpt_to_lst(env);
-	var->nbtfke = ft_lst_to_dpt(var->envp);
+	var->local_env = ft_dpt_to_lst(env);
+	var->local_export = ft_dpt_to_lst(env);
+	var->envp = ft_lst_to_dpt(var->local_env);
 	var->path = ft_split(getenv("PATH"), ':');
-	if (!(var->envp) || !(var->path))
+	if (!(var->local_env) || !(var->path))
 		return (NULL);
 	save_usr_tty_config(var);
 	return (var);
