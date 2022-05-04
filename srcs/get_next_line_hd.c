@@ -29,7 +29,6 @@ char	*get_next_line_hd(int fd)
 	char	*line;
 
 	line = NULL;
-	sleep(5);
 	c = 'J'; // le J C le S
 	while (read(fd, &c, 1) > 0 && c != '\n')
 		line = ft_append_char(line, c);
