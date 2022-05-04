@@ -26,7 +26,6 @@
 # include <limits.h>
 # include <sys/errno.h>
 
-# define PROMPT		"\033[0;32mminishell$> \033[0m"
 # define QUOTE		39
 # define DQUOTE		34
 # define BACKSLASH	92
@@ -107,6 +106,7 @@ typedef struct s_var
 	int		in;
 	int		out;
 	int		pid;
+	char	*prompt;
 	struct termios	usr_tty_config;
 }		t_var;
 
@@ -198,5 +198,6 @@ void	unlink_all(t_var *var);
 int		convert_a_hd(t_redir *redir);
 int		convert_all_hd(t_list *r_in, int i, t_var *var);
 int		hd_to_infile(t_list *cmds, t_var *var);
+void	set_prompt(t_var *var);
 
 #endif

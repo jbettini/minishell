@@ -52,7 +52,8 @@ SRC	= 	main.c 			\
 		simple_cmd.c	\
 		multiple_cmds.c	\
 		hd_to_in.c		\
-		get_next_line_hd.c
+		get_next_line_hd.c	\
+		set_prompt.c
 
 OBJ	=	$(SRC:%.c=%.o)
 OBJ_PFX = $(addprefix $(OBJ_DIR)/, $(OBJ))

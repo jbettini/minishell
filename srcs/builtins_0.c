@@ -68,6 +68,7 @@ void	ft_cd(char **args, t_var *var)
 		cd_to_envvar(var, "OLDPWD=");
 	else
 		my_chdir(args[1], var);
+	set_prompt(var);
 }
 
 void	ft_echo(char **arg)

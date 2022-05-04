@@ -21,6 +21,7 @@ void	*free_var(t_var *to_free)
 		ft_free_split(to_free->path);
 	close(to_free->oldstdin);
 	close(to_free->oldstdout);
+	free(to_free->prompt);
 	free(to_free);
 	reset_usr_tty_config(to_free);
 	return (0);
@@ -42,6 +43,8 @@ t_var	*var_manager(char **env, t_var *to_free, int mode)
 	var->local_export = ft_dpt_to_lst(env);
 	var->envp = ft_lst_to_dpt(var->local_env);
 	var->path = ft_split(getenv("PATH"), ':');
+	var->prompt = NULL;
+	set_prompt(var);
 	if (!(var->local_env) || !(var->path))
 		return (NULL);
 	save_usr_tty_config(var);
@@ -56,7 +59,7 @@ int	minishell(t_var *var)
 
 	ret = 0;
 	set_sig(SIGINT, &sigint_handler);
-	line = readline(PROMPT);
+	line = readline(var->prompt);
 	var->oldstdout = dup(1);
 	var->oldstdin = dup(0);
 	if (!line)
