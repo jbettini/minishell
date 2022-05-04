@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-void	check_unset_path(char **args, t_env *env)
+void	check_unset_path(char **args, t_var *var)
 {
 	int	i;
 
@@ -24,8 +24,8 @@ void	check_unset_path(char **args, t_env *env)
 	}
 	if (args[i])
 	{
-		ft_free_split(env->path);
-		env->path = NULL;
+		ft_free_split(var->path);
+		var->path = NULL;
 	}
 }
 
@@ -48,7 +48,7 @@ int	ft_isbuild(char *args)
 	return (0);
 }
 
-void	wait_this_fk_process(t_env *env)
+void	wait_this_fk_process(t_var *var)
 {
 	int	i;
 	int	status;
@@ -57,9 +57,9 @@ void	wait_this_fk_process(t_env *env)
 	x = 0;
 	i = -1;
 	status = 0;
-	if (env->child)
+	if (var->child)
 	{
-		while (++i < env->child)
+		while (++i < var->child)
 		{
 			waitpid(-1, &status, 0);
 			if (WIFSIGNALED(status) && !x)

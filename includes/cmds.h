@@ -24,10 +24,6 @@ typedef struct s_cmd
 {
 	char	**args;
 	t_list	*redirs;
-	/*
-	t_list	*redir_in;
-	t_list	*redir_out;
-	*/
 }	t_cmd;
 
 #endif

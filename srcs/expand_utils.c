@@ -50,7 +50,7 @@ char	*get_ev_value(char *ev_name, char **env)
 	return (ev_value);
 }
 
-void	rearrange_word(char **word, int *i, t_env *env)
+void	rearrange_word(char **word, int *i, t_var *var)
 {
 	char	*ev_name;
 	char	*ev_value;
@@ -62,7 +62,7 @@ void	rearrange_word(char **word, int *i, t_env *env)
 		ev_value = ft_itoa(g.exit_status);
 	else
 	{
-		envp = ft_lst_to_dpt(env->envp);
+		envp = ft_lst_to_dpt(var->envp);
 		ev_value = get_ev_value(ev_name, envp);
 		free_strs(envp);
 	}

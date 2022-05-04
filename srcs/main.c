@@ -12,8 +12,7 @@
 
 #include "minishell.h"
 
-/* need review wait_this_fk_process() */
-void	*env_free(t_env *to_free)
+void	*free_var(t_var *to_free)
 {
 	ft_lstclear(&(to_free->envp), free);
 	ft_lstclear(&(to_free->ex_env), free);
@@ -27,29 +26,29 @@ void	*env_free(t_env *to_free)
 	return (0);
 }
 
-t_env	*env_manag(char **env, t_env *to_free, int mod)
+t_var	*var_manager(char **env, t_var *to_free, int mode)
 {
-	t_env	*env_set;
+	t_var	*var;
 
-	if (mod)
-		return (env_free(to_free));
-	env_set = malloc(sizeof(t_env));
-	env_set->child = 0;
-	env_set->cmd_path = NULL;
-	env_set->last_pid = 0;
+	if (mode)
+		return (free_var(to_free));
+	var = malloc(sizeof(t_var));
+	var->child = 0;
+	var->cmd_path = NULL;
+	var->last_pid = 0;
 	g.exit_status = 0;
-	env_set->hd_to_unlink = NULL;
-	env_set->envp = ft_dpt_to_lst(env);
-	env_set->ex_env = ft_dpt_to_lst(env);
-	env_set->nbtfke = ft_lst_to_dpt(env_set->envp);
-	env_set->path = ft_split(getenv("PATH"), ':');
-	if (!(env_set->envp) || !(env_set->path))
+	var->hd_to_unlink = NULL;
+	var->envp = ft_dpt_to_lst(env);
+	var->ex_env = ft_dpt_to_lst(env);
+	var->nbtfke = ft_lst_to_dpt(var->envp);
+	var->path = ft_split(getenv("PATH"), ':');
+	if (!(var->envp) || !(var->path))
 		return (NULL);
-	save_usr_tty_config(env_set);
-	return (env_set);
+	save_usr_tty_config(var);
+	return (var);
 }
 
-int	minishell(t_env *env_set)
+int	minishell(t_var *var)
 {
 	int		ret;
 	char	*line;
@@ -58,38 +57,44 @@ int	minishell(t_env *env_set)
 	ret = 0;
 	set_sig(SIGINT, &sigint_handler);
 	line = readline(PROMPT);
-	env_set->oldstdout = dup(1);
-	env_set->oldstdin = dup(0);
+	var->oldstdout = dup(1);
+	var->oldstdin = dup(0);
 	if (!line)
-		return (cette_fct_seet_a_normer_minishell());
-	else if (!ft_is_str_blank(line) && line)
+	{
+		ft_putstr_fd("exit\n", 1);
+		return (-1);
+	}
+	else if (line && !ft_is_str_blank(line))
 	{
 		add_history(line);
 		cmds = parse(line);
 		if (cmds)
-			ret = exec_cmds(cmds, env_set);
+			ret = exec_cmds(cmds, var);
 		ft_lstclear(&cmds, &free_cmd);
 	}
 	free(line);
 	return (ret);
 }
 
+// check leaks
+// check unlink
 // check exit status after ctrl+C in hd
 // what to do when redir all returns an error
+// norme
 int	main(int ac, char **av, char **env)
 {
-	t_env	*env_set;
+	t_var	*var;
 
 	(void)ac;
 	(void)av;
-	env_set = env_manag(env, NULL, 0);
+	var = var_manager(env, NULL, 0);
 	set_sig(SIGQUIT, SIG_IGN);
 	while (1)
 	{
 		tty_hide_ctrl();
-		if (minishell(env_set) == -1)
+		if (minishell(var) == -1)
 			break ;
 	}
-	env_manag(NULL, env_set, 1);
+	var_manager(NULL, var, 1);
 	return (g.exit_status);
 }

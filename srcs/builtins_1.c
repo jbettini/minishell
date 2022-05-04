@@ -31,14 +31,14 @@ static int	is_valid_nbr(char *nbr)
 	return (1);
 }
 
-int	ft_exit(char **args, int print_exit, t_env *env_set)
+int	ft_exit(char **args, int print_exit, t_var *var)
 {
 	if (print_exit)
 		ft_putstr_fd("exit\n", 1);
 	if (args[1] && !is_valid_nbr(args[1]))
 	{
 		print_error(ft_strdup("exit"), "numeric argument required");
-		env_manag(NULL, env_set, 1);
+		var_manager(NULL, var, 1);
 		exit(255);
 	}
 	else if (ft_double_strlen(args) > 2)
@@ -47,10 +47,10 @@ int	ft_exit(char **args, int print_exit, t_env *env_set)
 	{
 		if (args[1])
 		{
-			env_manag(NULL, env_set, 1);
+			var_manager(NULL, var, 1);
 			exit(ft_atoll(args[1]));
 		}
-		env_manag(NULL, env_set, 1);
+		var_manager(NULL, var, 1);
 		exit(0);
 	}
 	return (BUILD_ERROR);

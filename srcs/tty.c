@@ -12,14 +12,14 @@
 
 #include "minishell.h"
 
-void	save_usr_tty_config(t_env *env)
+void	save_usr_tty_config(t_var *var)
 {
-	tcgetattr(STDIN_FILENO, &env->usr_tty_config);
+	tcgetattr(STDIN_FILENO, &var->usr_tty_config);
 }
 
-void	reset_usr_tty_config(t_env *env)
+void	reset_usr_tty_config(t_var *var)
 {
-	tcsetattr(STDIN_FILENO, TCSANOW, &env->usr_tty_config);
+	tcsetattr(STDIN_FILENO, TCSANOW, &var->usr_tty_config);
 }
 
 void	tty_hide_ctrl(void)

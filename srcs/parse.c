@@ -48,14 +48,3 @@ char	*parse_cmd(char **path, char **cmd)
 	free(tmp);
 	return (NULL);
 }
-
-void	print_strs(char **strs)
-{
-	int	i;
-
-	if (!strs)
-		return ;
-	i = -1;
-	while (strs[i])
-		printf("%s\n", strs[i++]);
-}

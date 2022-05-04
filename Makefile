@@ -17,7 +17,7 @@ I_DIR	=	includes
 SRC_DIR =	srcs
 OBJ_DIR =	srcs/objs
 
-# IF NEEDED at 42 on MacOS10 Install :
+# IF NEEDED @42 on MacOS10 Install :
 # rm -rf $HOME/.brew && git clone --depth=1 https://github.com/Homebrew/brew $HOME/.brew && echo 'export PATH=$HOME/.brew/bin:$PATH' >> $HOME/.zshrc && source $HOME/.zshrc && brew update
 # brew install readline
 LIBS	=	-L/Users/$(USER)/.brew/opt/readline/lib -lreadline -Llibft -lft
@@ -28,19 +28,21 @@ HEADERS	=	-I$(I_DIR) -I/Users/$(USER)/.brew/opt/readline/include
 # HEADERS	=	-I$(I_DIR) -I/usr/local/opt/readline/include 
 
 SRC	= 	main.c 			\
- 		builtins.c 		\
- 		env.c 			\
+ 		builtins_0.c 	\
+		builtins_1.c	\
+		builtins_2.c	\
  		redir.c 		\
- 		connect.c 		\
+ 		exec_cmds.c 	\
  		error.c 		\
- 		expand.c 	\
+ 		expand.c 		\
  		free.c 			\
  		get_cmds.c 		\
  		get_tokens.c 	\
  		parse.c 		\
  		strs.c 			\
- 		utils.c			\
-		utils2.c		\
+ 		utils_0.c		\
+		utils_1.c		\
+		utils_2.c		\
  		signals.c 		\
  		ft_strtok.c		\
 		tty.c			\
@@ -50,9 +52,7 @@ SRC	= 	main.c 			\
 		simple_cmd.c	\
 		multiple_cmds.c	\
 		hd_to_in.c		\
-		norm.c	\
-		ft_exit.c	\
-		get_next_line_hd.c	\
+		get_next_line_hd.c
 
 OBJ	=	$(SRC:%.c=%.o)
 OBJ_PFX = $(addprefix $(OBJ_DIR)/, $(OBJ))

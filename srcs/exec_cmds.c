@@ -12,43 +12,43 @@
 
 #include "minishell.h"
 
-void	set_path(t_env *env, char **args, int mod)
+void	set_path(t_var *var, char **args, int mode)
 {
-	if (mod != DESTROY_SET && args)
+	if (mode != DESTROY_SET && args)
 	{
 		if (ft_strchr(args[0], '/'))
 		{	
 			if (access(args[0], F_OK | X_OK) != 0)
-				env->cmd_path = 0;
+				var->cmd_path = 0;
 			else
-				env->cmd_path = ft_strdup(args[0]);
+				var->cmd_path = ft_strdup(args[0]);
 		}
 		else
-			env->cmd_path = parse_cmd(env->path, args);
+			var->cmd_path = parse_cmd(var->path, args);
 		return ;
 	}
-	if (env->cmd_path && mod == DESTROY_SET)
+	if (var->cmd_path && mode == DESTROY_SET)
 	{
-		free(env->cmd_path);
-		env->cmd_path = NULL;
+		free(var->cmd_path);
+		var->cmd_path = NULL;
 	}
 }
 
-int	exec_cmds(t_list *cmds, t_env *env)
+int	exec_cmds(t_list *cmds, t_var *var)
 {
 	int	ret;
 
 	ret = 0;
 	tty_show_ctrl();
-	if (hd_to_infile(cmds, env) == CTRL_C)
+	if (hd_to_infile(cmds, var) == CTRL_C)
 	{
-		set_path(env, NULL, DESTROY_SET);
-		reset_routine_mc(env, CTRL_C);
+		set_path(var, NULL, DESTROY_SET);
+		reset_routine_mc(var, CTRL_C);
 		return (CTRL_C);
 	}
 	if (cmds->next)
-		ret = exec_pipe(cmds, env);
+		ret = exec_pipe(cmds, var);
 	else
-		ret = exec_simple_cmd((t_cmd *)(cmds->content), env);
+		ret = exec_simple_cmd((t_cmd *)(cmds->content), var);
 	return (ret);
 }

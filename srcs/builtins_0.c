@@ -12,31 +12,28 @@
 
 #include "minishell.h"
 
-#define HOME 1
-#define OLD 2
-
-void	cd_to_envvar(t_env *env, char *var)
+void	cd_to_envvar(t_var *var, char *ev_name)
 {
 	t_list	*tmp;
 	char	*str;
 
-	tmp = env->envp;
+	tmp = var->envp;
 	str = NULL;
-	while (tmp && !ft_strnequ(tmp->content, var, ft_strlen(var)))
+	while (tmp && !ft_strnequ(tmp->content, ev_name, ft_strlen(ev_name)))
 		tmp = tmp->next;
 	if (tmp)
 		my_chdir(ft_del_nl(ft_strnstr_out(tmp->content, \
-								var, ft_strlen(var))), env);
+								ev_name, ft_strlen(ev_name))), var);
 	else
 	{
-		if (ft_strnequ("HOME=", var, ft_strlen(var)))
+		if (ft_strnequ("HOME=", ev_name, ft_strlen(ev_name)))
 			ft_putendl_fd("cd: HOME not set", 2);
-		else if (ft_strnequ("OLDPWD=", var, ft_strlen(var)))
+		else if (ft_strnequ("OLDPWD=", ev_name, ft_strlen(ev_name)))
 			ft_putendl_fd("cd: OLDPWD not set", 2);
 	}
 }
 
-void	my_chdir(char *path, t_env *env)
+void	my_chdir(char *path, t_var *var)
 {
 	char	*pwd;
 	char	*oldpwd;
@@ -50,27 +47,27 @@ void	my_chdir(char *path, t_env *env)
 	else
 	{
 		tmp = ft_strjoin("OLDPWD=", oldpwd);
-		add_ref(&env->envp, tmp, 8, 0);
-		add_ref(&env->ex_env, tmp, 8, 0);
+		add_ref(&var->envp, tmp, 8, 0);
+		add_ref(&var->ex_env, tmp, 8, 0);
 		free(tmp);
 		pwd = getcwd(NULL, 0);
 		tmp = ft_strjoin("PWD=", pwd);
-		add_ref(&env->ex_env, tmp, 5, 0);
-		add_ref(&env->envp, tmp, 5, 0);
+		add_ref(&var->ex_env, tmp, 5, 0);
+		add_ref(&var->envp, tmp, 5, 0);
 		free(pwd);
 		free(tmp);
 	}
 	free(oldpwd);
 }
 
-void	ft_cd(char **args, t_env *env)
+void	ft_cd(char **args, t_var *var)
 {
 	if (!args[1])
-		cd_to_envvar(env, "HOME=");
+		cd_to_envvar(var, "HOME=");
 	else if (ft_strequ_hd(args[1], "-"))
-		cd_to_envvar(env, "OLDPWD=");
+		cd_to_envvar(var, "OLDPWD=");
 	else
-		my_chdir(args[1], env);
+		my_chdir(args[1], var);
 }
 
 void	ft_echo(char **arg)

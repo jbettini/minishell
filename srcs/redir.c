@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-int	redir_to_stdout(void *file, int mod)
+int	redir_to_stdout(void *file, int mode)
 {
 	int	fd;
 
@@ -22,9 +22,9 @@ int	redir_to_stdout(void *file, int mod)
 	if (access(file, F_OK) == 0)
 		if (access(file, W_OK) == -1)
 			return (PERM_ERROR);
-	if (mod == O_TRUNC)
+	if (mode == O_TRUNC)
 		fd = open(file, O_CREAT | O_WRONLY | O_TRUNC, 0744);
-	else if (mod == O_APPEND)
+	else if (mode == O_APPEND)
 		fd = open(file, O_CREAT | O_WRONLY | O_APPEND, 0744);
 	if (fd == -1)
 		return (OP_ERROR);
@@ -51,7 +51,7 @@ int	redir_to_stdin(void *file)
 	return (0);
 }
 
-int	redir_manag(t_redir *to_redir)
+int	redir_manager(t_redir *to_redir)
 {
 	int	ret;
 
@@ -69,7 +69,7 @@ int	redir_manag(t_redir *to_redir)
 	return (0);
 }
 
-int	redir_lst(t_list *redir_lst, t_env *env)
+int	redir_lst(t_list *redir_lst, t_var *var)
 {
 	t_redir	*to_redir;
 	int		ret;
@@ -78,9 +78,9 @@ int	redir_lst(t_list *redir_lst, t_env *env)
 	while (redir_lst)
 	{
 		to_redir = (t_redir *)redir_lst->content;
-		if (expand_redir(to_redir, env))
+		if (expand_redir(to_redir, var))
 			return (1);
-		ret = redir_manag(to_redir);
+		ret = redir_manager(to_redir);
 		if (ret)
 			return (ret);
 		redir_lst = redir_lst->next;
@@ -88,11 +88,11 @@ int	redir_lst(t_list *redir_lst, t_env *env)
 	return (0);
 }
 
-int	redir_all(t_cmd *cmd, t_env *env)
+int	redir_all(t_cmd *cmd, t_var *var)
 {
 	int	ret;
 
-	ret = redir_lst(cmd->redirs, env);
+	ret = redir_lst(cmd->redirs, var);
 	if (ret)
 		return (ret);
 	return (0);

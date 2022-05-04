@@ -15,20 +15,20 @@
 #define EXPORT 1
 #define UNSET 0
 
-int	is_valide_var(char *str, int mod)
+int	is_valide_var(char *str, int mode)
 {
 	int	i;
 
 	i = 0;
 	if (str[0] != '_' && !ft_isalpha(str[0]))
 		return (0);
-	if (mod == EXPORT)
+	if (mode == EXPORT)
 	{
 		while (str[++i] && str[i] != '=')
 			if (!ft_isalnum(str[i]) && str[i] != '_')
 				return (0);
 	}
-	else if (mod == UNSET)
+	else if (mode == UNSET)
 	{
 		while (str[++i])
 			if (!ft_isalnum(str[i]) && str[i] != '_')
@@ -78,7 +78,7 @@ void	delref(t_list **lst, void *data_ref)
 	free(data_ref);
 }
 
-void	add_ref(t_list **lst, void *data_ref, int idx, int mod)
+void	add_ref(t_list **lst, void *data_ref, int idx, int mode)
 {
 	t_list	*tmp;
 
@@ -89,7 +89,7 @@ void	add_ref(t_list **lst, void *data_ref, int idx, int mod)
 		ft_lstadd_back(lst, ft_lstnew(ft_strdup(data_ref)));
 	else
 	{
-		if (mod)
+		if (mode)
 			return ;
 		free(tmp->content);
 		tmp->content = NULL;

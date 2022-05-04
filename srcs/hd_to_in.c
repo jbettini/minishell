@@ -12,19 +12,19 @@
 
 #include "minishell.h"
 
-void	unlink_all(t_env *env)
+void	unlink_all(t_var *var)
 {
 	t_list	*tmp;
 
-	tmp = env->hd_to_unlink;
+	tmp = var->hd_to_unlink;
 	while (tmp)
 	{
 		if (!access(tmp->content, F_OK))
 			unlink(tmp->content);
 		tmp = tmp->next;
 	}
-	ft_lstclear(&(env->hd_to_unlink), &free);
-	env->hd_to_unlink = NULL;
+	ft_lstclear(&(var->hd_to_unlink), &free);
+	var->hd_to_unlink = NULL;
 }
 
 int	convert_a_hd(t_redir *redir)
@@ -59,7 +59,7 @@ int	convert_a_hd(t_redir *redir)
 	return (SUCCESS);
 }
 
-int	convert_all_hd(t_list *redirs, int i, t_env *env)
+int	convert_all_hd(t_list *redirs, int i, t_var *var)
 {
 	while (redirs)
 	{
@@ -67,7 +67,7 @@ int	convert_all_hd(t_list *redirs, int i, t_env *env)
 		{
 			((t_redir *)redirs->content)->filename = ft_join_free_ss(ft_join_free_s1(getcwd(NULL, 0), "/"), \
 							ft_join_free_s2(".heredoc_tmp", ft_itoa(i)));
-			ft_lstadd_back(&(env->hd_to_unlink), ft_lstnew(ft_strdup(((t_redir *)redirs->content)->filename)));
+			ft_lstadd_back(&(var->hd_to_unlink), ft_lstnew(ft_strdup(((t_redir *)redirs->content)->filename)));
 			if (convert_a_hd(redirs->content) == CTRL_C)
 				return (CTRL_C);
 		}
@@ -76,7 +76,7 @@ int	convert_all_hd(t_list *redirs, int i, t_env *env)
 	return (SUCCESS);
 }
 
-int	hd_to_infile(t_list *cmds, t_env *env)
+int	hd_to_infile(t_list *cmds, t_var *var)
 {
 	int	i;
 
@@ -84,7 +84,7 @@ int	hd_to_infile(t_list *cmds, t_env *env)
 	while (cmds)
 	{
 			if (convert_all_hd(((t_cmd *)cmds->content)->redirs, \
-														i, env) == CTRL_C)
+														i, var) == CTRL_C)
 				return (CTRL_C);
 		i++;
 		cmds = cmds->next;
