@@ -6,7 +6,7 @@
 /*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/24 17:33:48 by jbettini          #+#    #+#             */
-/*   Updated: 2022/05/05 17:13:27 by ydanset          ###   ########.fr       */
+/*   Updated: 2022/05/05 17:39:03 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,6 @@ int	minishell(t_var *var)
 	return (ret);
 }
 
-// norme
 int	main(int ac, char **av, char **env)
 {
 	t_var	*var;
