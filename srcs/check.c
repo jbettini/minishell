@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/03 03:34:18 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/26 18:12:19 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/05/05 17:13:11 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,10 +68,10 @@ void	wait_this_fk_process(t_var *var)
 				if (WTERMSIG(status) == SIGQUIT)
 					write(STDOUT_FILENO, "Quit: 3", 7);
 				write(STDOUT_FILENO, "\n", 1);
-				g.exit_status = 128 + WTERMSIG(status);
+				g_glb.exit_status = 128 + WTERMSIG(status);
 			}
 		}
 		if (!x)
-			g.exit_status = status % 255;
+			g_glb.exit_status = status % 255;
 	}
 }

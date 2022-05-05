@@ -6,7 +6,7 @@
 /*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/23 05:33:04 by jbettini          #+#    #+#             */
-/*   Updated: 2022/05/03 18:26:29 by ydanset          ###   ########.fr       */
+/*   Updated: 2022/05/05 17:35:08 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,33 +94,5 @@ void	add_ref(t_list **lst, void *data_ref, int idx, int mode)
 		free(tmp->content);
 		tmp->content = NULL;
 		tmp->content = ft_strdup(data_ref);
-	}
-}
-
-void	ft_putendl_export(char const *s)
-{
-	int	i;
-
-	i = 0;
-	while (s[i] && s[i] != '=')
-		ft_putchar(s[i++]);
-	if (!s[i])
-	{
-		ft_putchar('\n');
-		return ;
-	}
-	ft_putstr("=\"");
-	while (s[++i])
-		ft_putchar(s[i]);
-	ft_putstr("\"\n");
-}
-
-void	ft_putexport(t_list *lst)
-{
-	while (lst)
-	{
-		ft_putstr("declare -x ");
-		ft_putendl_export(lst->content);
-		lst = lst->next;
 	}
 }

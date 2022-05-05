@@ -6,7 +6,7 @@
 /*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/30 19:51:20 by jbettini          #+#    #+#             */
-/*   Updated: 2022/05/03 19:02:00 by ydanset          ###   ########.fr       */
+/*   Updated: 2022/05/05 17:29:27 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ typedef struct s_global
 	int			in_hd;
 }	t_global;
 
-t_global	g;
+t_global	g_glb;
 
 typedef struct s_cpt
 {
@@ -93,20 +93,20 @@ typedef struct s_token
 
 typedef struct s_var
 {
-	t_list	*local_env;
-	t_list	*local_export;
-	t_list	*hd_to_unlink;
-	char	**envp;
-	char	**path;
-	char	*cmd_path;
-	int		oldstdin;
-	int		oldstdout;
-	int		child;
-	int		last_pid;
-	int		in;
-	int		out;
-	int		pid;
-	char	*prompt;
+	t_list			*local_env;
+	t_list			*local_export;
+	t_list			*hd_to_unlink;
+	char			**envp;
+	char			**path;
+	char			*cmd_path;
+	int				oldstdin;
+	int				oldstdout;
+	int				child;
+	int				last_pid;
+	int				in;
+	int				out;
+	int				pid;
+	char			*prompt;
 	struct termios	usr_tty_config;
 }		t_var;
 
@@ -126,7 +126,7 @@ void	ft_echo(char **arg);
 int		ft_exit(char **args, int print_exit, t_var *var);
 int		check_the_build_for_env(char *args);
 void	check_unset_path(char **path, t_var *var);
-int		ft_isbuild(char *args);     
+int		ft_isbuild(char *args);
 void	set_path(t_var *var, char **args, int mode);
 void	reset_routine(t_var *var, int ret);
 int		redir_manager(t_redir *to_redir);
@@ -199,5 +199,6 @@ int		convert_a_hd(t_redir *redir);
 int		convert_all_hd(t_list *r_in, int i, t_var *var);
 int		hd_to_infile(t_list *cmds, t_var *var);
 void	set_prompt(t_var *var);
+void	genial_joseph_merci_pour_linspiration(t_cpt *cpt);
 
 #endif

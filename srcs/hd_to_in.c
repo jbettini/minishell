@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   hd_to_in.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/24 17:33:48 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/26 12:02:35 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/05/05 17:22:28 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,24 +27,31 @@ void	unlink_all(t_var *var)
 	var->hd_to_unlink = NULL;
 }
 
+static int	open_hd(int *fd, char *filename)
+{
+	*fd = open(filename, O_CREAT | O_RDWR | O_TRUNC, 0744);
+	if (*fd == -1)
+	{
+		print_error(NULL, strerror(errno));
+		return (1);
+	}
+	return (0);
+}
+
 int	convert_a_hd(t_redir *redir)
 {
 	char	*line;
 	int		fd;
 
-	fd = open(redir->filename, O_CREAT | O_RDWR | O_TRUNC, 0744);
-	if (fd == -1)
-	{
-		print_error(NULL, strerror(errno));
+	if (open_hd(&fd, redir->filename))
 		return (OP_ERROR);
-	}
-	g.in_hd = 1;
-	g.sigint_in_hd = 0;
+	g_glb.in_hd = 1;
+	g_glb.sigint_in_hd = 0;
 	while (1)
 	{
 		write(STDOUT_FILENO, "> ", 2);
 		line = get_next_line_hd(STDIN_FILENO);
-		if (g.sigint_in_hd || !line || !my_strcmp(redir->keyword, line))
+		if (g_glb.sigint_in_hd || !line || !my_strcmp(redir->keyword, line))
 		{
 			free(line);
 			break ;
@@ -52,8 +59,8 @@ int	convert_a_hd(t_redir *redir)
 		ft_putendl_fd(line, fd);
 		free(line);
 	}
-	g.in_hd = 0;
-	if (g.sigint_in_hd)
+	g_glb.in_hd = 0;
+	if (g_glb.sigint_in_hd)
 		return (CTRL_C);
 	close(fd);
 	return (SUCCESS);
@@ -65,9 +72,11 @@ int	convert_all_hd(t_list *redirs, int i, t_var *var)
 	{
 		if (((t_redir *)redirs->content)->type == REDIR_LL)
 		{
-			((t_redir *)redirs->content)->filename = ft_join_free_ss(ft_join_free_s1(getcwd(NULL, 0), "/"), \
-							ft_join_free_s2(".heredoc_tmp", ft_itoa(i)));
-			ft_lstadd_back(&(var->hd_to_unlink), ft_lstnew(ft_strdup(((t_redir *)redirs->content)->filename)));
+			((t_redir *)redirs->content)->filename = \
+				ft_join_free_ss(ft_join_free_s1(getcwd(NULL, 0), "/"), \
+				ft_join_free_s2(".heredoc_tmp", ft_itoa(i)));
+			ft_lstadd_back(&(var->hd_to_unlink), \
+				ft_lstnew(ft_strdup(((t_redir *)redirs->content)->filename)));
 			if (convert_a_hd(redirs->content) == CTRL_C)
 				return (CTRL_C);
 		}
@@ -83,9 +92,9 @@ int	hd_to_infile(t_list *cmds, t_var *var)
 	i = 0;
 	while (cmds)
 	{
-			if (convert_all_hd(((t_cmd *)cmds->content)->redirs, \
-														i, var) == CTRL_C)
-				return (CTRL_C);
+		if (convert_all_hd(((t_cmd *)cmds->content)->redirs, \
+				i, var) == CTRL_C)
+			return (CTRL_C);
 		i++;
 		cmds = cmds->next;
 	}

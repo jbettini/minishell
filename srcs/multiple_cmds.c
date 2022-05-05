@@ -6,7 +6,7 @@
 /*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/11 04:03:54 by jbettini          #+#    #+#             */
-/*   Updated: 2022/05/03 17:17:16 by ydanset          ###   ########.fr       */
+/*   Updated: 2022/05/05 17:13:29 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,10 @@ void	wait_last_pid(t_var *var)
 		if (WTERMSIG(status) == SIGQUIT)
 			write(STDOUT_FILENO, "Quit: 3", 7);
 		write(STDOUT_FILENO, "\n", 1);
-		g.exit_status = 128 + WTERMSIG(status);
+		g_glb.exit_status = 128 + WTERMSIG(status);
 	}
 	else
-		g.exit_status = status % 255;
+		g_glb.exit_status = status % 255;
 	while (wait(NULL) > 0)
 		;
 }
@@ -58,9 +58,9 @@ void	reset_routine_mc(t_var *var, int mode)
 	var->envp = ft_lst_to_dpt(var->local_env);
 	wait_last_pid(var);
 	if (mode == CTRL_C)
-		g.exit_status = 1;
-	if (g.sigint_in_hd == 1)
-		g.sigint_in_hd = 0;
+		g_glb.exit_status = 1;
+	if (g_glb.sigint_in_hd == 1)
+		g_glb.sigint_in_hd = 0;
 	var->child = 0;
 	unlink_all(var);
 	if (mode == CTRL_C)

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   builtins_2.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/05/05 17:22:56 by ydanset           #+#    #+#             */
+/*   Updated: 2022/05/05 17:30:50 by ydanset          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 #define EXPORT 1
@@ -64,15 +76,14 @@ int	ft_export(char **arg, t_var *var)
 			{
 				t.equ = ft_strc_index(arg[t.i], '=');
 				if (t.equ != -1)
-					nex(&(var->local_env), &(var->local_export), arg[t.i], t.equ + 1);
+					nex(&(var->local_env), &(var->local_export), \
+						arg[t.i], t.equ + 1);
 				else
-					add_ref(&(var->local_export), arg[t.i], ft_strlen(arg[t.i]), 1);
+					add_ref(&(var->local_export), arg[t.i], \
+						ft_strlen(arg[t.i]), 1);
 			}
 			else
-			{
-				print_error(ft_strdup("export"), "not a valid identifier");
-				t.ret = BUILD_ERROR;
-			}
+				genial_joseph_merci_pour_linspiration(&t);
 		}
 	}
 	return (t.ret);

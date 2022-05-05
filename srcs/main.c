@@ -6,7 +6,7 @@
 /*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/24 17:33:48 by jbettini          #+#    #+#             */
-/*   Updated: 2022/05/03 17:31:56 by ydanset          ###   ########.fr       */
+/*   Updated: 2022/05/05 17:13:27 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@ void	*free_var(t_var *to_free)
 	close(to_free->oldstdin);
 	close(to_free->oldstdout);
 	free(to_free->prompt);
-	free(to_free);
 	reset_usr_tty_config(to_free);
+	free(to_free);
 	return (0);
 }
 
@@ -37,7 +37,7 @@ t_var	*var_manager(char **env, t_var *to_free, int mode)
 	var->child = 0;
 	var->cmd_path = NULL;
 	var->last_pid = 0;
-	g.exit_status = 0;
+	g_glb.exit_status = 0;
 	var->hd_to_unlink = NULL;
 	var->local_env = ft_dpt_to_lst(env);
 	var->local_export = ft_dpt_to_lst(env);
@@ -79,10 +79,6 @@ int	minishell(t_var *var)
 	return (ret);
 }
 
-// check leaks
-// check unlink
-// check exit status after ctrl+C in hd
-// what to do when redir all returns an error
 // norme
 int	main(int ac, char **av, char **env)
 {
@@ -99,5 +95,5 @@ int	main(int ac, char **av, char **env)
 			break ;
 	}
 	var_manager(NULL, var, 1);
-	return (g.exit_status);
+	return (g_glb.exit_status);
 }

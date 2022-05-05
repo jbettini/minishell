@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line_hd.c                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/05/05 17:31:22 by ydanset           #+#    #+#             */
+/*   Updated: 2022/05/05 17:31:22 by ydanset          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 static char	*ft_append_char(char *str, char c)
@@ -29,7 +41,7 @@ char	*get_next_line_hd(int fd)
 	char	*line;
 
 	line = NULL;
-	c = 'J'; // le J C le S
+	c = 'J';
 	while (read(fd, &c, 1) > 0 && c != '\n')
 		line = ft_append_char(line, c);
 	if (!line && c == '\n')

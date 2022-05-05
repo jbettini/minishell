@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_get_next_line.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/09 18:11:01 by rahmed            #+#    #+#             */
-/*   Updated: 2022/04/26 17:00:42 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/05/05 17:16:55 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ char	*ft_get_next_line(int fd)
 {
 	char	c;
 	char	*line;
-			
+
 	line = NULL;
 	if (read(fd, &c, 0) == -1)
 		return (NULL);

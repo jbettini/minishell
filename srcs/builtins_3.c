@@ -1,40 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signals.c                                          :+:      :+:    :+:   */
+/*   builtins_3.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/02/10 18:55:54 by rahmed            #+#    #+#             */
-/*   Updated: 2022/05/05 17:13:30 by ydanset          ###   ########.fr       */
+/*   Created: 2022/05/05 17:35:20 by ydanset           #+#    #+#             */
+/*   Updated: 2022/05/05 17:35:32 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "minishell.h"
 
-void	sigint_handler(int signum)
-{	
-	(void)signum;
-	if (!g_glb.in_hd)
+void	ft_putendl_export(char const *s)
+{
+	int	i;
+
+	i = 0;
+	while (s[i] && s[i] != '=')
+		ft_putchar(s[i++]);
+	if (!s[i])
 	{
-		write(1, "\n", 1);
-		rl_replace_line("", 0);
-		rl_on_new_line();
-		rl_redisplay();
+		ft_putchar('\n');
+		return ;
 	}
-	else
-	{
-		close(0);
-		g_glb.sigint_in_hd = 1;
-	}
+	ft_putstr("=\"");
+	while (s[++i])
+		ft_putchar(s[i]);
+	ft_putstr("\"\n");
 }
 
-void	set_sig(int signum, void (*handler)(int))
+void	ft_putexport(t_list *lst)
 {
-	struct sigaction	sa;
-
-	sigemptyset(&sa.sa_mask);
-	sa.sa_handler = handler;
-	sa.sa_flags = 0;
-	sigaction(signum, &sa, NULL);
+	while (lst)
+	{
+		ft_putstr("declare -x ");
+		ft_putendl_export(lst->content);
+		lst = lst->next;
+	}
 }

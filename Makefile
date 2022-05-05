@@ -6,7 +6,7 @@
 #    By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/03 04:39:29 by jbettini          #+#    #+#              #
-#    Updated: 2022/05/03 17:41:02 by ydanset          ###   ########.fr        #
+#    Updated: 2022/05/05 17:37:29 by ydanset          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -53,7 +53,9 @@ SRC	= 	main.c 			\
 		multiple_cmds.c	\
 		hd_to_in.c		\
 		get_next_line_hd.c	\
-		set_prompt.c
+		set_prompt.c	\
+		builtins_3.c	\
+		genial_joseph_merci_pour_linspiration.c
 
 OBJ	=	$(SRC:%.c=%.o)
 OBJ_PFX = $(addprefix $(OBJ_DIR)/, $(OBJ))

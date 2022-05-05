@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   builtins_1.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/05/05 17:31:46 by ydanset           #+#    #+#             */
+/*   Updated: 2022/05/05 17:34:27 by ydanset          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 static unsigned long long	ft_atoull(char *nbr)
@@ -15,8 +27,8 @@ static int	is_valid_nbr(char *nbr)
 	int					neg;
 	unsigned long long	n;
 
-    if (!ft_str_isdigit(nbr))
-        return (0);
+	if (!ft_str_isdigit(nbr))
+		return (0);
 	neg = 0;
 	if (*nbr == '-')
 	{

@@ -6,7 +6,7 @@
 /*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/11 04:03:54 by jbettini          #+#    #+#             */
-/*   Updated: 2022/05/03 18:57:57 by ydanset          ###   ########.fr       */
+/*   Updated: 2022/05/05 17:31:35 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,17 +62,16 @@ void	reset_routine_sc(t_var *var, int ret)
 	dup2(var->oldstdout, 1);
 	close(var->oldstdin);
 	close(var->oldstdout);
-	if (!access(".heredoc_tmp", F_OK))
-		unlink(".heredoc_tmp");
+	unlink_all(var);
 	if (var->child)
 		wait_this_fk_process(var);
 	else
-		g.exit_status = ret;
+		g_glb.exit_status = ret;
 	if (ret == CTRL_C)
-		g.exit_status = 1;
+		g_glb.exit_status = 1;
 	var->child = 0;
-	if (g.sigint_in_hd)
-		g.sigint_in_hd = 0;
+	if (g_glb.sigint_in_hd)
+		g_glb.sigint_in_hd = 0;
 }
 
 int	exec_simple_cmd(t_cmd *cmd, t_var *var)
@@ -80,10 +79,10 @@ int	exec_simple_cmd(t_cmd *cmd, t_var *var)
 	int	ret;
 
 	ret = redir_all(cmd, var);
-	cmd->args = expand_args(cmd->args, var);
 	set_sig(SIGINT, SIG_IGN);
 	if (!ret && cmd->args)
 	{
+		cmd->args = expand_args(cmd->args, var);
 		if (ft_isbuild(cmd->args[0]))
 		{
 			ret = exec_build(cmd->args, var);
@@ -93,7 +92,7 @@ int	exec_simple_cmd(t_cmd *cmd, t_var *var)
 			exec_cmd_sc(cmd->args, var);
 	}
 	reset_routine_sc(var, ret);
-	if (g.exit_status == CMD_ERROR)
+	if (g_glb.exit_status == CMD_ERROR)
 		all_error(CMD_ERROR, cmd->args[0]);
 	return (ret);
 }
