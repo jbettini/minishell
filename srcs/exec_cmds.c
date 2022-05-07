@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   connect.c                                          :+:      :+:    :+:   */
+/*   exec_cmds.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/11 04:03:54 by jbettini          #+#    #+#             */
-/*   Updated: 2022/05/03 17:02:01 by ydanset          ###   ########.fr       */
+/*   Updated: 2022/05/07 20:47:40 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,27 @@ void	set_path(t_var *var, char **args, int mode)
 	}
 }
 
+void	update_path(t_var *var)
+{
+	t_list *tmp;
+
+	tmp = var->local_env;
+	if (var->path)
+		ft_free_split(var->path);
+	var->path = NULL;
+	while (tmp)
+	{
+		if (ft_strnequ(tmp->content, "PATH=", 5))
+		{
+			var->path = ft_split((tmp->content) + 5 , ':');
+			break ;
+		}
+		tmp = tmp->next;
+	}
+	ft_free_split(var->envp);
+	var->envp = ft_lst_to_dpt(var->local_env);
+}
+
 int	exec_cmds(t_list *cmds, t_var *var)
 {
 	int	ret;
@@ -50,5 +71,6 @@ int	exec_cmds(t_list *cmds, t_var *var)
 		ret = exec_pipe(cmds, var);
 	else
 		ret = exec_simple_cmd((t_cmd *)(cmds->content), var);
+	update_path(var);
 	return (ret);
 }

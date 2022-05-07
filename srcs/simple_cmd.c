@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   simple_cmd.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/11 04:03:54 by jbettini          #+#    #+#             */
-/*   Updated: 2022/05/05 17:31:35 by ydanset          ###   ########.fr       */
+/*   Updated: 2022/05/07 20:47:37 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,7 @@ void	exec_cmd_sc(char **args, t_var *var)
 
 void	reset_routine_sc(t_var *var, int ret)
 {
-	ft_free_split(var->envp);
-	var->envp = ft_lst_to_dpt(var->local_env);
+
 	dup2(var->oldstdin, 0);
 	dup2(var->oldstdout, 1);
 	close(var->oldstdin);
@@ -84,10 +83,7 @@ int	exec_simple_cmd(t_cmd *cmd, t_var *var)
 	{
 		cmd->args = expand_args(cmd->args, var);
 		if (ft_isbuild(cmd->args[0]))
-		{
 			ret = exec_build(cmd->args, var);
-			check_unset_path(cmd->args, var);
-		}
 		else
 			exec_cmd_sc(cmd->args, var);
 	}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/24 17:33:48 by jbettini          #+#    #+#             */
-/*   Updated: 2022/05/05 17:39:03 by ydanset          ###   ########.fr       */
+/*   Updated: 2022/05/07 21:01:16 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,6 @@ t_var	*var_manager(char **env, t_var *to_free, int mode)
 	var->path = ft_split(getenv("PATH"), ':');
 	var->prompt = NULL;
 	set_prompt(var);
-	if (!(var->local_env) || !(var->path))
-		return (NULL);
 	save_usr_tty_config(var);
 	return (var);
 }
