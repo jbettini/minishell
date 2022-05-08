@@ -6,7 +6,7 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/11 04:03:54 by jbettini          #+#    #+#             */
-/*   Updated: 2022/05/07 20:47:37 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/05/08 16:35:43 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,9 +82,9 @@ int	exec_simple_cmd(t_cmd *cmd, t_var *var)
 	if (!ret && cmd->args)
 	{
 		cmd->args = expand_args(cmd->args, var);
-		if (ft_isbuild(cmd->args[0]))
+		if (cmd->args && ft_isbuild(cmd->args[0]))
 			ret = exec_build(cmd->args, var);
-		else
+		else if (cmd->args)
 			exec_cmd_sc(cmd->args, var);
 	}
 	reset_routine_sc(var, ret);

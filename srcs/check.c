@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/03 03:34:18 by jbettini          #+#    #+#             */
-/*   Updated: 2022/05/05 17:13:11 by ydanset          ###   ########.fr       */
+/*   Updated: 2022/05/08 16:17:52 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ void	check_unset_path(char **args, t_var *var)
 
 int	ft_isbuild(char *args)
 {
+	if (!args)
+		return (0);
 	if (ft_strequ_hd(args, "exit"))
 		return (1);
 	else if (ft_strequ_hd(args, "env"))

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   multiple_cmds.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/11 04:03:54 by jbettini          #+#    #+#             */
-/*   Updated: 2022/05/05 17:13:29 by ydanset          ###   ########.fr       */
+/*   Updated: 2022/05/08 16:38:06 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,10 @@ void	reset_routine_mc(t_var *var, int mode)
 		g_glb.sigint_in_hd = 0;
 	var->child = 0;
 	unlink_all(var);
-	if (mode == CTRL_C)
-		dup2(var->oldstdin, 0);
+	dup2(var->oldstdin, 0);
+	dup2(var->oldstdout, 1);
+	close(var->oldstdin);
+	close(var->oldstdout);
 }
 
 void	_pipex(t_list *cmds, t_var *var)
