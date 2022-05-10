@@ -6,7 +6,7 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 14:26:44 by ydanset           #+#    #+#             */
-/*   Updated: 2022/04/19 16:45:08 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/05/07 20:47:38 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,15 +47,4 @@ char	*parse_cmd(char **path, char **cmd)
 	}
 	free(tmp);
 	return (NULL);
-}
-
-void	print_strs(char **strs)
-{
-	int	i;
-
-	if (!strs)
-		return ;
-	i = -1;
-	while (strs[i])
-		printf("%s\n", strs[i++]);
 }

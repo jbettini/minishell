@@ -1,29 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cmds.h                                             :+:      :+:    :+:   */
+/*   builtins_3.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/02/13 23:30:50 by ydanset           #+#    #+#             */
-/*   Updated: 2022/04/03 08:23:24 by ydanset          ###   ########.fr       */
+/*   Created: 2022/05/05 17:35:20 by ydanset           #+#    #+#             */
+/*   Updated: 2022/05/05 17:35:32 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CMDS_H
-# define CMDS_H
+#include "minishell.h"
 
-typedef struct s_redir
+void	ft_putendl_export(char const *s)
 {
-	int		type;
-	char	*keyword;
-	char	*filename;
-}	t_redir;
+	int	i;
 
-typedef struct s_cmd
+	i = 0;
+	while (s[i] && s[i] != '=')
+		ft_putchar(s[i++]);
+	if (!s[i])
+	{
+		ft_putchar('\n');
+		return ;
+	}
+	ft_putstr("=\"");
+	while (s[++i])
+		ft_putchar(s[i]);
+	ft_putstr("\"\n");
+}
+
+void	ft_putexport(t_list *lst)
 {
-	char	**args;
-	t_list	*redirs;
-}	t_cmd;
-
-#endif
+	while (lst)
+	{
+		ft_putstr("declare -x ");
+		ft_putendl_export(lst->content);
+		lst = lst->next;
+	}
+}

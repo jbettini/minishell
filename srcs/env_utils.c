@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/23 05:33:04 by jbettini          #+#    #+#             */
-/*   Updated: 2022/05/03 18:26:29 by ydanset          ###   ########.fr       */
+/*   Updated: 2022/05/10 17:25:26 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,20 +15,20 @@
 #define EXPORT 1
 #define UNSET 0
 
-int	is_valide_var(char *str, int mod)
+int	is_valide_var(char *str, int mode)
 {
 	int	i;
 
 	i = 0;
 	if (str[0] != '_' && !ft_isalpha(str[0]))
 		return (0);
-	if (mod == EXPORT)
+	if (mode == EXPORT)
 	{
 		while (str[++i] && str[i] != '=')
 			if (!ft_isalnum(str[i]) && str[i] != '_')
 				return (0);
 	}
-	else if (mod == UNSET)
+	else if (mode == UNSET)
 	{
 		while (str[++i])
 			if (!ft_isalnum(str[i]) && str[i] != '_')
@@ -78,49 +78,35 @@ void	delref(t_list **lst, void *data_ref)
 	free(data_ref);
 }
 
-void	add_ref(t_list **lst, void *data_ref, int idx, int mod)
+void	add_ref(t_list **lst, void *data_ref)
 {
 	t_list	*tmp;
+	char	*ev_name1;
+	char	*ev_name2;
 
 	tmp = *lst;
-	while (tmp && !ft_strnequ(tmp->content, data_ref, idx))
+	while (tmp)
+	{
+		ev_name1 = get_ev_name(tmp->content);
+		ev_name2 = get_ev_name(data_ref);
+		if (!my_strcmp(ev_name2, ev_name1))
+		{
+			free(ev_name1);
+			free(ev_name2);
+			break ;
+		}
+		free(ev_name1);
+		free(ev_name2);
 		tmp = tmp->next;
+	}
 	if (!tmp)
 		ft_lstadd_back(lst, ft_lstnew(ft_strdup(data_ref)));
 	else
 	{
-		if (mod)
+		if (!ft_strchr(data_ref, '='))
 			return ;
 		free(tmp->content);
 		tmp->content = NULL;
 		tmp->content = ft_strdup(data_ref);
-	}
-}
-
-void	ft_putendl_export(char const *s)
-{
-	int	i;
-
-	i = 0;
-	while (s[i] && s[i] != '=')
-		ft_putchar(s[i++]);
-	if (!s[i])
-	{
-		ft_putchar('\n');
-		return ;
-	}
-	ft_putstr("=\"");
-	while (s[++i])
-		ft_putchar(s[i]);
-	ft_putstr("\"\n");
-}
-
-void	ft_putexport(t_list *lst)
-{
-	while (lst)
-	{
-		ft_putstr("declare -x ");
-		ft_putendl_export(lst->content);
-		lst = lst->next;
 	}
 }

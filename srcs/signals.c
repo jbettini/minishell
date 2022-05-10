@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 18:55:54 by rahmed            #+#    #+#             */
-/*   Updated: 2022/04/26 18:16:26 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/05/05 17:13:30 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 void	sigint_handler(int signum)
 {	
 	(void)signum;
-	write(1, "\n", 1);
-	if (!g.in_hd)
+	if (!g_glb.in_hd)
 	{
+		write(1, "\n", 1);
 		rl_replace_line("", 0);
 		rl_on_new_line();
 		rl_redisplay();
@@ -25,7 +25,7 @@ void	sigint_handler(int signum)
 	else
 	{
 		close(0);
-		g.hd_exited_from_sigint = 1;
+		g_glb.sigint_in_hd = 1;
 	}
 }
 

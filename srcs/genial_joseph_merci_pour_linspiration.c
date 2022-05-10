@@ -1,29 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cmds.h                                             :+:      :+:    :+:   */
+/*   genial_joseph_merci_pour_linspiration.c            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/02/13 23:30:50 by ydanset           #+#    #+#             */
-/*   Updated: 2022/04/03 08:23:24 by ydanset          ###   ########.fr       */
+/*   Created: 2022/05/05 17:28:37 by ydanset           #+#    #+#             */
+/*   Updated: 2022/05/05 17:28:55 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CMDS_H
-# define CMDS_H
+#include "minishell.h"
 
-typedef struct s_redir
+void	genial_joseph_merci_pour_linspiration(t_cpt *t)
 {
-	int		type;
-	char	*keyword;
-	char	*filename;
-}	t_redir;
-
-typedef struct s_cmd
-{
-	char	**args;
-	t_list	*redirs;
-}	t_cmd;
-
-#endif
+	print_error(ft_strdup("export"), "not a valid identifier");
+	t->ret = BUILD_ERROR;
+}

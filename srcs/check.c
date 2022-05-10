@@ -6,13 +6,13 @@
 /*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/03 03:34:18 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/26 18:12:19 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/05/08 16:17:52 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	check_unset_path(char **args, t_env *env)
+void	check_unset_path(char **args, t_var *var)
 {
 	int	i;
 
@@ -24,13 +24,15 @@ void	check_unset_path(char **args, t_env *env)
 	}
 	if (args[i])
 	{
-		ft_free_split(env->path);
-		env->path = NULL;
+		ft_free_split(var->path);
+		var->path = NULL;
 	}
 }
 
 int	ft_isbuild(char *args)
 {
+	if (!args)
+		return (0);
 	if (ft_strequ_hd(args, "exit"))
 		return (1);
 	else if (ft_strequ_hd(args, "env"))
@@ -48,7 +50,7 @@ int	ft_isbuild(char *args)
 	return (0);
 }
 
-void	wait_this_fk_process(t_env *env)
+void	wait_this_fk_process(t_var *var)
 {
 	int	i;
 	int	status;
@@ -57,9 +59,9 @@ void	wait_this_fk_process(t_env *env)
 	x = 0;
 	i = -1;
 	status = 0;
-	if (env->child)
+	if (var->child)
 	{
-		while (++i < env->child)
+		while (++i < var->child)
 		{
 			waitpid(-1, &status, 0);
 			if (WIFSIGNALED(status) && !x)
@@ -68,10 +70,10 @@ void	wait_this_fk_process(t_env *env)
 				if (WTERMSIG(status) == SIGQUIT)
 					write(STDOUT_FILENO, "Quit: 3", 7);
 				write(STDOUT_FILENO, "\n", 1);
-				g.exit_status = 128 + WTERMSIG(status);
+				g_glb.exit_status = 128 + WTERMSIG(status);
 			}
 		}
 		if (!x)
-			g.exit_status = status % 255;
+			g_glb.exit_status = status % 255;
 	}
 }

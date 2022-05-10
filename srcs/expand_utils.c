@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/03 21:15:24 by jbettini          #+#    #+#             */
-/*   Updated: 2022/04/26 18:12:19 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/05/05 17:13:22 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,17 +50,22 @@ char	*get_ev_value(char *ev_name, char **env)
 	return (ev_value);
 }
 
-void	rearrange_word(char **word, int *i, char **env)
+void	rearrange_word(char **word, int *i, t_var *var)
 {
 	char	*ev_name;
 	char	*ev_value;
+	char	**local_env;
 
 	ev_name = get_ev_name(&(*word)[*i + 1]);
 	*word = trunc_str(*word, *i + 1, ft_strlen(ev_name));
 	if (!my_strcmp(ev_name, "?"))
-		ev_value = ft_itoa(g.exit_status);
+		ev_value = ft_itoa(g_glb.exit_status);
 	else
-		ev_value = get_ev_value(ev_name, env);
+	{
+		local_env = ft_lst_to_dpt(var->local_env);
+		ev_value = get_ev_value(ev_name, local_env);
+		free_strs(local_env);
+	}
 	*word = str_insert(*word, ev_value, *i);
 	*i += ft_strlen(ev_value);
 	free(ev_value);

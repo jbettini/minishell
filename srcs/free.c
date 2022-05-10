@@ -27,7 +27,8 @@ void	free_redir(void *ptr)
 	t_redir	*redir;
 
 	redir = ptr;
-	free(redir->word);
+	free(redir->keyword);
+	free(redir->filename);
 	free(redir);
 }
 
@@ -37,7 +38,6 @@ void	free_cmd(void *ptr)
 
 	cmd = ptr;
 	free_strs(cmd->args);
-	ft_lstclear(&cmd->redir_in, &free_redir);
-	ft_lstclear(&cmd->redir_out, &free_redir);
+	ft_lstclear(&cmd->redirs, &free_redir);
 	free(cmd);
 }

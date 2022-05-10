@@ -12,64 +12,7 @@
 
 #include "minishell.h"
 
-int	redir_heredoc(char *stop)
-{
-	char	**hd;
-	int		fd;
-	int		fd2;
-	int		i;
-
-	i = -1;
-	fd = open(".heredoc_tmp", O_CREAT | O_RDWR | O_TRUNC, 0744);
-	if (fd == -1)
-		return (OP_ERROR);
-	hd = here_doc(stop);
-	if (!hd)
-		return (CTRL_C);
-	while (hd[++i])
-		ft_putendl_fd(hd[i], fd);
-	close(fd);
-	fd2 = open(".heredoc_tmp", O_RDONLY);
-	if (dup2(fd2, 0) == -1)
-		return (DUP_ERROR);
-	close(fd2);
-	ft_free_split(hd);
-	return (SUCCESS);
-}
-
-char	**here_doc(char *stop)
-{
-	char	**tab;
-	char	*rd_ret;
-	t_list	*lst;
-
-	rd_ret = NULL;
-	lst = NULL;
-	g.in_hd = 1;
-	g.hd_exited_from_sigint = 0;
-	while (1)
-	{
-		write(STDOUT_FILENO, "> ", 2);
-		rd_ret = ft_get_next_line(STDIN_FILENO);
-		if (rd_ret && rd_ret[0])
-			rd_ret = ft_str_del_nl(rd_ret);
-		if (!rd_ret || ft_strequ_hd(rd_ret, stop) || g.hd_exited_from_sigint)
-		{
-			g.in_hd = 0;
-			free(rd_ret);
-			break ;
-		}
-		ft_lstadd_back(&lst, ft_lstnew(ft_strdup(rd_ret)));
-		free(rd_ret);
-	}
-	if (g.hd_exited_from_sigint)
-		return (NULL);
-	tab = ft_lst_to_dpt(lst);
-	ft_lstclear(&lst, &free);
-	return (tab);
-}
-
-int	redir_to_stdout(void *file, int mod)
+int	redir_to_stdout(void *file, int mode)
 {
 	int	fd;
 
@@ -79,9 +22,9 @@ int	redir_to_stdout(void *file, int mod)
 	if (access(file, F_OK) == 0)
 		if (access(file, W_OK) == -1)
 			return (PERM_ERROR);
-	if (mod == O_TRUNC)
+	if (mode == O_TRUNC)
 		fd = open(file, O_CREAT | O_WRONLY | O_TRUNC, 0744);
-	else if (mod == O_APPEND)
+	else if (mode == O_APPEND)
 		fd = open(file, O_CREAT | O_WRONLY | O_APPEND, 0744);
 	if (fd == -1)
 		return (OP_ERROR);
@@ -105,5 +48,52 @@ int	redir_to_stdin(void *file)
 	if (dup2(fd, 0) == -1)
 		return (DUP_ERROR);
 	close(fd);
+	return (0);
+}
+
+int	redir_manager(t_redir *to_redir)
+{
+	int	ret;
+
+	ret = 0;
+	if (to_redir->type == REDIR_L || to_redir->type == REDIR_LL)
+		ret = redir_to_stdin(to_redir->filename);
+	else if (to_redir->type == REDIR_RR)
+		ret = redir_to_stdout(to_redir->filename, O_APPEND);
+	else if (to_redir->type == REDIR_R)
+		ret = redir_to_stdout(to_redir->filename, O_TRUNC);
+	if (ret == CTRL_C)
+		return (ret);
+	else if (ret)
+		return (all_error(ret, to_redir->filename));
+	return (0);
+}
+
+int	redir_lst(t_list *redir_lst, t_var *var)
+{
+	t_redir	*to_redir;
+	int		ret;
+
+	ret = 0;
+	while (redir_lst)
+	{
+		to_redir = (t_redir *)redir_lst->content;
+		if (expand_redir(to_redir, var))
+			return (1);
+		ret = redir_manager(to_redir);
+		if (ret)
+			return (ret);
+		redir_lst = redir_lst->next;
+	}
+	return (0);
+}
+
+int	redir_all(t_cmd *cmd, t_var *var)
+{
+	int	ret;
+
+	ret = redir_lst(cmd->redirs, var);
+	if (ret)
+		return (ret);
 	return (0);
 }

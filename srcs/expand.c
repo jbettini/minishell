@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   expand_ev.c                                        :+:      :+:    :+:   */
+/*   expand.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-void	expand_word(char **word, char **env)
+void	expand_word(char **word, t_var *var)
 {
 	int		in_double_quotes;
 	int		i;
@@ -27,7 +27,7 @@ void	expand_word(char **word, char **env)
 			in_double_quotes = 0;
 		if ((*word)[i] == '$' && ((*word)[i + 1] == '?'
 			|| ft_isalpha((*word)[i + 1]) || (*word)[i + 1] == '_'))
-			rearrange_word(word, &i, env);
+			rearrange_word(word, &i, var);
 		else if ((*word)[i] == '\'' && !in_double_quotes)
 		{
 			i++;
@@ -40,7 +40,7 @@ void	expand_word(char **word, char **env)
 	}
 }
 
-char	**expand_args(char **args, char **env)
+char	**expand_args(char **args, t_var *var)
 {
 	int		i;
 	int		j;
@@ -51,7 +51,7 @@ char	**expand_args(char **args, char **env)
 	i = -1;
 	while (args && args[++i])
 	{
-		expand_word(&args[i], env);
+		expand_word(&args[i], var);
 		if (!args[i][0])
 			continue ;
 		arg_expanded = ft_strtok(args[i], " \t\n");
@@ -78,63 +78,21 @@ int	redir_expanded_is_valid(char *word_expanded)
 	return (1);
 }
 
-int	expand_redir(t_list *redirs, char **env)
+int	expand_redir(t_redir *redir, t_var *var)
 {
-	t_redir	*redir;
-	char	*ev_name;
+	char	*tmp;
 
-	while (redirs)
+	if (redir->type == REDIR_LL)
+		return (0);
+	tmp = ft_strdup(redir->filename);
+	expand_word(&redir->filename, var);
+	if (!redir_expanded_is_valid(redir->filename))
 	{
-		redir = redirs->content;
-		if (redir->type != REDIR_LL)
-		{
-			ev_name = ft_strdup(redir->word);
-			expand_word(&redir->word, env);
-			if (!redir_expanded_is_valid(redir->word))
-				return (error(ev_name, "ambiguous redirect", 0));
-			delete_quotes(&redir->word);
-			free(ev_name);
-		}
-		redirs = redirs->next;
+		print_error(ft_strdup(tmp), "ambiguous redirect");
+		free(tmp);
+		return (1);
 	}
-	return (1);
+	delete_quotes(&redir->filename);
+	free(tmp);
+	return (0);
 }
-
-int	expand_ev(t_cmd *cmd, t_env *env)
-{
-	char	**envp;
-	int		ret;
-
-	ret = 1;
-	envp = ft_lst_to_dpt(env->envp);
-	cmd->args = expand_args(cmd->args, envp);
-	if (!expand_redir(cmd->redir_in, envp)
-		|| !expand_redir(cmd->redir_out, envp))
-		ret = 0;
-	free_strs(envp);
-	return (ret);
-}
-
-/*
-int	expand_ev(t_list *cmds, t_env *env)
-{
-	t_cmd	*cmd;
-	char	**envp;
-
-	envp = ft_lst_to_dpt(env->envp);
-	while (cmds)
-	{
-		cmd = cmds->content;
-		cmd->args = expand_args(cmd->args, envp);
-		if (!expand_redir(cmd->redir_in, envp)
-			|| !expand_redir(cmd->redir_out, envp))
-		{
-			free_strs(envp);
-			return (0);
-		}
-		cmds = cmds->next;
-	}
-	free_strs(envp);
-	return (1);
-}
-*/
