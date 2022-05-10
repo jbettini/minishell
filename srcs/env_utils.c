@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/23 05:33:04 by jbettini          #+#    #+#             */
-/*   Updated: 2022/05/05 17:35:08 by ydanset          ###   ########.fr       */
+/*   Updated: 2022/05/10 17:25:26 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,16 +81,42 @@ void	delref(t_list **lst, void *data_ref)
 void	add_ref(t_list **lst, void *data_ref, int idx, int mode)
 {
 	t_list	*tmp;
+	char	*ev_name;
 
 	tmp = *lst;
-	while (tmp && !ft_strnequ(tmp->content, data_ref, idx))
-		tmp = tmp->next;
+	if (mode)
+	{
+		while (tmp)
+		{
+			ev_name = get_ev_name(tmp->content);
+			/*
+			if (!ft_strnequ(tmp->content, data_ref, idx) && (!((char *)tmp->content)[idx] || ((char *)tmp->content)[idx] == '='))
+			{
+				printf("here\n");
+				break;
+			}
+			*/
+			if (!my_strcmp(data_ref, ev_name))
+			{
+				free(ev_name);
+				break ;
+			}
+			free(ev_name);
+			tmp = tmp->next;
+		}
+	}
+	else
+	{
+		printf("IN : %s\n", data_ref);
+		while (tmp && !ft_strnequ(tmp->content, data_ref, idx))
+			tmp = tmp->next;
+	}
+	//printf("data ref : %s\n", data_ref);
+	//printf("tmp ref : %s\n", tmp->content);
 	if (!tmp)
 		ft_lstadd_back(lst, ft_lstnew(ft_strdup(data_ref)));
 	else
 	{
-		if (mode)
-			return ;
 		free(tmp->content);
 		tmp->content = NULL;
 		tmp->content = ft_strdup(data_ref);
