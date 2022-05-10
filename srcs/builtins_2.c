@@ -55,10 +55,10 @@ int	ft_unset(char **arg, t_var *var)
 	return (ret);
 }
 
-void	nex(t_list **local_env, t_list **ex, char *arg, int equ)
+void	nex(t_list **local_env, t_list **ex, char *arg)
 {
-	add_ref(local_env, arg, equ, 0);
-	add_ref(ex, arg, ft_strlen(arg), 0);
+	add_ref(local_env, arg);
+	add_ref(ex, arg);
 }
 
 int	ft_export(char **arg, t_var *var)
@@ -77,10 +77,9 @@ int	ft_export(char **arg, t_var *var)
 				t.equ = ft_strc_index(arg[t.i], '=');
 				if (t.equ != -1)
 					nex(&(var->local_env), &(var->local_export), \
-						arg[t.i], t.equ + 1);
+						arg[t.i]);
 				else
-					add_ref(&(var->local_export), arg[t.i], \
-						ft_strlen(arg[t.i]), 1);
+					add_ref(&(var->local_export), arg[t.i]);
 			}
 			else
 				genial_joseph_merci_pour_linspiration(&t);

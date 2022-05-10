@@ -47,13 +47,13 @@ void	my_chdir(char *path, t_var *var)
 	else
 	{
 		tmp = ft_strjoin("OLDPWD=", oldpwd);
-		add_ref(&var->local_env, tmp, 8, 0);
-		add_ref(&var->local_export, tmp, 8, 0);
+		add_ref(&var->local_env, tmp);
+		add_ref(&var->local_export, tmp);
 		free(tmp);
 		pwd = getcwd(NULL, 0);
 		tmp = ft_strjoin("PWD=", pwd);
-		add_ref(&var->local_export, tmp, 5, 0);
-		add_ref(&var->local_env, tmp, 5, 0);
+		add_ref(&var->local_export, tmp);
+		add_ref(&var->local_env, tmp);
 		free(pwd);
 		free(tmp);
 	}

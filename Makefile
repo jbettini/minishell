@@ -20,12 +20,12 @@ OBJ_DIR =	srcs/objs
 # IF NEEDED @42 on MacOS10 Install :
 # rm -rf $HOME/.brew && git clone --depth=1 https://github.com/Homebrew/brew $HOME/.brew && echo 'export PATH=$HOME/.brew/bin:$PATH' >> $HOME/.zshrc && source $HOME/.zshrc && brew update
 # brew install readline
-LIBS	=	-L/Users/$(USER)/.brew/opt/readline/lib -lreadline -Llibft -lft
-HEADERS	=	-I$(I_DIR) -I/Users/$(USER)/.brew/opt/readline/include
+#LIBS	=	-L/Users/$(USER)/.brew/opt/readline/lib -lreadline -Llibft -lft
+#HEADERS	=	-I$(I_DIR) -I/Users/$(USER)/.brew/opt/readline/include
 
 # @HOME on MacOS12 Monterey
-#LIBS	=	-L/usr/local/opt/readline/lib -lreadline -Llibft -lft
-#HEADERS	=	-I$(I_DIR) -I/usr/local/opt/readline/include 
+LIBS	=	-L/usr/local/opt/readline/lib -lreadline -Llibft -lft
+HEADERS	=	-I$(I_DIR) -I/usr/local/opt/readline/include 
 
 SRC	= 	main.c 			\
  		builtins_0.c 	\

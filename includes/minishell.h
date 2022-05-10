@@ -138,7 +138,7 @@ int		exec_cmds(t_list *cmds, t_var *var);
 int		is_valide_var(char *str, int mode);
 int		ft_strc_index(char *str, int c);
 void	delref(t_list **lst, void *data_ref);
-void	add_ref(t_list **lst, void *data_ref, int idx, int mode);
+void	add_ref(t_list **lst, void *data_ref);
 void	ft_putexport(t_list *lst);
 void	ft_env(char **args, t_var *var);
 int		ft_pwd(char **args);

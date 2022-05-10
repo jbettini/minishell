@@ -78,45 +78,33 @@ void	delref(t_list **lst, void *data_ref)
 	free(data_ref);
 }
 
-void	add_ref(t_list **lst, void *data_ref, int idx, int mode)
+void	add_ref(t_list **lst, void *data_ref)
 {
 	t_list	*tmp;
-	char	*ev_name;
+	char	*ev_name1;
+	char	*ev_name2;
 
 	tmp = *lst;
-	if (mode)
+	while (tmp)
 	{
-		while (tmp)
+		ev_name1 = get_ev_name(tmp->content);
+		ev_name2 = get_ev_name(data_ref);
+		if (!my_strcmp(ev_name2, ev_name1))
 		{
-			ev_name = get_ev_name(tmp->content);
-			/*
-			if (!ft_strnequ(tmp->content, data_ref, idx) && (!((char *)tmp->content)[idx] || ((char *)tmp->content)[idx] == '='))
-			{
-				printf("here\n");
-				break;
-			}
-			*/
-			if (!my_strcmp(data_ref, ev_name))
-			{
-				free(ev_name);
-				break ;
-			}
-			free(ev_name);
-			tmp = tmp->next;
+			free(ev_name1);
+			free(ev_name2);
+			break ;
 		}
+		free(ev_name1);
+		free(ev_name2);
+		tmp = tmp->next;
 	}
-	else
-	{
-		printf("IN : %s\n", data_ref);
-		while (tmp && !ft_strnequ(tmp->content, data_ref, idx))
-			tmp = tmp->next;
-	}
-	//printf("data ref : %s\n", data_ref);
-	//printf("tmp ref : %s\n", tmp->content);
 	if (!tmp)
 		ft_lstadd_back(lst, ft_lstnew(ft_strdup(data_ref)));
 	else
 	{
+		if (!ft_strchr(data_ref, '='))
+			return ;
 		free(tmp->content);
 		tmp->content = NULL;
 		tmp->content = ft_strdup(data_ref);
