@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/23 05:33:04 by jbettini          #+#    #+#             */
-/*   Updated: 2022/05/10 17:25:26 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/05/17 13:16:02 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,35 +78,40 @@ void	delref(t_list **lst, void *data_ref)
 	free(data_ref);
 }
 
-void	add_ref(t_list **lst, void *data_ref)
+t_list	*get_ev(t_list **lst, char *ev_name)
 {
+	char	*name;
 	t_list	*tmp;
-	char	*ev_name1;
-	char	*ev_name2;
 
 	tmp = *lst;
 	while (tmp)
 	{
-		ev_name1 = get_ev_name(tmp->content);
-		ev_name2 = get_ev_name(data_ref);
-		if (!my_strcmp(ev_name2, ev_name1))
+		name = get_ev_name(tmp->content);
+		if (!my_strcmp(name, ev_name))
 		{
-			free(ev_name1);
-			free(ev_name2);
+			free(name);
 			break ;
 		}
-		free(ev_name1);
-		free(ev_name2);
+		free(name);
 		tmp = tmp->next;
 	}
-	if (!tmp)
+	return (tmp);
+}
+
+void	add_ref(t_list **lst, void *data_ref)
+{
+	t_list	*ev;
+	char	*ev_name;
+
+	ev_name = get_ev_name(data_ref);
+	ev = get_ev(lst, ev_name);
+	free(ev_name);
+	if (!ev)
 		ft_lstadd_back(lst, ft_lstnew(ft_strdup(data_ref)));
 	else
 	{
 		if (!ft_strchr(data_ref, '='))
 			return ;
-		free(tmp->content);
-		tmp->content = NULL;
-		tmp->content = ft_strdup(data_ref);
+		ev->content = ft_strdup(data_ref);
 	}
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   simple_cmd.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/11 04:03:54 by jbettini          #+#    #+#             */
-/*   Updated: 2022/05/08 16:35:43 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/05/17 12:59:58 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,6 @@ void	exec_cmd_sc(char **args, t_var *var)
 
 void	reset_routine_sc(t_var *var, int ret)
 {
-
 	dup2(var->oldstdin, 0);
 	dup2(var->oldstdout, 1);
 	close(var->oldstdin);

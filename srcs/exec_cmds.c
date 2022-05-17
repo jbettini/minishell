@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_cmds.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/11 04:03:54 by jbettini          #+#    #+#             */
-/*   Updated: 2022/05/07 20:47:40 by jbettini         ###   ########.fr       */
+/*   Updated: 2022/05/17 12:59:34 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	set_path(t_var *var, char **args, int mode)
 
 void	update_path(t_var *var)
 {
-	t_list *tmp;
+	t_list	*tmp;
 
 	tmp = var->local_env;
 	if (var->path)
@@ -46,7 +46,7 @@ void	update_path(t_var *var)
 	{
 		if (ft_strnequ(tmp->content, "PATH=", 5))
 		{
-			var->path = ft_split((tmp->content) + 5 , ':');
+			var->path = ft_split((tmp->content) + 5, ':');
 			break ;
 		}
 		tmp = tmp->next;
