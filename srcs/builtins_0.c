@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtins.c                                         :+:      :+:    :+:   */
+/*   builtins_0.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/24 15:32:07 by jbettini          #+#    #+#             */
-/*   Updated: 2022/05/03 19:02:12 by ydanset          ###   ########.fr       */
+/*   Updated: 2022/05/25 13:56:47 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,31 +33,47 @@ void	cd_to_envvar(t_var *var, char *ev_name)
 	}
 }
 
+void	update_oldpwd(t_var *var)
+{
+	char	*ev_value;
+	char	**env;
+	char	*new_oldpwd;
+
+	env = ft_lst_to_dpt(var->local_env);
+	ev_value = get_ev_value("PWD", env);
+	new_oldpwd = ft_strjoin("OLDPWD=", ev_value);
+	free(ev_value);
+	add_ref(&var->local_env, new_oldpwd);
+	add_ref(&var->local_export, new_oldpwd);
+	free(new_oldpwd);
+	free_strs(env);
+}
+
 void	my_chdir(char *path, t_var *var)
 {
 	char	*pwd;
-	char	*oldpwd;
 	char	*tmp;
 
+	(void)var;
 	tmp = NULL;
 	pwd = NULL;
-	oldpwd = getcwd(NULL, 0);
 	if (chdir(path) == -1)
 		perror("cd");
 	else
 	{
-		tmp = ft_strjoin("OLDPWD=", oldpwd);
-		add_ref(&var->local_env, tmp);
-		add_ref(&var->local_export, tmp);
-		free(tmp);
+		update_oldpwd(var);
 		pwd = getcwd(NULL, 0);
+		if (!pwd)
+		{
+			print_error(ft_strdup("cd"), "No such file or directory");
+			return ;
+		}
 		tmp = ft_strjoin("PWD=", pwd);
 		add_ref(&var->local_export, tmp);
 		add_ref(&var->local_env, tmp);
 		free(pwd);
 		free(tmp);
 	}
-	free(oldpwd);
 }
 
 void	ft_cd(char **args, t_var *var)
@@ -69,19 +85,4 @@ void	ft_cd(char **args, t_var *var)
 	else
 		my_chdir(args[1], var);
 	set_prompt(var);
-}
-
-void	ft_echo(char **arg)
-{
-	int	i;
-
-	i = ft_strequ_hd(arg[1], "-n");
-	while (arg[++i])
-	{
-		ft_putstr_fd(arg[i], 1);
-		if (arg[i + 1])
-			ft_putchar_fd(' ', 1);
-	}
-	if (!ft_strequ_hd(arg[1], "-n"))
-		ft_putchar_fd('\n', 1);
 }

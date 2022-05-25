@@ -6,7 +6,7 @@
 #    By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/03 04:39:29 by jbettini          #+#    #+#              #
-#    Updated: 2022/05/17 12:58:11 by ydanset          ###   ########.fr        #
+#    Updated: 2022/05/25 12:39:40 by ydanset          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -63,7 +63,7 @@ OBJ_PFX = $(addprefix $(OBJ_DIR)/, $(OBJ))
 all: $(NAME)
 
 $(NAME): $(OBJ_PFX)
-	make -C libft
+	make -j -C libft
 	$(CC) -o $(NAME) $(OBJ_PFX) $(LIBS)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
