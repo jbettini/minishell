@@ -6,7 +6,7 @@
 /*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/05 17:35:20 by ydanset           #+#    #+#             */
-/*   Updated: 2022/05/25 13:32:37 by ydanset          ###   ########.fr       */
+/*   Updated: 2022/05/27 12:36:59 by ydanset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,15 +53,23 @@ int	check_echo_option(char *str)
 	return (1);
 }
 
+int	skip_option(char **arg)
+{
+	int	i;
+
+	i = 0;
+	while (arg[i] && check_echo_option(arg[i]))
+		i++;
+	return (i);
+}
+
 void	ft_echo(char **arg)
 {
 	int	i;
 	int	has_option_n;
 
 	has_option_n = check_echo_option(arg[1]);
-	i = 0;
-	if (has_option_n)
-		i = 1;
+	i = skip_option(&arg[1]);
 	while (arg[++i])
 	{
 		ft_putstr_fd(arg[i], 1);
