@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_0.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ydanset <ydanset@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jbettini <jbettini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/24 15:32:07 by jbettini          #+#    #+#             */
-/*   Updated: 2022/05/25 13:56:47 by ydanset          ###   ########.fr       */
+/*   Updated: 2024/07/04 02:43:00 by jbettini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,8 @@
 void	cd_to_envvar(t_var *var, char *ev_name)
 {
 	t_list	*tmp;
-	char	*str;
 
 	tmp = var->local_env;
-	str = NULL;
 	while (tmp && !ft_strnequ(tmp->content, ev_name, ft_strlen(ev_name)))
 		tmp = tmp->next;
 	if (tmp)
